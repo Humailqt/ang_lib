@@ -2842,39 +2842,66 @@ int Shpeel::load_default_panel()
     LibMessage(std::to_wstring(__LINE__).c_str(), 0);
 #endif // DEBUG_LOAD_DEFAULT_PANEL_
     IPartPtr part = GetPart();
-    
+    {
+        if (!m_part)
+        {
+            IDocument3DPtr doc = GetDoc();
+            m_part = doc->GetPart(pNew_Part);
+#if DEBUG_LOAD_DEFAULT_PANEL_
+            LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+#endif // DEBUG_LOAD_DEFAULT_PANEL_
+            if (!m_part)
+            {
+                m_part = doc->GetPart(pTop_Part);
+#if DEBUG_LOAD_DEFAULT_PANEL_
+                LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+#endif // DEBUG_LOAD_DEFAULT_PANEL_
+            }
+        }
+   
+    }
 #if DEBUG_LOAD_DEFAULT_PANEL_
     LibMessage(std::to_wstring(__LINE__).c_str(), 0);
 #endif // DEBUG_LOAD_DEFAULT_PANEL_
-    try
-    {
-        IEntityPtr p_obj(new IEntityPtr(part->NewEntity(o3d_sketch), false /*AddRef*/));//создание поинтера на обьект который будет очищен 
 
-    }
-    catch (const std::exception&e)
+    if (part)
     {
-    
+#if DEBUG_LOAD_DEFAULT_PANEL_
+        LibMessage(_T("Part not emopty"), 0);
+#endif // DEBUG_LOAD_DEFAULT_PANEL_
     }
+    else
+    {
+#if DEBUG_LOAD_DEFAULT_PANEL_
+        LibMessage(_T("ERROR: Part is emopty"), 0);
+#endif // DEBUG_LOAD_DEFAULT_PANEL_
+    }
+#if DEBUG_LOAD_DEFAULT_PANEL_
+    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+#endif // DEBUG_LOAD_DEFAULT_PANEL_
+
+    IEntityPtr p_obj = part->NewEntity(o3d_sketch); //создание поинтера на обьект который будет очищен 
+
 #if DEBUG_LOAD_DEFAULT_PANEL_
     LibMessage(std::to_wstring(__LINE__).c_str(), 0);
 #endif // DEBUG_LOAD_DEFAULT_PANEL_
 
     // Получим интерфейс базовой плоскости XOY
-    IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+    //IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
 #if DEBUG_LOAD_DEFAULT_PANEL_
     LibMessage(std::to_wstring(__LINE__).c_str(), 0);
 #endif // DEBUG_LOAD_DEFAULT_PANEL_
-    ISketchDefinitionPtr sketchDefinition = new ISketchDefinitionPtr(IUnknownPtr((basePlane)->GetDefinition(), false /*AddRef*/));
-    IEntityPtr entitySketch; 
+    ISketchDefinitionPtr sketchDefinition(IUnknownPtr((p_obj)->GetDefinition(), false /*AddRef*/));
+    
     // Установка параметров эскиза
-    (sketchDefinition)->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+    (sketchDefinition)->SetPlane(p_obj); // Установим плоскость XOY базовой для эскиза
     //(sketchDefinition)->SetAngle(0);        // Угол поворота эскиза
 
 #if DEBUG_LOAD_DEFAULT_PANEL_
     LibMessage(std::to_wstring(__LINE__).c_str(), 0);
 #endif // DEBUG_LOAD_DEFAULT_PANEL_
     // Создадим эскиз
-    (entitySketch)->Create();
+    (p_obj)->Create();
 
 #if DEBUG_LOAD_DEFAULT_PANEL_
     LibMessage(std::to_wstring(__LINE__).c_str(), 0);
@@ -2932,7 +2959,7 @@ int Shpeel::load_default_panel()
                 0,                  // Направление построения тонкой стенки
                 0,                  // Толщина стенки в прямом направлении
                 0);                // Толщина стенки в обратном направлении
-            extrusionDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания
+            extrusionDefinition->SetSketch(p_obj);        // Эскиз операции выдавливания
 
             // Создать операцию выдавливания
             entityExtrusion->Create();

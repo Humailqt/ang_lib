@@ -111,7 +111,7 @@ public:
   // Перерисовать фантом
   virtual void RedrawPhantom(){}
   virtual void get_part(){}
-  virtual IPartPtr& GetPart() { 
+  virtual IPartPtr GetPart() { 
       IPartPtr i = nullptr;
       return i; }
   // Количество параметров выводимых в гриде 
