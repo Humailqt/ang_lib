@@ -1,0 +1,322 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT\r\n"
+    "#pragma code_page(1251)\r\n"
+    "#endif //_WIN32\r\n"
+    "#endif\r\n"
+    "#include ""res\\studs3d.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+//IDP_BMP_G_SIMPLE        BITMAP  DISCARDABLE     "res\\G_SIMPLE.bmp"
+//ID_PROP_G_STEP          BITMAP  DISCARDABLE     "res\\G_STEP.bmp"
+//IDP_BMP_G_I1            BITMAP  DISCARDABLE     "res\\G_I1.bmp"
+//IDP_BMP_G_I2            BITMAP  DISCARDABLE     "res\\G_I2.bmp"
+
+IDP_BMP_G_SIMPLE        ICON  DISCARDABLE     "res\\G_SIMPLE.ico"
+ID_PROP_G_STEP          ICON  DISCARDABLE     "res\\G_STEP.ico"
+IDP_BMP_G_I1            ICON  DISCARDABLE     "res\\G_I1.ico"
+IDP_BMP_G_I2            ICON  DISCARDABLE     "res\\G_I2.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDR_LIBID               "Крепежный элемент на Visual C++ с панелью"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_PROP_SCREW_ENDING_LENGHT "Длина &ввинчиваемого конца, мм"
+    IDS_SCREW_ENDING_TIPS       "Длина ввинчиваемого конца шпильки"
+    ID_PROP_ISP                 "&Исполнение"
+    IDS_ISP_TIPS                "Исполнение"
+    IDS_ISP_HINT                "Выбор исполнения"
+    IDP_BMP_G_I1                "Исполнение 1"
+    IDP_BMP_G_I2                "Исполнение 2"
+    ID_PROP_CLASS               "&Класс точности"
+    IDS_CLASS_TIPS              "Класс точности шпильки"
+    ID_PROP_GOST                "&Гост"
+    IDS_GOST_TIPS               "Гост шпильки"
+    ID_PROP_MATERIAL            "&Материал"
+    IDS_MATERIAL_TIPS           "Материал шпильки"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDP_SPC_OBJ             "&Создать объект спецификации"
+    IDS_SPC_OBJ_TIPS        "Создать объект спецификации"
+    ID_PROP_MASSA_1000      "m(кг) Масса 1000 шт"
+    ID_PROP_FACET           "c(мм) Фаска"
+    ID_PROP_PITCH           "p(мм) Шаг резьбы"
+    ID_PROP_SCREW_ENDING    "b0(мм) Ввинчиваемый конец"
+    ID_PROP_WRENCH_ENDING   "b(мм) Гаечный конец"
+    ID_PROP_SIMPLE          "Упрощенно"
+    ID_PROP_G_STEP          "Мелкий шаг"
+    IDP_FLAGS               "Дополнительные &параметры"
+    IDS_FLAGS_TIPS          "Дополнительные параметры"
+    ID_PROP_DIAM            "&Диаметр, мм"
+    IDS_DIAM_TIPS           "Диаметр резьбы"
+    ID_PROP_LENGHT          "Д&лина, мм"
+    IDS_LENGHT_TIPS         "Длина шпильки"
+    ID_PROP_OTHER_PARAM     "Справочные данные"
+    ID_POINT_3D             "Координаты:"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_API7LT              "klAPI7.dll"
+    IDS_API7                "kAPI7.dll"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_3DDOCERROR          "Документ не активизирован или не является 3D-сборкой"
+    IDS_STUD_NAME           "Шпилька М%gх%g ГОСТ %i-76"
+    STR_SELECT_PLANE        "Создайте объект или укажите элемент базирования крепёжной детали"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    STUDS_COMMAND           "Шпилька"
+    STR_101                 "22032-76"
+    STR_102                 "22033-76"
+    STR_103                 "22034-76"
+    STR_104                 "22035-76"
+    STR_105                 "22036-76"
+    STR_106                 "22037-76"
+    STR_107                 "22038-76"
+    STR_108                 "22039-76"
+    STR_109                 "22040-76"
+    STR_110                 "22041-76"
+    STR_111                 "22042-76"
+    STR_112                 "22043-76"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    STR_200                 "22032.loa"
+    STR_201                 "22033.loa"
+    STR_202                 "22034.loa"
+    STR_203                 "22035.loa"
+    STR_204                 "22036.loa"
+    STR_205                 "22036.loa"
+    STR_206                 "22038.loa"
+    STR_207                 "22038.loa"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    STR_208                 "22040.loa"
+    STR_209                 "22040.loa"
+    STR_210                 "22042.loa"
+    STR_211                 "22042.loa"
+    STR_220                 "st22032.loa"
+    STR_221                 "st22033.loa"
+    STR_222                 "st22034.loa"
+    STR_223                 "st22035.loa"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    STR_224                 "st22036.loa"
+    STR_225                 "st22037.loa"
+    STR_226                 "st22038.loa"
+    STR_227                 "st22039.loa"
+    STR_228                 "st22040.loa"
+    STR_229                 "st22041.loa"
+    STR_230                 "st22042.loa"
+    STR_231                 "st22043.loa"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    STR_SELECT_POINT        "Укажите элемент базирования крепёжной детали"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDP_STUDS               "Шпилька"
+    ID_PROP_ELEMENT_PARAM   "Параметры элемента"
+    IDS_PARAM_CAPTION       "Параметры"
+    IDS_VALUE_CAPTION       "Значение"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_STUD_1D             "1d"
+    IDS_STUD_125D           "1,25 d"
+    IDS_STUD_16D            "1,6 d"
+    IDS_STUD_2D             "2d"
+    IDS_STUD_25D            "2,5 d"
+    IDS_STUD_B0             "b0"
+    IDS_STUD_A              "A"
+    IDS_STUD_B              "B"
+    IDS_MATERIAL_STEEL      "Сталь"
+    IDS_MATERIAL_ALUMINIUM  "Алюмин. сплав"
+    IDS_MATERIAL_BRASS      "Латунь"
+    IDS_MATERIAL_BRONZE     "Бронза"
+
+    IDS_TAKE_POINT "Построить точку"
+END
+
+
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "studs3d1.DLL\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "studs3d1\0"
+            VALUE "LegalCopyright", "Copyright (C) 2000\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "studs3d1.DLL\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "studs3d1 Dynamic Link Library\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "afxres.rc"         // Standard components
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+#endif
+#include "res\studs3d.rc2"  // non-Microsoft Visual C++ edited resources
+
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

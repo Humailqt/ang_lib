@@ -1,0 +1,7 @@
+;LIBRARY      "Studs3d1"
+;DESCRIPTION  'Studs3d1 Windows Dynamic Link Library'
+
+EXPORTS
+  LIBRARYID    @1
+  LIBRARYENTRY @2
+  LibObjInterfaceEntry @5
