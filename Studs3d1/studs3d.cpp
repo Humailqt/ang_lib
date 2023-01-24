@@ -2853,7 +2853,7 @@ int Shpeel::load_default_panel()
     }
     catch (const std::exception&e)
     {
-    
+        LibMessage(_T("Test_123"), 0);
     }
 #if DEBUG_LOAD_DEFAULT_PANEL_
     LibMessage(std::to_wstring(__LINE__).c_str(), 0);
