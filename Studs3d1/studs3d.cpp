@@ -2838,97 +2838,41 @@ unsigned int Shpeel::get_order_control(variant_t ID)
 int Shpeel::load_default_panel()
 {
     int h = 150, w = 100, z = 20;
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    IPartPtr part = GetPart();
+
+    ISketchDefinitionPtr sketchDefinition;
+    IPartPtr part(doc->GetPart(pTop_Part), false);
+    _com_ptr_t<IEntityPtr> p_obj(new IEntityPtr(part->NewEntity(o3d_sketch), false /*AddRef*/));//создание поинтера на обьект который будет очищен 
+
+
+    sketchDefinition = new ISketchDefinitionPtr(IUnknownPtr((p_obj)->GetDefinition(), false /*AddRef*/));
+ 
+
+    if (sketchDefinition)
     {
-        if (!m_part)
+        // Получим интерфейс базовой плоскости XOY
+        IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+
+        // Установка параметров эскиза
+        (sketchDefinition)->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+        //(sketchDefinition)->SetAngle(0);        // Угол поворота эскиза
+
+        // Создадим эскиз
+        (p_obj)->Create();
+
+        // Войти в режим редактирования эскиза
+        if ((sketchDefinition)->BeginEdit())
         {
-            IDocument3DPtr doc = GetDoc();
-            m_part = doc->GetPart(pNew_Part);
-#if DEBUG_LOAD_DEFAULT_PANEL_
-            LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-            if (!m_part)
-            {
-                m_part = doc->GetPart(pTop_Part);
-#if DEBUG_LOAD_DEFAULT_PANEL_
-                LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-            }
+            // Введем новый эскиз - квадрат
+            LineSeg(0, 0, w, 0, 1);
+            LineSeg(0, h, w, h, 1);
+            LineSeg(0, 0, 0, h, 1);
+            LineSeg(w, 0, w, h, 1);
+            // Выйти из режима редактирования эскиза
+            (sketchDefinition)->EndEdit();
         }
-   
-    }
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-
-    if (part)
-    {
-#if DEBUG_LOAD_DEFAULT_PANEL_
-        LibMessage(_T("Part not emopty"), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    }
-    else
-    {
-#if DEBUG_LOAD_DEFAULT_PANEL_
-        LibMessage(_T("ERROR: Part is emopty"), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    }
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-
-    IEntityPtr p_obj = part->NewEntity(o3d_sketch); //создание поинтера на обьект который будет очищен 
-
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-
-    // Получим интерфейс базовой плоскости XOY
-    //IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    ISketchDefinitionPtr sketchDefinition(IUnknownPtr((p_obj)->GetDefinition(), false /*AddRef*/));
-    
-    // Установка параметров эскиза
-    (sketchDefinition)->SetPlane(p_obj); // Установим плоскость XOY базовой для эскиза
-    //(sketchDefinition)->SetAngle(0);        // Угол поворота эскиза
-
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    // Создадим эскиз
-    (p_obj)->Create();
-
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    // Войти в режим редактирования эскиза
-    if ((sketchDefinition)->BeginEdit())
-    {
-        // Введем новый эскиз - квадрат
-        LineSeg(0, 0, w, 0, 1);
-        LineSeg(0, h, w, h, 1);
-        LineSeg(0, 0, 0, h, 1);
-        LineSeg(w, 0, w, h, 1);
-        // Выйти из режима редактирования эскиза
-        (sketchDefinition)->EndEdit();
     }
 
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
     IEntityPtr entityExtrusion(part->NewEntity(o3d_bossExtrusion), false /*AddRef*/);
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
 
     if (entityExtrusion)
     {
@@ -2971,10 +2915,8 @@ int Shpeel::load_default_panel()
         }
         entityExtrusion->Update();
     }
+    GetPart() = part;
 
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
     return 1;
 }
 
