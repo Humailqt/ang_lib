@@ -192,7 +192,8 @@ struct info_list
 #pragma pack( pop )
 
 ////////////////////////////////////////////////////////////////////////////////
-// 
+//
+// Класс шпилек
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern class Shpeel : public PropertyManagerObject
@@ -231,7 +232,6 @@ private :
   CString patch_lib;
 public :
   std::vector<info_list> v_info_list;
-
   Shpeel();
   virtual ~Shpeel();
 
@@ -243,6 +243,7 @@ public :
 
   ////////////////////////////////////////////////////////////////////////////
   int load_default_panel();
+  void Shpeel::draw_panel();
 
   ///////////////////////////////////////////////////////////////////////////
 
@@ -278,7 +279,7 @@ public :
 #define DEBUG_GetPart_ 1 
 #endif // DEBUG_GET_VALUE_FROM_LIST
 
-  IPartPtr&         GetPart()   {return m_part; }
+  IPartPtr&         GetPart()   { return m_part; }
   // AddRef - не делает
   IDocument3DPtr&   GetDoc()    { return doc;  }
   unsigned int get_order_control(variant_t ID);

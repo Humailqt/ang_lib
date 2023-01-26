@@ -69,9 +69,6 @@
     <ClInclude Include="BaseEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="draw_obj.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceDir.h">
       <Filter>Header Files</Filter>
     </ClInclude>

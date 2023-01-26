@@ -153,6 +153,11 @@ public:
   PropertyManagerEvent( LPDISPATCH manager, PropertyManagerObject& _obj );           
   virtual ~PropertyManagerEvent();
 
+
+
+  void draw_panel(IDocument3DPtr doc, IPart* part/*,CStringW str*/);
+
+
 public: 
   // prChangeControlValue - Событие изменения значения контрола 
   afx_msg BOOL ButtonClick       ( long buttonID );  

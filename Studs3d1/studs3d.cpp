@@ -752,7 +752,7 @@ void Shpeel::SetParam(IPartPtr& pPart )
 
   if (pPart)
   {
-      draw_panel(NULL, pPart);
+      draw_panel();
   }
 
 }
@@ -1836,14 +1836,14 @@ void Shpeel::Draw3D()
       GetParam();
     else
     {
-      //load_default_panel();
+
       /*LibMessage((L"Studs3d:" + std::to_wstring(__LINE__)).c_str());
       bstr = GetFileName();
       m_part->SetFileName(bstr);*/
     }
-    draw_panel(doc, m_part);
 
-
+    draw_panel();
+    
     SpecPropertyToolBarEnum toolBarType = pnEnterEscHelp;
 
     if (InitProcessParam(toolBarID, toolBarType, firstTabID))
@@ -2737,6 +2737,12 @@ bool Shpeel::CheckDir(CString lib)
     return true;
 }
 
+void Shpeel::draw_panel()
+{
+    m_part->SetFileName(L"D:/ang_lib/ang_detile/d.m3d"/*(LPWSTR)str.operator LPCWSTR*/);
+    m_part->Update();
+}
+
 bool Shpeel::_upload_list(ksAPI7::IPropertyListPtr& p_property_list, CString lib)
 {
 #if  DEBUG_CH_DIR
@@ -2837,7 +2843,119 @@ unsigned int Shpeel::get_order_control(variant_t ID)
 
 int Shpeel::load_default_panel()
 {
-   
+
+
+//    int h = 150, w = 100, z = 20;
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//    IPartPtr part = GetPart();
+//    
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//    try
+//    {
+//        IEntityPtr p_obj(new IEntityPtr(part->NewEntity(o3d_sketch), false /*AddRef*/));//создание поинтера на обьект который будет очищен 
+//
+//    }
+//    catch (const std::exception&e)
+//    {
+//    
+//    }
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//
+//    // Получим интерфейс базовой плоскости XOY
+//    IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//    ISketchDefinitionPtr sketchDefinition = new ISketchDefinitionPtr(IUnknownPtr((basePlane)->GetDefinition(), false /*AddRef*/));
+//    IEntityPtr entitySketch; 
+//    // Установка параметров эскиза
+//    (sketchDefinition)->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+//    //(sketchDefinition)->SetAngle(0);        // Угол поворота эскиза
+//
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//    // Создадим эскиз
+//    (entitySketch)->Create();
+//
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//    // Войти в режим редактирования эскиза
+//    if ((sketchDefinition)->BeginEdit())
+//    {
+//        // Введем новый эскиз - квадрат
+//        LineSeg(0, 0, w, 0, 1);
+//        LineSeg(0, h, w, h, 1);
+//        LineSeg(0, 0, 0, h, 1);
+//        LineSeg(w, 0, w, h, 1);
+//        // Выйти из режима редактирования эскиза
+//        (sketchDefinition)->EndEdit();
+//    }
+//
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//    IEntityPtr entityExtrusion(part->NewEntity(o3d_bossExtrusion), false /*AddRef*/);
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
+//
+//    if (entityExtrusion)
+//    {
+//
+//        // Интерфейс базовой операции выдавливания
+//        IBossExtrusionDefinitionPtr extrusionDefinition(IUnknownPtr(entityExtrusion->GetDefinition(), false /*AddRef*/));
+//        if (extrusionDefinition)
+//        {
+//            // Установка параметров операции выдавливания
+//
+//            extrusionDefinition->SetDirectionType(dtNormal);     // Направление выдавливания ( dtNormal	- прямое
+//            // направление, для тонкой стенки - наружу,
+//            // dtReverse	- обратное направление, для тонкой стенки - внутрь
+//            // dtBoth - в обе стороны, dtMiddlePlane от средней плоскости )
+//            // Изменить параметры выдавливания в одном направлении
+//            extrusionDefinition->SetSideParam(true,               // Направление выдавливания ( TRUE - прямое направление,
+//                // FALSE - обратное направление )
+//                etBlind,            // Тип выдавливания ( etBlind - строго на глубину,
+//                // etThroughAll - через всю деталь, etUpToVertexTo - на расстояние до вершины,
+//                // etUpToVertexFrom - на расстояние за вершину, etUpToSurfaceTo - на
+//                // расстояние до поверхности, etUpToSurfaceFrom - на расстояние за поверхность,
+//                // etUpToNearSurface	- до ближайшей поверхности )
+//                z,                // Глубина выдавливания
+//                0,                  // Угол уклона
+//                false);            // Направление уклона ( TRUE - уклон наружу, FALSE - уклон внутрь )
+//            // Изменить параметры тонкой стенки
+//            extrusionDefinition->SetThinParam(false,              // Признак тонкостенной операции
+//                0,                  // Направление построения тонкой стенки
+//                0,                  // Толщина стенки в прямом направлении
+//                0);                // Толщина стенки в обратном направлении
+//            extrusionDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания
+//
+//            // Создать операцию выдавливания
+//            entityExtrusion->Create();
+//
+//            // Формирует массив объектов и возвращает указатель на его интерфейс - массив граней компонента       
+//            IEntityCollectionPtr entityCollection(part->EntityCollection(o3d_face), false /*AddRef*/);
+//            entityExtrusion->Update();
+//
+//        }
+//        entityExtrusion->Update();
+//    }
+//
+//#if DEBUG_LOAD_DEFAULT_PANEL_
+//    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+//#endif // DEBUG_LOAD_DEFAULT_PANEL_
     return 1;
 }
 
