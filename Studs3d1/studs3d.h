@@ -192,8 +192,7 @@ struct info_list
 #pragma pack( pop )
 
 ////////////////////////////////////////////////////////////////////////////////
-//
-// Класс шпилек
+// 
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern class Shpeel : public PropertyManagerObject
@@ -279,23 +278,7 @@ public :
 #define DEBUG_GetPart_ 1 
 #endif // DEBUG_GET_VALUE_FROM_LIST
 
-  IPartPtr&         GetPart()   { 
-#if DEBUG_GetPart_
-      LibMessage(_T("Get part:"),0);
-#endif // DEBUG_GetPart_
-
-      if (m_part)
-      {
-#if DEBUG_GetPart_
-          LibMessage(_T("Get part: new part"),0);
-#endif // DEBUG_GetPart_
-          IDocument3D *doc = ksGet3dDocument();
-          m_part = doc->GetPart(pNew_Part);
-      }
-#if DEBUG_GetPart_
-      LibMessage(_T("Get part: return"),0);
-#endif // DEBUG_GetPart_
-      return m_part; }
+  IPartPtr&         GetPart()   {return m_part; }
   // AddRef - не делает
   IDocument3DPtr&   GetDoc()    { return doc;  }
   unsigned int get_order_control(variant_t ID);
