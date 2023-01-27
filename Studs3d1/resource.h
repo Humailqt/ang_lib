@@ -2,6 +2,7 @@
 // Microsoft Developer Studio generated include file.
 // Used by studs3d.rc
 //
+
 #define END_OF_RESOURCE_TABLE           0xffff
 
 #define STUDS_COMMAND                   100

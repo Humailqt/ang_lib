@@ -13,10 +13,11 @@
 
 
 #include <ldefin2d.h>
-#include "UtilityF.h"
-
-
 #include "BaseEvent.h"
+#ifndef _ACTIVE_FILE_PATCH
+#include "ResourceDir.h"
+#endif
+
 
 //-------------------------------------------------------------------------------
 // Функции для выдачи сообщений библиотеки

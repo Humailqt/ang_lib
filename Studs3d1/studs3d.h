@@ -19,8 +19,8 @@
 #include <SArray.h>
 #include <PArray.h>
 #include <filesystem>
-#include "UtilityF.h"
-#include "Panel_Utilit.h"
+
+
 #if !defined(_IFUNC)
 # define _IFUNC STDMETHODCALLTYPE
 #endif

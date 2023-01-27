@@ -472,9 +472,22 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
   LibMessage(_T("ChangeControlValue"), 0);
   if (control->Id == ID_CHOSE_DETAIL)
   {
-
       CString patch; 
       patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
+      if (!patch.IsEmpty())
+      {
+          int sumbolF = patch.Find(new_detile_df);
+          LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
+          if (sumbolF)
+          {
+              LibMessage((new_detile_df),0);
+          }
+          else
+          {
+              LibMessage(_T("dont find  new_detile_df!"), 0);
+              return 0;
+          }
+      }
       auto &part = obj.GetPart();
       if (!part)
       {
