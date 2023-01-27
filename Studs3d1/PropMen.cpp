@@ -469,7 +469,7 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 {
 
   ksAPI7::IPropertyControlPtr control( iCtrl );
-
+  LibMessage(_T("ChangeControlValue"), 0);
   if (control->Id == ID_CHOSE_DETAIL)
   {
 
@@ -487,21 +487,25 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 
   }
   else
-      if (control->Id == ID_H_3D_PLATE)
+  {
+      //LibMessage(CString(LPCWSTR (std::to_wstring(control->Id).c_str())), 0);
+      if (control->Id == ID_POINT_3D_X)
       {
-           
-          LibMessage(_T("ID_H_3D_PLATE"), 0);
+          LibMessage(_T("ID_POINT_3D_X"), 0);
       }
       else
-      if (control->Id == ID_W_3D_PLATE)
-      {
-          LibMessage(_T("ID_W_3D_PLATE"), 0);
-      }
-      else
-      if (control->Id == ID_Z_3D_PLATE)
-      {
-          LibMessage(_T("ID_Z_3D_PLATE"), 0);
-      }
+          if (control->Id == ID_POINT_3D_Y)
+          {
+              LibMessage(_T("ID_POINT_3D_Y"), 0);
+          }
+          else
+              if (control->Id == ID_POINT_3D_Z)
+              {
+                  LibMessage(_T("ID_POINT_3D_Z"), 0);
+              }
+
+  }
+
     
   if ( control ) 
   {
@@ -535,10 +539,6 @@ afx_msg BOOL PropertyManagerEvent::ButtonClick(long buttonID)
 // ---
 afx_msg BOOL PropertyManagerEvent::ControlCommand(LPDISPATCH ctrl, long buttonID ) 
 {
-  CString S;
-  S.Format(_T("%d"), buttonID);
-  LibMessage(_T("ControlCommand"), 0);
-  LibMessage(S, 0);
   obj.OnButtonClick(buttonID); 
   obj.RedrawPhantom();  
   return true;

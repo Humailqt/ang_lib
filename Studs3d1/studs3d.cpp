@@ -734,7 +734,6 @@ CString& Shpeel::GetFileName()
   return fileName;
 }
 
-#include "draw_obj.h"
 //------------------------------------------------------------------------------
 // Редактируем переменные
 // ---
@@ -1381,11 +1380,11 @@ void Shpeel::OnButtonClick( long buttonID )
       break;
     }
 
-    case ID_CHOSE_DETAIL:
-    {
-        LibMessage(_T("ID_CHOSE_DETAIL"));
-        break;
-    }
+    //case ID_CHOSE_DETAIL:
+    //{
+    //    LibMessage(_T("ID_CHOSE_DETAIL"));
+    //    break;
+    //}
   }
 }
 
@@ -1821,7 +1820,6 @@ void Shpeel::get_part()
 
 }
 
-#include "draw_obj.h"
 //-------------------------------------------------------------------------------------
 // Рисование 3D объектов
 // ---
@@ -2843,7 +2841,8 @@ unsigned int Shpeel::get_order_control(variant_t ID)
 
 int Shpeel::load_default_panel()
 {
-
+    IDocument3DPtr docP;
+    ksGet3dDocument()
 
 //    int h = 150, w = 100, z = 20;
 //#if DEBUG_LOAD_DEFAULT_PANEL_
