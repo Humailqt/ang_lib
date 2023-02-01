@@ -229,8 +229,8 @@ private :
   BaseMakroParam                               par; // Макро параметры
   SHPEEL                                       tmp; // Структура параметров шпилек
 
-  CString patch_lib;
 public :
+  CString patch_lib;
   std::vector<info_list> v_info_list;
   Shpeel();
   virtual ~Shpeel();
@@ -243,7 +243,7 @@ public :
 
   ////////////////////////////////////////////////////////////////////////////
   int load_default_panel();
-  void Shpeel::draw_panel();
+  void draw_panel();
 
   ///////////////////////////////////////////////////////////////////////////
 

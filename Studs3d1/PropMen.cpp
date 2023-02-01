@@ -469,22 +469,23 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 {
 
   ksAPI7::IPropertyControlPtr control( iCtrl );
-  LibMessage(_T("ChangeControlValue"), 0);
+
   if (control->Id == ID_CHOSE_DETAIL)
   {
       CString patch; 
       patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
       if (!patch.IsEmpty())
       {
+          LibMessage(patch, 0);
           int sumbolF = patch.Find(new_detile_df);
           LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
-          if (sumbolF)
+          if (sumbolF>=0)
           {
-              LibMessage((new_detile_df),0);
+              obj.load_default_panel();
           }
           else
           {
-              LibMessage(_T("dont find  new_detile_df!"), 0);
+              LibMessage(_T("dont find new_detile_df!"), 0);
               return 0;
           }
       }
