@@ -21,6 +21,7 @@
 #include <filesystem>
 
 
+
 #if !defined(_IFUNC)
 # define _IFUNC STDMETHODCALLTYPE
 #endif
@@ -244,6 +245,7 @@ public :
   ////////////////////////////////////////////////////////////////////////////
   int load_default_panel();
   void draw_panel();
+  std::wstring get_tmp_filename_tmp(IDocument3DPtr doc);
 
   ///////////////////////////////////////////////////////////////////////////
 

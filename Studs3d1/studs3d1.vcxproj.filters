@@ -72,6 +72,9 @@
     <ClInclude Include="ResourceDir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AngLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\G_I1.bmp">

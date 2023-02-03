@@ -172,7 +172,11 @@ DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
   if ( dwReason == DLL_PROCESS_ATTACH )
   {
     TRACE0( "DLL Initializing!" );
- 
+    //////////////////////////////////
+
+
+    //////////////////////////////////
+
     if ( !AfxInitExtensionModule( StepDLL, hInstance ) )
       return 0;
 
@@ -187,6 +191,7 @@ DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
       pNewKompasAPI = NULL;    // Освободить Компас
 
     TRACE0( "DLL Terminating!" );
+
     AfxTermExtensionModule( StepDLL );
   }
   return 1;
@@ -208,7 +213,6 @@ unsigned int WINAPI LIBRARYID()
 void WINAPI LIBRARYENTRY( unsigned int ) 
 {
   GetNewKompasAPI();
-
 
 
   IDocument3DPtr pDocument3d( ksGetActive3dDocument(), false/*AddRef*/ ); // Получить указатель на активный документ трехмерной модели
@@ -747,8 +751,8 @@ void Shpeel::SetParam(IPartPtr& pPart )
     {
         //pPart = m_part;
         //draw_panel(NULL, pPart);
-        pPart->SetFileName(L"D:/ang_lib/ang_detile/d.m3d");
-        pPart->Update();
+        //pPart->SetFileName(L"D:/ang_lib/ang_detile/d.m3d");
+        //pPart->Update();
 
     }
 
@@ -847,19 +851,11 @@ reference Shpeel::EditSpcObj( reference spcObj )
   
   
   ////////////////////////////////////////
-
-  CString patch;
-  patch = get_value_from_list(this, ID_CHOSE_DETAIL);
-  auto& part = GetPart();
-  part->ClearAllObj();
-  part->SetFileName((LPWSTR)(LPCTSTR)patch);
-  part->Update();
-  RedrawPhantom();
-
-
+  
 
   ////////////////////////////////////////
-  
+
+
 
   ksAPI7::IPart7Ptr part7 = IUnknownPtr( ksTransferInterface( m_part, ksAPI7Dual, 0 ), false );
   ksAPI7::IPropertyKeeperPtr propertyKeeperIn1( part7 );
@@ -1681,12 +1677,15 @@ void Shpeel::ShowControls()
       ksAPI7::IPropertyEditPtr edit_h = curentCollection->Add(ksControlEditReal);
       edit_h->Name = _T("Высота");
       edit_h->Id = ID_H_3D_PLATE;
+      edit_h->Value = 100;
       ksAPI7::IPropertyEditPtr edit_w = curentCollection->Add(ksControlEditReal);
       edit_w->Name = _T("Ширина");
       edit_w->Id = ID_W_3D_PLATE;
+      edit_w->Value = 100;
       ksAPI7::IPropertyEditPtr edit_z = curentCollection->Add(ksControlEditReal);
       edit_z->Name = _T("Толщина");
       edit_z->Id = ID_Z_3D_PLATE;
+      edit_z->Value = 20;
 
   }
   //// Комбобокс ГОСТа
@@ -1844,6 +1843,11 @@ void Shpeel::Draw3D()
     }
     
     load_default_panel();
+    IDocument3DPtr corrent_doc(ksGetActive3dDocument());
+    //auto cor_dir = std::filesystem::path(corrent_doc->GetFileName()).remove_filename().wstring();
+    //cor_dir += patch_resure_detales;
+    //cor_dir += _T("Tmp.m3d");
+    m_part->SetFileName((LPWSTR)(get_tmp_filename_tmp(corrent_doc)).c_str());
     
     SpecPropertyToolBarEnum toolBarType = pnEnterEscHelp;
 
@@ -2740,8 +2744,8 @@ bool Shpeel::CheckDir(CString lib)
 
 void Shpeel::draw_panel()
 {
-    m_part->SetFileName(L"D:/ang_lib/ang_detile/d.m3d"/*(LPWSTR)str.operator LPCWSTR*/);
-    m_part->Update();
+    //m_part->SetFileName(L"D:/ang_lib/ang_detile/d.m3d"/*(LPWSTR)str.operator LPCWSTR*/);
+    //m_part->Update();
 }
 
 bool Shpeel::_upload_list(ksAPI7::IPropertyListPtr& p_property_list, CString lib)
@@ -2846,9 +2850,15 @@ int Shpeel::load_default_panel()
     ////////////////////////////////////////////////////// TEST BLOCK 
     IDocument3DPtr corrent_doc(ksGetActive3dDocument());
     IDocument3DPtr pDocument3d(ksGet3dDocument(), false/*AddRef*/);
-    int h= 150, w =100, z=20; 
 
-    IPartPtr part;
+    //auto hControl = this->GetPropertyControl(ID_H_3D_PLATE);
+    //auto wControl = this->GetPropertyControl(ID_W_3D_PLATE);
+    //auto zControl = this->GetPropertyControl(ID_Z_3D_PLATE);
+
+    int h = 20/*hControl->Value.intVal*/, w = 20/*wControl->Value.intVal*/, z = 10/*zControl->Value.intVal*/;
+
+    IPartPtr part = m_part;
+    part->ClearAllObj();
     try
     {
         // Получить указатель на объект документа трехмерной модели
@@ -2876,7 +2886,7 @@ int Shpeel::load_default_panel()
 
                             // Установка параметров эскиза
                             sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-                            sketchDefinition->SetAngle(45);        // Угол поворота эскиза
+                            sketchDefinition->SetAngle(0);        // Угол поворота эскиза
 
                             // Создадим эскиз
                             entitySketch->Create();
@@ -2950,11 +2960,16 @@ int Shpeel::load_default_panel()
     {
         LibMessage(mes, MB_ICONERROR | MB_OK); // Вывод сообщений о ошибке
     }
+    auto pPatch = ((LPWSTR)(LPCTSTR)get_tmp_filename_tmp(pDocument3d).c_str());
+    if (pDocument3d->SetFileName(pPatch))
+    {
 
+    }
+    
+    pDocument3d->Save();
     /////////////////////////////////////////////////////
     corrent_doc->SetActive();
-
-    m_part = part;
+    m_part->SetFileName(pPatch);
     m_part->Update();
     return 1;
 }
@@ -3067,4 +3082,12 @@ CString get_value_from_list(Shpeel* shpeel, long id_control)
         break;
     }
     return str;
+}
+
+std::wstring Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
+{
+    auto cor_dir = std::filesystem::path(doc->GetFileName()).remove_filename().wstring();
+    cor_dir += patch_resure_detales;
+    cor_dir += _T("Tmp.m3d");
+    return cor_dir;
 }

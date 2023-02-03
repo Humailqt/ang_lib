@@ -70,7 +70,7 @@ public:
   /////////////////////////////////////////////////////////////
 
   virtual int load_default_panel() { return 1; };
-
+  std::string get_tmp_filename_tmp(IDocument3DPtr doc) { return std::string(""); };
 
   /////////////////////////////////////////////////////////////
 

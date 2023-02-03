@@ -476,32 +476,88 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
       if (!patch.IsEmpty())
       {
-          LibMessage(patch, 0);
+         /* LibMessage(patch, 0);*/
           int sumbolF = patch.Find(new_detile_df);
-          LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
+          //LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
           if (sumbolF>=0)
           {
+              auto& part = obj.GetPart();
+              part->ClearAllObj();
               obj.load_default_panel();
+              part->Update();
+              obj.RedrawPhantom();
           }
           else
           {
-              LibMessage(_T("dont find new_detile_df!"), 0);
-              return 0;
+              auto& part = obj.GetPart();
+              if (!part)
+              {
+                  LibMessage(_T("part empty"), 0);
+              }
+              part->ClearAllObj();
+              part->SetFileName((LPWSTR)(LPCTSTR)patch);
+              part->Update();
+              obj.RedrawPhantom();
           }
+
       }
-      auto &part = obj.GetPart();
-      if (!part)
-      {
-          LibMessage(_T("part empty"), 0);
-      }
-      part->ClearAllObj();
-      part->SetFileName((LPWSTR)(LPCTSTR)patch);
-      part->Update();
-      obj.RedrawPhantom();
+
 
   }
   else
   {
+      switch (control->Id)
+      {
+      case(ID_H_3D_PLATE):
+      {
+          LibMessage(_T("ID_H_3D_PLATE"), 0);
+          auto cor_part = obj.GetPart();
+          IEntityPtr entitySketch(cor_part->NewEntity(o3d_sketch), false /*AddRef*/);
+          if (entitySketch)
+          {
+              ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+              if (sketchDefinition)
+              {
+                  
+                  // Получим интерфейс базовой плоскости XOY
+                  IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+
+                  // Установка параметров эскиза
+                  sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+                  sketchDefinition->SetAngle(0);        // Угол поворота эскиза
+
+                  // Создадим эскиз
+                  entitySketch->Create();
+
+                  // Войти в режим редактирования эскиза
+                  if (sketchDefinition->BeginEdit())
+                  {
+                      LineSeg(0, 0, w, 0, 1);
+                      LineSeg(0, h, w, h, 1);
+                      LineSeg(0, 0, 0, h, 1);
+                      LineSeg(w, 0, w, h, 1);
+
+                      sketchDefinition->EndEdit();
+                  }
+
+              }
+          }
+          break;
+      }
+      case(ID_W_3D_PLATE):
+      {
+          LibMessage(_T("ID_W_3D_PLATE"), 0);
+          break;
+      }
+      case(ID_Z_3D_PLATE):
+      {
+          LibMessage(_T("ID_Z_3D_PLATE"), 0);
+          break;
+      }
+
+      default:
+          break;
+      }
       //LibMessage(CString(LPCWSTR (std::to_wstring(control->Id).c_str())), 0);
       if (control->Id == ID_POINT_3D_X)
       {
