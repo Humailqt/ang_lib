@@ -33,6 +33,9 @@
     <ClCompile Include="ResourceDir.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="info_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="studs3d.rc">
@@ -73,6 +76,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AngLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="info_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

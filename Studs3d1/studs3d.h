@@ -19,7 +19,8 @@
 #include <SArray.h>
 #include <PArray.h>
 #include <filesystem>
-
+#include <memory>
+#include "info_base.h"
 
 
 #if !defined(_IFUNC)
@@ -192,13 +193,22 @@ struct info_list
 
 #pragma pack( pop )
 
+struct InsertPart
+{
+    IPartPtr part;
+    IDocument3DPtr doc;
+    CString patch; 
+};
+
+#define InsertPartPtr std::shared_ptr<InsertPart> 
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Класс шпилек
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern class Shpeel : public PropertyManagerObject
-             , public ILibPropertyObject, public Process3DManipulatorsObject
+             , public ILibPropertyObject, public Process3DManipulatorsObject,public showInfo
 {
 private :
   int                                     refCount;
@@ -212,7 +222,7 @@ private :
   bool                                     changed; // Признак изменения параметров
   bool                                    openBase; // Работа с БД
   _variant_t                               Objects;
-
+  InsertPartPtr                             partInfo;
 
   ksAPI7::ISpecificationBaseObjectsPtr m_spcBaseObjects;
 
@@ -244,8 +254,10 @@ public :
 
   ////////////////////////////////////////////////////////////////////////////
   int load_default_panel();
-  void draw_panel();
+  void show_info();
   std::wstring get_tmp_filename_tmp(IDocument3DPtr doc);
+
+  bool save_part_info(IPartPtr part, IDocument3DPtr doc, CString patch_file);
 
   ///////////////////////////////////////////////////////////////////////////
 

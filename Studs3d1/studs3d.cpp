@@ -75,7 +75,7 @@ LPTSTR _LoadStr( int id )
 //------------------------------------------------------------------------------
 // Вспомогательная функция, вывод сообщения
 // ---
-int LibMessage( LPCTSTR str, int flags = 0 ) 
+extern int LibMessage( LPCTSTR str, int flags = 0 ) 
 {
   int res = 0;
 
@@ -98,7 +98,7 @@ int LibMessage( LPCTSTR str, int flags = 0 )
 //------------------------------------------------------------------------------
 // Вспомогательная функция, вывод сообщения
 // ---
-int LibMessage( int strId, int flags ) 
+ int LibMessage( int strId, int flags = 0)
 {
   return LibMessage( LoadStr(strId), flags );
 }
@@ -650,7 +650,7 @@ Shpeel::Shpeel()
 
   // Взяли деталь
   m_part = IPartPtr( doc->GetPart( flagMode ? pEdit_Part : pNew_Part ), false/*AddRef*/ );
-
+  partInfo = std::shared_ptr<InsertPart>(new InsertPart) ;
   if( !GetParam() ) 
   {
 
@@ -755,11 +755,6 @@ void Shpeel::SetParam(IPartPtr& pPart )
         //pPart->Update();
 
     }
-
-  if (pPart)
-  {
-      draw_panel();
-  }
 
 }
 
@@ -2742,12 +2737,6 @@ bool Shpeel::CheckDir(CString lib)
     return true;
 }
 
-void Shpeel::draw_panel()
-{
-    //m_part->SetFileName(L"D:/ang_lib/ang_detile/d.m3d"/*(LPWSTR)str.operator LPCWSTR*/);
-    //m_part->Update();
-}
-
 bool Shpeel::_upload_list(ksAPI7::IPropertyListPtr& p_property_list, CString lib)
 {
 #if  DEBUG_CH_DIR
@@ -2936,8 +2925,6 @@ int Shpeel::load_default_panel()
                                     // Создать операцию выдавливания
                                     entityExtrusion->Create();
 
-                                    MessageT(_T("Операция выдавливания"));
-
                                 }
                             }
                         }
@@ -2967,9 +2954,12 @@ int Shpeel::load_default_panel()
     }
     
     pDocument3d->Save();
-    /////////////////////////////////////////////////////
-    corrent_doc->SetActive();
     m_part->SetFileName(pPatch);
+
+    save_part_info(part, pDocument3d,pPatch);
+    /////////////////////////////////////////////////////
+
+    corrent_doc->SetActive();
     m_part->Update();
     return 1;
 }
@@ -3090,4 +3080,12 @@ std::wstring Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
     cor_dir += patch_resure_detales;
     cor_dir += _T("Tmp.m3d");
     return cor_dir;
+}
+
+bool Shpeel::save_part_info(IPartPtr part, IDocument3DPtr doc,CString patch_file)
+{
+    partInfo->patch = patch_file;
+    partInfo->part = part;
+    partInfo->doc = doc;
+    return 1;
 }

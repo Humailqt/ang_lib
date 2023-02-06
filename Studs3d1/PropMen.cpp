@@ -528,14 +528,14 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 
                   // Создадим эскиз
                   entitySketch->Create();
-
+                  
                   // Войти в режим редактирования эскиза
                   if (sketchDefinition->BeginEdit())
                   {
-                      LineSeg(0, 0, w, 0, 1);
-                      LineSeg(0, h, w, h, 1);
-                      LineSeg(0, 0, 0, h, 1);
-                      LineSeg(w, 0, w, h, 1);
+                      //LineSeg(0, 0, w, 0, 1);
+                      //LineSeg(0, h, w, h, 1);
+                      //LineSeg(0, 0, 0, h, 1);
+                      //LineSeg(w, 0, w, h, 1);
 
                       sketchDefinition->EndEdit();
                   }

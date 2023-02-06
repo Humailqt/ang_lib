@@ -268,6 +268,7 @@
   <ItemGroup>
     <ClCompile Include="$(KOMPAS_SDK)\Include\SafeArrayUtils.cpp" />
     <ClCompile Include="BaseEvent.cpp" />
+    <ClCompile Include="info_base.cpp" />
     <ClCompile Include="PropMen.cpp" />
     <ClCompile Include="ResourceDir.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -289,6 +290,7 @@
     <ClInclude Include="$(KOMPAS_SDK)\Include\SafeArrayUtils.h" />
     <ClInclude Include="AngLogger.h" />
     <ClInclude Include="BaseEvent.h" />
+    <ClInclude Include="info_base.h" />
     <ClInclude Include="PropMen.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceDir.h" />
