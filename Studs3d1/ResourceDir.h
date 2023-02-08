@@ -48,3 +48,11 @@ CString active_file_patch();
 //    return lib_patch;
 //}
 //#endif // !_GETCORRENT_DIR
+struct InsertPart
+{
+    IPartPtr part;
+    IDocument3DPtr doc;
+    CString patch;
+};
+
+#define InsertPartPtr std::shared_ptr<InsertPart> 

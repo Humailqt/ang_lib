@@ -131,16 +131,16 @@ bool PropertyManagerObject::InitProcessParam( long toolBarID, SpecPropertyToolBa
           // Наполнение закладки контролами для вывода параметров элемента
           ShowControls();
           
-          // Создать окно просмотра
-          slideBox = curentCollection->Add( ksControlSlideBox );            
-          slideBox->SlideType      = ksSlide;                 
-          slideBox->DrawingSlide   = (long)GetSlideID(); 
-          slideBox->ResModule      = (LONG_PTR)StepDLL.hModule;
-          slideBox->Hint           = _T("Hint для слайда");
-          slideBox->Tips           = _T("Tips для слайда");
-          slideBox->Id             = 10000;
-          slideBox->Name           = _T("Окно просмотра");
-          slideBox->NameVisibility = ksNameHorizontalVisible;
+          //// Создать окно просмотра
+          //slideBox = curentCollection->Add( ksControlSlideBox );            
+          //slideBox->SlideType      = ksSlide;                 
+          //slideBox->DrawingSlide   = (long)GetSlideID(); 
+          //slideBox->ResModule      = (LONG_PTR)StepDLL.hModule;
+          //slideBox->Hint           = _T("Hint для слайда");
+          //slideBox->Tips           = _T("Tips для слайда");
+          //slideBox->Id             = 10000;
+          //slideBox->Name           = _T("Окно просмотра");
+          //slideBox->NameVisibility = ksNameHorizontalVisible;
         }
    
         int  paramCount = ParamCount();                             // Нужно ли выводить грид ?
@@ -482,10 +482,13 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
           if (sumbolF>=0)
           {
               auto& part = obj.GetPart();
+              auto info = obj.get_part_info(); 
               part->ClearAllObj();
               obj.load_default_panel();
               part->Update();
               obj.RedrawPhantom();
+              info->part = part;
+              info->patch = patch;
           }
           else
           {
@@ -498,6 +501,9 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
               part->SetFileName((LPWSTR)(LPCTSTR)patch);
               part->Update();
               obj.RedrawPhantom();
+              auto info = obj.get_part_info();
+              info->part = part;
+              info->patch = patch;
           }
 
       }

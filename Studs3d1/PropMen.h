@@ -32,6 +32,9 @@ int LibMessage( LPCTSTR str,   int flags ); // Сообщение передается строкой
 void DumpError(_com_error& e);              // Вывод текста исключения 
 void ShowError();                           // Вывод сообщений при самостоятельном анализе HRESULT 
 
+#ifndef InsertPartPtr
+#define InsertPartPtr std::shared_ptr<InsertPart> 
+#endif // !InsertPartPtr
 
 
 // Получить библиотечный шрифт
@@ -66,7 +69,7 @@ public:
   virtual void OnButtonClick       ( long buttonID )                     {}     
   // Событие prChangeControlValue - Изменение значения контрола
   virtual void OnChangeControlValue( long ctrlID, const VARIANT& newVal ){}
-
+  virtual InsertPartPtr get_part_info() { return NULL; }
   /////////////////////////////////////////////////////////////
 
   virtual int load_default_panel() { return 1; };

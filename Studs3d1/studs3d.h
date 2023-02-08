@@ -193,14 +193,10 @@ struct info_list
 
 #pragma pack( pop )
 
-struct InsertPart
-{
-    IPartPtr part;
-    IDocument3DPtr doc;
-    CString patch; 
-};
-
+#ifndef InsertPartPtr
 #define InsertPartPtr std::shared_ptr<InsertPart> 
+#endif // !InsertPartPtr
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -256,7 +252,7 @@ public :
   int load_default_panel();
   void show_info();
   std::wstring get_tmp_filename_tmp(IDocument3DPtr doc);
-
+  InsertPartPtr get_part_info() { return partInfo; }
   bool save_part_info(IPartPtr part, IDocument3DPtr doc, CString patch_file);
 
   ///////////////////////////////////////////////////////////////////////////

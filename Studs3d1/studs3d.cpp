@@ -749,10 +749,7 @@ void Shpeel::SetParam(IPartPtr& pPart )
   // Редактируем внешние переменные
     if (!(bool)pPart)
     {
-        //pPart = m_part;
-        //draw_panel(NULL, pPart);
-        //pPart->SetFileName(L"D:/ang_lib/ang_detile/d.m3d");
-        //pPart->Update();
+      
 
     }
 
@@ -849,9 +846,8 @@ reference Shpeel::EditSpcObj( reference spcObj )
   
 
   ////////////////////////////////////////
-
-
-
+  m_part = partInfo->part;
+  
   ksAPI7::IPart7Ptr part7 = IUnknownPtr( ksTransferInterface( m_part, ksAPI7Dual, 0 ), false );
   ksAPI7::IPropertyKeeperPtr propertyKeeperIn1( part7 );
  
@@ -986,11 +982,14 @@ reference Shpeel::EditSpcObj( reference spcObj )
 // ---
 bool Shpeel::DrawSpcObj( reference & spcObj ) 
 {
+  set_info(partInfo->part->GetFileName());
+
   spcObj = 0;
   if( IsSpcObjCreate() ) 
   {
     if ( ReturnResult() == etError10 ) // Вырожденный объект
       ResultNULL();
+    set_info(partInfo->part->GetFileName());
 
     spcObj = EditSpcObj( spcObj );
     if( !par.flagAttr && spcObj ) 
@@ -1911,6 +1910,8 @@ void Shpeel::Draw3D()
       }
     }
   }
+  set_info(partInfo->part->GetFileName());
+
 }
 
 
@@ -1939,11 +1940,15 @@ BOOL Shpeel::EndProcess()
 {
   if ( fixingPart ) // Закрепляем деталь
   {
+    //set_info("End process: зарепление детали ");
+    //show(__LINE__);
     SetParam(m_part);
     if ( !flagMode )
     {
-      _bstr_t fileName = GetFileName();
-      doc->SetPartFromFile( fileName, m_part, false );
+      //_bstr_t fileName = GetFileName();
+      auto fileName = partInfo->part;
+     
+      doc->SetPartFromFile(fileName->GetFileName(), m_part, false );
     }
     m_part->UpdatePlacement();  // Изменение положения детали
 
@@ -1967,12 +1972,15 @@ BOOL Shpeel::EndProcess()
     // Устанавливаем признак, стандартное изделие
     m_part->SetStandardComponent(true);
 
+
     reference spcObj;
+
     if (DrawSpcObj(spcObj)) // Вывод объекта СП
     {
       // Редактируем параметры
       ksEditWindowSpcObject(spcObj);
     }
+
   }
 
   return PropertyManagerObject::EndProcess();
