@@ -19,8 +19,10 @@
 #include <SArray.h>
 #include <PArray.h>
 #include <filesystem>
-#include "UtilityF.h"
-#include "Panel_Utilit.h"
+#include <memory>
+#include "info_base.h"
+
+
 #if !defined(_IFUNC)
 # define _IFUNC STDMETHODCALLTYPE
 #endif
@@ -191,13 +193,18 @@ struct info_list
 
 #pragma pack( pop )
 
+#ifndef InsertPartPtr
+#define InsertPartPtr std::shared_ptr<InsertPart> 
+#endif // !InsertPartPtr
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Класс шпилек
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern class Shpeel : public PropertyManagerObject
-             , public ILibPropertyObject, public Process3DManipulatorsObject
+             , public ILibPropertyObject, public Process3DManipulatorsObject,public showInfo
 {
 private :
   int                                     refCount;
@@ -211,7 +218,7 @@ private :
   bool                                     changed; // Признак изменения параметров
   bool                                    openBase; // Работа с БД
   _variant_t                               Objects;
-
+  InsertPartPtr                             partInfo;
 
   ksAPI7::ISpecificationBaseObjectsPtr m_spcBaseObjects;
 
@@ -229,10 +236,9 @@ private :
   BaseMakroParam                               par; // Макро параметры
   SHPEEL                                       tmp; // Структура параметров шпилек
 
-  CString patch_lib;
 public :
+  CString patch_lib;
   std::vector<info_list> v_info_list;
-
   Shpeel();
   virtual ~Shpeel();
 
@@ -244,6 +250,10 @@ public :
 
   ////////////////////////////////////////////////////////////////////////////
   int load_default_panel();
+  void show_info();
+  std::wstring get_tmp_filename_tmp(IDocument3DPtr doc);
+  InsertPartPtr get_part_info() { return partInfo; }
+  bool save_part_info(IPartPtr part, IDocument3DPtr doc, CString patch_file);
 
   ///////////////////////////////////////////////////////////////////////////
 
@@ -279,23 +289,7 @@ public :
 #define DEBUG_GetPart_ 1 
 #endif // DEBUG_GET_VALUE_FROM_LIST
 
-  IPartPtr&         GetPart()   { 
-#if DEBUG_GetPart_
-      LibMessage(_T("Get part:"),0);
-#endif // DEBUG_GetPart_
-
-      if (m_part)
-      {
-#if DEBUG_GetPart_
-          LibMessage(_T("Get part: new part"),0);
-#endif // DEBUG_GetPart_
-          IDocument3D *doc = ksGet3dDocument();
-          m_part = doc->GetPart(pNew_Part);
-      }
-#if DEBUG_GetPart_
-      LibMessage(_T("Get part: return"),0);
-#endif // DEBUG_GetPart_
-      return m_part; }
+  IPartPtr&         GetPart()   { return m_part; }
   // AddRef - не делает
   IDocument3DPtr&   GetDoc()    { return doc;  }
   unsigned int get_order_control(variant_t ID);

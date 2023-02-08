@@ -1,13 +1,14 @@
-////////////////////////////////////////////////////////////////////////////////
+п»ї////////////////////////////////////////////////////////////////////////////////
 //
-// studs3d.cpp - Крепежный элемент на Visual C++ - шпилька
+// studs3d.cpp - РљСЂРµРїРµР¶РЅС‹Р№ СЌР»РµРјРµРЅС‚ РЅР° Visual C++ - С€РїРёР»СЊРєР°
 //
 ////////////////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 #include <afxdllx.h>
 #include <string>
 #include "resource.h"
-#include "ResourceDir.h"
+
+
 //#include "panel.h"
 #include <iostream>
 
@@ -37,7 +38,7 @@ ksAPI7::IApplicationPtr pNewKompasAPI( NULL );
 
 
 //----------------------------------------------------------------------------------------------
-// Вспомогательная функция, перевод значения в строку
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ, РїРµСЂРµРІРѕРґ Р·РЅР°С‡РµРЅРёСЏ РІ СЃС‚СЂРѕРєСѓ
 // ---
 LPCTSTR DoubleToStr( double value ) 
 {
@@ -48,82 +49,82 @@ LPCTSTR DoubleToStr( double value )
 
 
 //------------------------------------------------------------------------------
-// Вспомогательная функция, загрузить строку из ресурса
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ, Р·Р°РіСЂСѓР·РёС‚СЊ СЃС‚СЂРѕРєСѓ РёР· СЂРµСЃСѓСЂСЃР°
 // ---
 LPTSTR LoadStr( int id ) 
 { 
   static TCHAR buf[512]; 
-  // Конвертировать строку в соответствии с текущим словарем
+  // РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ С‚РµРєСѓС‰РёРј СЃР»РѕРІР°СЂРµРј
   ksConvertLangStrExT( StepDLL.hModule, id, buf, 512 );
   return buf;
 }
 
 
 //------------------------------------------------------------------------------
-// Вспомогательная функция, загрузить строку из ресурса
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ, Р·Р°РіСЂСѓР·РёС‚СЊ СЃС‚СЂРѕРєСѓ РёР· СЂРµСЃСѓСЂСЃР°
 // ---
 LPTSTR _LoadStr( int id ) 
 { 
   static TCHAR buf[512]; 
-  // Конвертировать строку в соответствии с текущим словарем
+  // РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ С‚РµРєСѓС‰РёРј СЃР»РѕРІР°СЂРµРј
   LoadString( StepDLL.hModule, id, buf, 512 );
   return buf;
 }
 
 
 //------------------------------------------------------------------------------
-// Вспомогательная функция, вывод сообщения
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ, РІС‹РІРѕРґ СЃРѕРѕР±С‰РµРЅРёСЏ
 // ---
-int LibMessage( LPCTSTR str, int flags = 0 ) 
+extern int LibMessage( LPCTSTR str, int flags = 0 ) 
 {
   int res = 0;
 
-  if ( str && str[0] )                  // Строка передана
+  if ( str && str[0] )                  // РЎС‚СЂРѕРєР° РїРµСЂРµРґР°РЅР°
   {
-    int enabse = IsEnableTaskAccess();  // Проверка доступа
-    if ( enabse )                       // Если доступ к задаче разрешен
-      EnableTaskAccess(0);              // Запрещаем доступ
+    int enabse = IsEnableTaskAccess();  // РџСЂРѕРІРµСЂРєР° РґРѕСЃС‚СѓРїР°
+    if ( enabse )                       // Р•СЃР»Рё РґРѕСЃС‚СѓРї Рє Р·Р°РґР°С‡Рµ СЂР°Р·СЂРµС€РµРЅ
+      EnableTaskAccess(0);              // Р—Р°РїСЂРµС‰Р°РµРј РґРѕСЃС‚СѓРї
 
-    // Текст сообщения  заголовок параметры
+    // РўРµРєСЃС‚ СЃРѕРѕР±С‰РµРЅРёСЏ  Р·Р°РіРѕР»РѕРІРѕРє РїР°СЂР°РјРµС‚СЂС‹
     res = MessageBox( (HWND) GetHWindow(), str, LoadStr(IDR_LIBID), flags );
 
-    if ( enabse )                       // Если доступ к задаче был запрещен
-      EnableTaskAccess(1);              // Разрешаем доступ к задаче
+    if ( enabse )                       // Р•СЃР»Рё РґРѕСЃС‚СѓРї Рє Р·Р°РґР°С‡Рµ Р±С‹Р» Р·Р°РїСЂРµС‰РµРЅ
+      EnableTaskAccess(1);              // Р Р°Р·СЂРµС€Р°РµРј РґРѕСЃС‚СѓРї Рє Р·Р°РґР°С‡Рµ
   }
   return res;
 }
 
 
 //------------------------------------------------------------------------------
-// Вспомогательная функция, вывод сообщения
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ, РІС‹РІРѕРґ СЃРѕРѕР±С‰РµРЅРёСЏ
 // ---
-int LibMessage( int strId, int flags ) 
+ int LibMessage( int strId, int flags = 0)
 {
   return LibMessage( LoadStr(strId), flags );
 }
 
 
 //------------------------------------------------------------------------------
-// Вспомогательная функция, возвращающая информацию об ошибке
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ, РІРѕР·РІСЂР°С‰Р°СЋС‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± РѕС€РёР±РєРµ
 // ---
 void DumpError(_com_error& e)
 {
   _bstr_t bstrSource(e.Source());
   _bstr_t bstrDescription(e.Description());
   CString str;
-  str.Format( _T("Номер ошибки= %08lx"),   e.Error());
-  str += _T("\nСообщение:");       
+  str.Format( _T("РќРѕРјРµСЂ РѕС€РёР±РєРё= %08lx"),   e.Error());
+  str += _T("\nРЎРѕРѕР±С‰РµРЅРёРµ:");       
   str += e.ErrorMessage();
-  str += _T("\nИсточник:");        
+  str += _T("\nРСЃС‚РѕС‡РЅРёРє:");        
   str += (LPCTSTR)bstrSource;
-  str += _T("\nОписание ошибки:"); 
+  str += _T("\nРћРїРёСЃР°РЅРёРµ РѕС€РёР±РєРё:"); 
   str += (LPCTSTR)bstrDescription;
   LibMessage( str, MB_OK | MB_ICONERROR);	
 }
 
 
 //-------------------------------------------------------------------------------
-// Вспомогательная функция, получить доступ к новому API
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ, РїРѕР»СѓС‡РёС‚СЊ РґРѕСЃС‚СѓРї Рє РЅРѕРІРѕРјСѓ API
 // ---
 void GetNewKompasAPI() 
 {
@@ -143,16 +144,16 @@ void GetNewKompasAPI()
 
       filename.Replace( filename.Right(filename.GetLength() - (filename.ReverseFind(_T('\\')) + 1)), libname );
 
-      HINSTANCE hAppAuto = LoadLibrary( filename ); // Идентификатор kAPI7.dll
+      HINSTANCE hAppAuto = LoadLibrary( filename ); // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ kAPI7.dll
       if(  hAppAuto ) 
       {
-        // Указатель на функцию возвращающую интерфейс KompasApplication  
+        // РЈРєР°Р·Р°С‚РµР»СЊ РЅР° С„СѓРЅРєС†РёСЋ РІРѕР·РІСЂР°С‰Р°СЋС‰СѓСЋ РёРЅС‚РµСЂС„РµР№СЃ KompasApplication  
         typedef LPDISPATCH ( WINAPI *FCreateKompasApplication )(); 
 				 
         FCreateKompasApplication pCreateKompasApplication = 
           (FCreateKompasApplication)GetProcAddress( hAppAuto, "CreateKompasApplication" );	
         if ( pCreateKompasApplication )
-          pNewKompasAPI = IDispatchPtr( pCreateKompasApplication(), false/*AddRef*/ ); // Получаем интерфейс Application
+          pNewKompasAPI = IDispatchPtr( pCreateKompasApplication(), false/*AddRef*/ ); // РџРѕР»СѓС‡Р°РµРј РёРЅС‚РµСЂС„РµР№СЃ Application
         FreeLibrary( hAppAuto );  
       }
     }
@@ -160,8 +161,8 @@ void GetNewKompasAPI()
 }
 
 //-------------------------------------------------------------------------------
-// Стандартная точка входа
-// Инициализация и завершение DLL
+// РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ С‚РѕС‡РєР° РІС…РѕРґР°
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Рё Р·Р°РІРµСЂС€РµРЅРёРµ DLL
 // ---
 extern "C" int APIENTRY
 DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
@@ -171,7 +172,11 @@ DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
   if ( dwReason == DLL_PROCESS_ATTACH )
   {
     TRACE0( "DLL Initializing!" );
- 
+    //////////////////////////////////
+
+
+    //////////////////////////////////
+
     if ( !AfxInitExtensionModule( StepDLL, hInstance ) )
       return 0;
 
@@ -181,11 +186,12 @@ DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
   {
 
     BaseEvent::TerminateEvents();
-    BaseEvent::DestroyList(); // Удалить список подписчиков
+    BaseEvent::DestroyList(); // РЈРґР°Р»РёС‚СЊ СЃРїРёСЃРѕРє РїРѕРґРїРёСЃС‡РёРєРѕРІ
     if ( pNewKompasAPI )
-      pNewKompasAPI = NULL;    // Освободить Компас
+      pNewKompasAPI = NULL;    // РћСЃРІРѕР±РѕРґРёС‚СЊ РљРѕРјРїР°СЃ
 
     TRACE0( "DLL Terminating!" );
+
     AfxTermExtensionModule( StepDLL );
   }
   return 1;
@@ -193,7 +199,7 @@ DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
 
 
 //-------------------------------------------------------------------------------
-// Задать идентификатор ресурсов
+// Р—Р°РґР°С‚СЊ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЂРµСЃСѓСЂСЃРѕРІ
 // ---
 unsigned int WINAPI LIBRARYID()
 {
@@ -202,22 +208,23 @@ unsigned int WINAPI LIBRARYID()
 
 
 //-------------------------------------------------------------------------------
-// Головная функция библиотеки
+// Р“РѕР»РѕРІРЅР°СЏ С„СѓРЅРєС†РёСЏ Р±РёР±Р»РёРѕС‚РµРєРё
 // ---
 void WINAPI LIBRARYENTRY( unsigned int ) 
 {
   GetNewKompasAPI();
 
 
-
-  IDocument3DPtr pDocument3d( ksGetActive3dDocument(), false/*AddRef*/ ); // Получить указатель на активный документ трехмерной модели
+  IDocument3DPtr pDocument3d( ksGetActive3dDocument(), false/*AddRef*/ ); // РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р°РєС‚РёРІРЅС‹Р№ РґРѕРєСѓРјРµРЅС‚ С‚СЂРµС…РјРµСЂРЅРѕР№ РјРѕРґРµР»Рё
   if ( (bool)pDocument3d && !pDocument3d->IsDetail() )
   {
       try
       {
         Shpeel* shpeel = new Shpeel();
+        shpeel->patch_lib = std::filesystem::path(pDocument3d->GetFileName()).c_str();
 	    if ( shpeel ) 
         {
+          
 	      shpeel->Draw3D();
 	    }
 
@@ -226,28 +233,28 @@ void WINAPI LIBRARYENTRY( unsigned int )
       {
           LibMessage((CString(e.what())),0);
       }
-//     pDocument3d->RebuildDocument();
+     pDocument3d->RebuildDocument();
   }
   else
   {
-    // Документ не активизирован или не является 3D-моделью
-    ErrorT( LoadStr( IDS_3DDOCERROR ) ); // Выдать сообщение о ошибке
+    // Р”РѕРєСѓРјРµРЅС‚ РЅРµ Р°РєС‚РёРІРёР·РёСЂРѕРІР°РЅ РёР»Рё РЅРµ СЏРІР»СЏРµС‚СЃСЏ 3D-РјРѕРґРµР»СЊСЋ
+    ErrorT( LoadStr( IDS_3DDOCERROR ) ); // Р’С‹РґР°С‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ Рѕ РѕС€РёР±РєРµ
   }
 
-  if ( ReturnResult() == etError10 ) // Вырожденный объект
+  if ( ReturnResult() == etError10 ) // Р’С‹СЂРѕР¶РґРµРЅРЅС‹Р№ РѕР±СЉРµРєС‚
 	ResultNULL();
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Внекласные функции
+// Р’РЅРµРєР»Р°СЃРЅС‹Рµ С„СѓРЅРєС†РёРё
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 
 //------------------------------------------------------------------------------
-// Определяет класс точности по ГОСТу
+// РћРїСЂРµРґРµР»СЏРµС‚ РєР»Р°СЃСЃ С‚РѕС‡РЅРѕСЃС‚Рё РїРѕ Р“РћРЎРўСѓ
 // ---
 static short GetClassStrForGost( short gost ) 
 {
@@ -272,7 +279,7 @@ static short GetClassStrForGost( short gost )
 
 
 //------------------------------------------------------------------------------
-// Определяет класс точности по ГОСТу
+// РћРїСЂРµРґРµР»СЏРµС‚ РєР»Р°СЃСЃ С‚РѕС‡РЅРѕСЃС‚Рё РїРѕ Р“РћРЎРўСѓ
 // ---
 short GetGostForTypeAndKlass( short type, short klass ) 
 {
@@ -291,7 +298,7 @@ short GetGostForTypeAndKlass( short type, short klass )
                                                         
                                                    
 //------------------------------------------------------------------------------
-// Определяет длину ввинчиваемого конца по ГОСТу
+// РћРїСЂРµРґРµР»СЏРµС‚ РґР»РёРЅСѓ РІРІРёРЅС‡РёРІР°РµРјРѕРіРѕ РєРѕРЅС†Р° РїРѕ Р“РћРЎРўСѓ
 // ---
 static short GetTypeStrForGost( short gost ) 
 {
@@ -316,7 +323,7 @@ static short GetTypeStrForGost( short gost )
 
 
 //------------------------------------------------------------------------------
-// Строка по ГОСТу (Файлы *.loa)
+// РЎС‚СЂРѕРєР° РїРѕ Р“РћРЎРўСѓ (Р¤Р°Р№Р»С‹ *.loa)
 // ---
 static void GetGostLoa( short gost, short *gNumb, short *stNumb ) 
 {
@@ -340,7 +347,7 @@ static void GetGostLoa( short gost, short *gNumb, short *stNumb )
 
 
 //------------------------------------------------------------------------------
-// Строка по ГОСТу (Название)
+// РЎС‚СЂРѕРєР° РїРѕ Р“РћРЎРўСѓ (РќР°Р·РІР°РЅРёРµ)
 // ---
 static short GetGostStr( short gost ) 
 {
@@ -365,7 +372,7 @@ static short GetGostStr( short gost )
 
 
 //-------------------------------------------------------------------------------
-// Подключение к базе
+// РџРѕРґРєР»СЋС‡РµРЅРёРµ Рє Р±Р°Р·Рµ
 // ---
 int _ConnectDB( reference bd, LPCTSTR name ) 
 {
@@ -396,24 +403,24 @@ int _ConnectDB( reference bd, LPCTSTR name )
 
 
 //------------------------------------------------------------------------------
-// Присваивает переменной с именем varName значение val
+// РџСЂРёСЃРІР°РёРІР°РµС‚ РїРµСЂРµРјРµРЅРЅРѕР№ СЃ РёРјРµРЅРµРј varName Р·РЅР°С‡РµРЅРёРµ val
 // ---
 void SetVarValue( IVariableCollectionPtr& varArr, TCHAR* varName, double val ) 
 {
-	IVariablePtr var( varArr->GetByName( _bstr_t(varName), true, false), false/*AddRef*/ ); // Текущая переменная
+	IVariablePtr var( varArr->GetByName( _bstr_t(varName), true, false), false/*AddRef*/ ); // РўРµРєСѓС‰Р°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ
   if ( var )
-    var->SetValue( val ); // Сменить значение
+    var->SetValue( val ); // РЎРјРµРЅРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ
 }  
 
 
 //------------------------------------------------------------------------------
-// Определяет является ли объект поверхностью ( planar = true - плоскостью,
-// planar = false - конической поверхностью )
+// РћРїСЂРµРґРµР»СЏРµС‚ СЏРІР»СЏРµС‚СЃСЏ Р»Рё РѕР±СЉРµРєС‚ РїРѕРІРµСЂС…РЅРѕСЃС‚СЊСЋ ( planar = true - РїР»РѕСЃРєРѕСЃС‚СЊСЋ,
+// planar = false - РєРѕРЅРёС‡РµСЃРєРѕР№ РїРѕРІРµСЂС…РЅРѕСЃС‚СЊСЋ )
 // ---
 bool IsSurface( IEntityPtr entity, bool planar = true, double * = NULL ) 
 {
 	bool res = false;
-// КЕ K8+ после второго двойного клика мы щитаем, что создаем новую шпильку и все время пытаемся мэйтить ее с собой
+// РљР• K8+ РїРѕСЃР»Рµ РІС‚РѕСЂРѕРіРѕ РґРІРѕР№РЅРѕРіРѕ РєР»РёРєР° РјС‹ С‰РёС‚Р°РµРј, С‡С‚Рѕ СЃРѕР·РґР°РµРј РЅРѕРІСѓСЋ С€РїРёР»СЊРєСѓ Рё РІСЃРµ РІСЂРµРјСЏ РїС‹С‚Р°РµРјСЃСЏ РјСЌР№С‚РёС‚СЊ РµРµ СЃ СЃРѕР±РѕР№
   if ( (bool)entity && entity->IsCreated() ) 
   {
     IFaceDefinitionPtr faceDef( IUnknownPtr( entity->GetDefinition(), false/*AddRef*/ ) ); 
@@ -430,29 +437,29 @@ bool IsSurface( IEntityPtr entity, bool planar = true, double * = NULL )
 
 
 //------------------------------------------------------------------------------
-// Определяет является ли объект осью
+// РћРїСЂРµРґРµР»СЏРµС‚ СЏРІР»СЏРµС‚СЃСЏ Р»Рё РѕР±СЉРµРєС‚ РѕСЃСЊСЋ
 // ---
 bool IsAxis( IEntityPtr entity ) 
 {
   if ( entity ) 
   {
     short  type = entity->GetType();
-    return type == o3d_axis2Planes              || // Ось по двум плоскостям
-           type == o3d_axisOperation            || // Ось операций
-           type == o3d_axis2Points              || // Ось по двум точкам
-           type == o3d_axisConeFace             || // Ось конической поверхности
-           type == o3d_axisEdge                 || // Ось по ребру
-           type == o3d_AxisFromPointByDirection || // Ось через точку по направлению
-           type == o3d_axisOX                   || // Ось X
-           type == o3d_axisOY                   || // Ось Y
-           type == o3d_axisOZ                   ;  // Ось Z
+    return type == o3d_axis2Planes              || // РћСЃСЊ РїРѕ РґРІСѓРј РїР»РѕСЃРєРѕСЃС‚СЏРј
+           type == o3d_axisOperation            || // РћСЃСЊ РѕРїРµСЂР°С†РёР№
+           type == o3d_axis2Points              || // РћСЃСЊ РїРѕ РґРІСѓРј С‚РѕС‡РєР°Рј
+           type == o3d_axisConeFace             || // РћСЃСЊ РєРѕРЅРёС‡РµСЃРєРѕР№ РїРѕРІРµСЂС…РЅРѕСЃС‚Рё
+           type == o3d_axisEdge                 || // РћСЃСЊ РїРѕ СЂРµР±СЂСѓ
+           type == o3d_AxisFromPointByDirection || // РћСЃСЊ С‡РµСЂРµР· С‚РѕС‡РєСѓ РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЋ
+           type == o3d_axisOX                   || // РћСЃСЊ X
+           type == o3d_axisOY                   || // РћСЃСЊ Y
+           type == o3d_axisOZ                   ;  // РћСЃСЊ Z
   }
   return false;
 }
 
 
 //------------------------------------------------------------------------------
-// Чтение БД
+// Р§С‚РµРЅРёРµ Р‘Р”
 // ---
 int ReadShpeelBase( float d, ShpeelBase &base, SHPEEL * shpeel ) 
 {
@@ -467,11 +474,11 @@ int ReadShpeelBase( float d, ShpeelBase &base, SHPEEL * shpeel )
   int res = ReadRecord( base.bg, base.rg2, &shpeelTmp );
   if( res ) 
   {
-    shpeel->d  = shpeelTmp.d;  // Диаметр резьбы
-    shpeel->p1 = shpeelTmp.p1; // Шаг резьбы 
-    shpeel->p2 = shpeelTmp.p2; // Шаг резьбы 
-    shpeel->b1 = shpeelTmp.b1; // Ввинчиваемый конец
-    shpeel->c  = shpeelTmp.c;  // Размер фаски 
+    shpeel->d  = shpeelTmp.d;  // Р”РёР°РјРµС‚СЂ СЂРµР·СЊР±С‹
+    shpeel->p1 = shpeelTmp.p1; // РЁР°Рі СЂРµР·СЊР±С‹ 
+    shpeel->p2 = shpeelTmp.p2; // РЁР°Рі СЂРµР·СЊР±С‹ 
+    shpeel->b1 = shpeelTmp.b1; // Р’РІРёРЅС‡РёРІР°РµРјС‹Р№ РєРѕРЅРµС†
+    shpeel->c  = shpeelTmp.c;  // Р Р°Р·РјРµСЂ С„Р°СЃРєРё 
   }
 
   return res;
@@ -479,8 +486,8 @@ int ReadShpeelBase( float d, ShpeelBase &base, SHPEEL * shpeel )
 
 
 //------------------------------------------------------------------------------
-// Читать параметры стержня
-// Возвращает 1 - успех 0 - не найдено записи -1 - ошибка связи с БД
+// Р§РёС‚Р°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ СЃС‚РµСЂР¶РЅСЏ
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ 1 - СѓСЃРїРµС… 0 - РЅРµ РЅР°Р№РґРµРЅРѕ Р·Р°РїРёСЃРё -1 - РѕС€РёР±РєР° СЃРІСЏР·Рё СЃ Р‘Р”
 // ---
 int ReadShpeelStBase( ShpeelBase &base, SHPEEL * shpeel )
 {
@@ -508,11 +515,11 @@ int ReadShpeelStBase( ShpeelBase &base, SHPEEL * shpeel )
   shpeel->m1 = shpeelSTmp.m1;
   shpeel->m2 = shpeelSTmp.m2;
 
-  // ALLST - резьба до головки
+  // ALLST - СЂРµР·СЊР±Р° РґРѕ РіРѕР»РѕРІРєРё
   if( shpeel->gost > 22041 && !(fabs(shpeel->b) > EPSILON) ) 
   {
     shpeel->f |= ALLST;
-    shpeel->f &= ~ISPOLN; // Исполнение 1 становится текущим, тк. исполнение 2 недоступно
+    shpeel->f &= ~ISPOLN; // РСЃРїРѕР»РЅРµРЅРёРµ 1 СЃС‚Р°РЅРѕРІРёС‚СЃСЏ С‚РµРєСѓС‰РёРј, С‚Рє. РёСЃРїРѕР»РЅРµРЅРёРµ 2 РЅРµРґРѕСЃС‚СѓРїРЅРѕ
   }
   else
     shpeel->f &=~ ALLST;
@@ -523,12 +530,12 @@ int ReadShpeelStBase( ShpeelBase &base, SHPEEL * shpeel )
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Работа с БД
+// Р Р°Р±РѕС‚Р° СЃ Р‘Р”
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------------------------
-// Открытие БД
+// РћС‚РєСЂС‹С‚РёРµ Р‘Р”
 // ---
 int Shpeel::OpenBase() 
 {
@@ -598,7 +605,7 @@ int Shpeel::OpenBase()
 
 
 //------------------------------------------------------------------------------
-// Открытие БД
+// РћС‚РєСЂС‹С‚РёРµ Р‘Р”
 // ---
 void Shpeel::CloseBase()
 {
@@ -611,7 +618,7 @@ void Shpeel::CloseBase()
 
 
 //------------------------------------------------------------------------------
-// Получить параметры
+// РџРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹
 // ---
 int Shpeel::GetParam() 
 {
@@ -620,7 +627,7 @@ int Shpeel::GetParam()
 
 
 //------------------------------------------------------------------------------
-// Конструктор
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 // ---
 Shpeel::Shpeel() 
  : refCount      ( 0     )
@@ -641,9 +648,9 @@ Shpeel::Shpeel()
     flagMode = doc->IsEditMode() ;
   //callbackCurrentShpeel = this;
 
-  // Взяли деталь
+  // Р’Р·СЏР»Рё РґРµС‚Р°Р»СЊ
   m_part = IPartPtr( doc->GetPart( flagMode ? pEdit_Part : pNew_Part ), false/*AddRef*/ );
-
+  partInfo = std::shared_ptr<InsertPart>(new InsertPart) ;
   if( !GetParam() ) 
   {
 
@@ -659,18 +666,18 @@ Shpeel::Shpeel()
 
 
 //------------------------------------------------------------------------------
-// Конструктор копий
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёР№
 // ---
 Shpeel::~Shpeel()
 {
   ASSERT(!refCount);
-  if ( openBase ) // Если БД открыта
-    CloseBase();  // Закрываем старую БД
+  if ( openBase ) // Р•СЃР»Рё Р‘Р” РѕС‚РєСЂС‹С‚Р°
+    CloseBase();  // Р—Р°РєСЂС‹РІР°РµРј СЃС‚Р°СЂСѓСЋ Р‘Р”
 }
 
 
 //------------------------------------------------------------------------------
-// Инициализация
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 // ---
 void Shpeel::Init() 
 {
@@ -684,7 +691,7 @@ void Shpeel::Init()
   tmp.p1         = 2.5;
   tmp.p2         = 1.5;
   tmp.c          = 2.5;
-  tmp.indexMassa = 0; // 0 - металл 1 - алюмин сплав 3 - бронза 2 - латунь
+  tmp.indexMassa = 0; // 0 - РјРµС‚Р°Р»Р» 1 - Р°Р»СЋРјРёРЅ СЃРїР»Р°РІ 3 - Р±СЂРѕРЅР·Р° 2 - Р»Р°С‚СѓРЅСЊ
   tmp.ver        = 1;
   tmp.b1         = 20;
   tmp.klass      = 2; // klass=B
@@ -697,13 +704,13 @@ void Shpeel::Init()
 
 
 //------------------------------------------------------------------------------
-// При вставке из библиотеки моделей указывается полный путь к файлу библиотеки и путь внутри библиотеки моделей
+// РџСЂРё РІСЃС‚Р°РІРєРµ РёР· Р±РёР±Р»РёРѕС‚РµРєРё РјРѕРґРµР»РµР№ СѓРєР°Р·С‹РІР°РµС‚СЃСЏ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ Р±РёР±Р»РёРѕС‚РµРєРё Рё РїСѓС‚СЊ РІРЅСѓС‚СЂРё Р±РёР±Р»РёРѕС‚РµРєРё РјРѕРґРµР»РµР№
 // ---
 CString& Shpeel::GetFileName() 
 {        
   static TCHAR fullName[512];
   bool res = false;
-  if( GetModuleFileName( StepDLL.hModule, fullName, sizeof(fullName) ) ) //подружает файл stud.l3d
+  if( GetModuleFileName( StepDLL.hModule, fullName, sizeof(fullName) ) ) //РїРѕРґСЂСѓР¶Р°РµС‚ С„Р°Р№Р» stud.l3d
   {
 
     TCHAR *c = _tcsrchr( fullName, _T('\\'));
@@ -734,32 +741,23 @@ CString& Shpeel::GetFileName()
   return fileName;
 }
 
-#include "draw_obj.h"
 //------------------------------------------------------------------------------
-// Редактируем переменные
+// Р РµРґР°РєС‚РёСЂСѓРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ
 // ---
 void Shpeel::SetParam(IPartPtr& pPart )
 {
-  // Редактируем внешние переменные
+  // Р РµРґР°РєС‚РёСЂСѓРµРј РІРЅРµС€РЅРёРµ РїРµСЂРµРјРµРЅРЅС‹Рµ
     if (!(bool)pPart)
     {
-        //pPart = m_part;
-        //draw_panel(NULL, pPart);
-        pPart->SetFileName(L"D:/ang_lib/ang_detile/d.m3d");
-        pPart->Update();
+      
 
     }
-
-  if (pPart)
-  {
-      draw_panel(NULL, pPart);
-  }
 
 }
 
 
 //------------------------------------------------------------------------------
-// Добавить сопряжения
+// Р”РѕР±Р°РІРёС‚СЊ СЃРѕРїСЂСЏР¶РµРЅРёСЏ
 // ---
 bool Shpeel::AddMate( short constraintType, 
                       short direction, 
@@ -772,7 +770,7 @@ bool Shpeel::AddMate( short constraintType,
 {
   bool res = false;
 
-  if (p && mCol) // Временное сопряжение
+  if (p && mCol) // Р’СЂРµРјРµРЅРЅРѕРµ СЃРѕРїСЂСЏР¶РµРЅРёРµ
   { 
     IMateConstraintPtr mate=doc->GetMateConstraint();
 
@@ -816,7 +814,7 @@ void FillDispArray( const _variant_t & var, PArray<T> & dispArr )
       if ( pvar ) {
         int count = var.parray->rgsabound[0].cElements;
 
-        // Добавляем комментарии в коллекцию
+        // Р”РѕР±Р°РІР»СЏРµРј РєРѕРјРјРµРЅС‚Р°СЂРёРё РІ РєРѕР»Р»РµРєС†РёСЋ
         for ( long i = 0; i < count; i++ ) 
         {
           dispArr.Add( new T(pvar[i]) );
@@ -829,7 +827,7 @@ void FillDispArray( const _variant_t & var, PArray<T> & dispArr )
 
 
 //------------------------------------------------------------------------------
-// Редактирование объекта спецификации
+// Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РѕР±СЉРµРєС‚Р° СЃРїРµС†РёС„РёРєР°С†РёРё
 // ---
 reference Shpeel::EditSpcObj( reference spcObj )
 {
@@ -845,20 +843,11 @@ reference Shpeel::EditSpcObj( reference spcObj )
   
   
   ////////////////////////////////////////
-
-  CString patch;
-  patch = get_value_from_list(this, ID_CHOSE_DETAIL);
-  auto& part = GetPart();
-  part->ClearAllObj();
-  part->SetFileName((LPWSTR)(LPCTSTR)patch);
-  part->Update();
-  RedrawPhantom();
-
-
-
-  ////////////////////////////////////////
   
 
+  ////////////////////////////////////////
+  m_part = partInfo->part;
+  
   ksAPI7::IPart7Ptr part7 = IUnknownPtr( ksTransferInterface( m_part, ksAPI7Dual, 0 ), false );
   ksAPI7::IPropertyKeeperPtr propertyKeeperIn1( part7 );
  
@@ -894,7 +883,7 @@ reference Shpeel::EditSpcObj( reference spcObj )
   {  
     if ( !obj1 ) 
     {
-      // Базовый объект добавляется.
+      // Р‘Р°Р·РѕРІС‹Р№ РѕР±СЉРµРєС‚ РґРѕР±Р°РІР»СЏРµС‚СЃСЏ.
       obj1 = m_spcBaseObjects->AddWithParam( ObjectCreateParam, propertyKeeperIn1, FALSE, (LPDISPATCH)propertyKeeperIn1 );
     }
   }
@@ -938,7 +927,7 @@ reference Shpeel::EditSpcObj( reference spcObj )
       if ( item )
         item->PutVisible( FALSE );
  
-      // Изменим длину
+      // РР·РјРµРЅРёРј РґР»РёРЅСѓ
       uBuf = (UINT)tmp.l;
 
       item = columnItems->GetItem( 8 );
@@ -961,14 +950,14 @@ reference Shpeel::EditSpcObj( reference spcObj )
       if ( item )
         item->PutVisible( FALSE );
  
-      // Изменим ГОСТ
+      // РР·РјРµРЅРёРј Р“РћРЎРў
       uBuf = tmp.gost;
       item = columnItems->GetItem( 13 );
       if ( item )
         item->PutValue( uBuf );
  
       float massa = tmp.f & ISPOLN ? tmp.m2 : tmp.m1;
-      // 0 - металл 1 - алюмин сплав 3 - бронза 2 - латунь
+      // 0 - РјРµС‚Р°Р»Р» 1 - Р°Р»СЋРјРёРЅ СЃРїР»Р°РІ 3 - Р±СЂРѕРЅР·Р° 2 - Р»Р°С‚СѓРЅСЊ
       massa = massa*( !tmp.indexMassa ? 1 : tmp.indexMassa==1 ? 0.356f : tmp.indexMassa==3 ? 0.97f : 1.08f )/COUNT_MASSA;
       columns = obj1->AdditionalColumns;
       column = columns->GetColumn( ksSColumnMass, 1, 0 );
@@ -989,15 +978,18 @@ reference Shpeel::EditSpcObj( reference spcObj )
 
 
 //-------------------------------------------------------------------------------
-// Отрисовка объекта спецификации 
+// РћС‚СЂРёСЃРѕРІРєР° РѕР±СЉРµРєС‚Р° СЃРїРµС†РёС„РёРєР°С†РёРё 
 // ---
 bool Shpeel::DrawSpcObj( reference & spcObj ) 
 {
+  set_info(partInfo->part->GetFileName());
+
   spcObj = 0;
   if( IsSpcObjCreate() ) 
   {
-    if ( ReturnResult() == etError10 ) // Вырожденный объект
+    if ( ReturnResult() == etError10 ) // Р’С‹СЂРѕР¶РґРµРЅРЅС‹Р№ РѕР±СЉРµРєС‚
       ResultNULL();
+    set_info(partInfo->part->GetFileName());
 
     spcObj = EditSpcObj( spcObj );
     if( !par.flagAttr && spcObj ) 
@@ -1011,27 +1003,27 @@ bool Shpeel::DrawSpcObj( reference & spcObj )
 
 
 //---------------------------------------------------------------------------------------------------- 
-// Вывод параметров 
+// Р’С‹РІРѕРґ РїР°СЂР°РјРµС‚СЂРѕРІ 
 // ---
 void Shpeel::ShowParam()
 {
-    // Перезаполняем грид
+    // РџРµСЂРµР·Р°РїРѕР»РЅСЏРµРј РіСЂРёРґ
   if ( paramGrid ) 
   {
     //rowIndex = 1;
 
-    //// "b(мм) Гаечный конец"
+    //// "b(РјРј) Р“Р°РµС‡РЅС‹Р№ РєРѕРЅРµС†"
     //AddDoubleToGrig( ID_PROP_WRENCH_ENDING, tmp.b ); 
-    //// "b0(мм) Ввинчиваемый конец"
+    //// "b0(РјРј) Р’РІРёРЅС‡РёРІР°РµРјС‹Р№ РєРѕРЅРµС†"
     //AddDoubleToGrig( ID_PROP_SCREW_ENDING, tmp.b1 ); 
-    //// "p(мм) Шаг резьбы"
+    //// "p(РјРј) РЁР°Рі СЂРµР·СЊР±С‹"
     //float step = !(tmp.f & PITCHOFF || !(tmp.f & PITCH)) ? tmp.p1 : tmp.p2;
     //AddDoubleToGrig( ID_PROP_PITCH, step ); 
-    //// "c(мм) Фаска"
+    //// "c(РјРј) Р¤Р°СЃРєР°"
     //AddDoubleToGrig( ID_PROP_FACET, tmp.c ); 
-    //// "m(кг) Масса 1000 шт"
+    //// "m(РєРі) РњР°СЃСЃР° 1000 С€С‚"
     //float massa = tmp.f & ISPOLN ? tmp.m2 : tmp.m1;
-    //// 0 - металл 1 - алюмин сплав 3 - бронза 2 - латунь
+    //// 0 - РјРµС‚Р°Р»Р» 1 - Р°Р»СЋРјРёРЅ СЃРїР»Р°РІ 3 - Р±СЂРѕРЅР·Р° 2 - Р»Р°С‚СѓРЅСЊ
     //massa = massa*( !tmp.indexMassa ? 1 : tmp.indexMassa==1 ? 0.356f : tmp.indexMassa==3 ? 0.97f : 1.08f );
     //AddDoubleToGrig( ID_PROP_MASSA_1000, massa ); 
   
@@ -1042,13 +1034,13 @@ void Shpeel::ShowParam()
 
 
 //-------------------------------------------------------------------------------------
-// Идентификатор слайда
+// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃР»Р°Р№РґР°
 // ---
 long Shpeel::GetSlideID()
 {
   if( tmp.gost > 22041 ) 
   {
-    if ( tmp.f & ALLST ) // ALLST - резьба до головки
+    if ( tmp.f & ALLST ) // ALLST - СЂРµР·СЊР±Р° РґРѕ РіРѕР»РѕРІРєРё
       return SH22042_3;
     else 
     {
@@ -1069,7 +1061,7 @@ long Shpeel::GetSlideID()
 
 
 //-------------------------------------------------------------------------------------
-// Изменение значения контрола
+// РР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РєРѕРЅС‚СЂРѕР»Р°
 // ---
 void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal ) 
 {
@@ -1077,11 +1069,11 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
 
  switch ( ctrlID ) 
   {
-    case IDP_SPC_OBJ: // Объект спецификации
+    case IDP_SPC_OBJ: // РћР±СЉРµРєС‚ СЃРїРµС†РёС„РёРєР°С†РёРё
       par.flagAttr = !par.flagAttr;
       break;
 
-    case ID_PROP_GOST: // ГОСТ
+    case ID_PROP_GOST: // Р“РћРЎРў
     { 
       CString strGost = newVal.bstrVal;
       short gost = (short)_ttoi( strGost.Left(5) );
@@ -1092,41 +1084,41 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
         tmp.gost = gost;
         CloseBase();
         OpenBase();
-        if ( ReadShpeelBase( tmp.d, bBase, &tmp ) && ReadShpeelStBase(bBase, &tmp ) ) // Чтение БД
+        if ( ReadShpeelBase( tmp.d, bBase, &tmp ) && ReadShpeelStBase(bBase, &tmp ) ) // Р§С‚РµРЅРёРµ Р‘Р”
         {
 
           ksAPI7::IPropertyListPtr diamList( GetPropertyControl(ID_PROP_DIAM) );
           if( diamList )
-            FillDiametr( diamList ); // Заполняет список диаметров
+            FillDiametr( diamList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґРёР°РјРµС‚СЂРѕРІ
 
           ksAPI7::IPropertyListPtr lenghtList( GetPropertyControl(ID_PROP_LENGHT) );
           if( lenghtList )
-            FillLenght( lenghtList ); // Заполняет список длин
+            FillLenght( lenghtList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ
         
           ksAPI7::IPropertyListPtr screwEndingList( GetPropertyControl(ID_PROP_SCREW_ENDING_LENGHT) );
           if( screwEndingList )
-            // Выделяем в списке 
+            // Р’С‹РґРµР»СЏРµРј РІ СЃРїРёСЃРєРµ 
             screwEndingList->Value =  LoadStr( GetTypeStrForGost( tmp.gost ));
 
           ksAPI7::IPropertyListPtr classList( GetPropertyControl(ID_PROP_CLASS) );
           if( classList )
-            // Выделяем в списке 
+            // Р’С‹РґРµР»СЏРµРј РІ СЃРїРёСЃРєРµ 
             classList->Value = LoadStr( GetClassStrForGost( tmp.gost ) ); 
 
 		      ksAPI7::IPropertyMultiButtonPtr ispButtons( GetPropertyControl(ID_PROP_ISP) );
           if( ispButtons )
           {
-            // Проверка возможности исполнения 2
-            bool enable = tmp.f & ALLST ? false : true; // ALLST - резьба до головки
+            // РџСЂРѕРІРµСЂРєР° РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РёСЃРїРѕР»РЅРµРЅРёСЏ 2
+            bool enable = tmp.f & ALLST ? false : true; // ALLST - СЂРµР·СЊР±Р° РґРѕ РіРѕР»РѕРІРєРё
             ispButtons->ButtonEnable [ IDP_BMP_G_I2 ] = enable;
             if( !enable )
-              ispButtons->ButtonChecked[ IDP_BMP_G_I1 ] = !(tmp.f & ISPOLN ); // Исполнение 1 становится текущим, тк. исполнение 2 недоступно
+              ispButtons->ButtonChecked[ IDP_BMP_G_I1 ] = !(tmp.f & ISPOLN ); // РСЃРїРѕР»РЅРµРЅРёРµ 1 СЃС‚Р°РЅРѕРІРёС‚СЃСЏ С‚РµРєСѓС‰РёРј, С‚Рє. РёСЃРїРѕР»РЅРµРЅРёРµ 2 РЅРµРґРѕСЃС‚СѓРїРЅРѕ
           }
 
-          // Вывод параметров в гриде ( ГОСТ шпильки - новые параметры )
+          // Р’С‹РІРѕРґ РїР°СЂР°РјРµС‚СЂРѕРІ РІ РіСЂРёРґРµ ( Р“РћРЎРў С€РїРёР»СЊРєРё - РЅРѕРІС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ )
           ShowParam(); 
 
-          // Перерисовать фантом и слайд
+          // РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ С„Р°РЅС‚РѕРј Рё СЃР»Р°Р№Рґ
           SetChanged(); 
 
         }
@@ -1134,30 +1126,30 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
       break;
     }      
 
-    case ID_PROP_DIAM: // Диаметр 
+    case ID_PROP_DIAM: // Р”РёР°РјРµС‚СЂ 
     { 
       float diam = (float)newVal.dblVal; 
       if ( fabs(diam - tmp.d ) > EPSILON ) 
       {
-        if ( ReadShpeelBase( diam, bBase, &tmp ) && ReadShpeelStBase(bBase, &tmp ) ) // Чтение БД
+        if ( ReadShpeelBase( diam, bBase, &tmp ) && ReadShpeelStBase(bBase, &tmp ) ) // Р§С‚РµРЅРёРµ Р‘Р”
         {
 		      ksAPI7::IPropertyListPtr lenghtList( GetPropertyControl(ID_PROP_LENGHT) );
           if( lenghtList )
-            FillLenght( lenghtList ); // Заполняет список длин
+            FillLenght( lenghtList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ
           
 		      ksAPI7::IPropertyMultiButtonPtr ispButtons( GetPropertyControl(ID_PROP_ISP) );
           if( ispButtons )
           {
-            // Проверка возможности исполнения 2
-            bool enable = tmp.f & ALLST ? false : true; // ALLST - резьба до головки
+            // РџСЂРѕРІРµСЂРєР° РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РёСЃРїРѕР»РЅРµРЅРёСЏ 2
+            bool enable = tmp.f & ALLST ? false : true; // ALLST - СЂРµР·СЊР±Р° РґРѕ РіРѕР»РѕРІРєРё
             ispButtons->ButtonEnable [ IDP_BMP_G_I2 ] = enable;
             if( !enable )
-              ispButtons->ButtonChecked[ IDP_BMP_G_I1 ] = !(tmp.f & ISPOLN ); // Исполнение 1 становится текущим, тк. исполнение 2 недоступно
+              ispButtons->ButtonChecked[ IDP_BMP_G_I1 ] = !(tmp.f & ISPOLN ); // РСЃРїРѕР»РЅРµРЅРёРµ 1 СЃС‚Р°РЅРѕРІРёС‚СЃСЏ С‚РµРєСѓС‰РёРј, С‚Рє. РёСЃРїРѕР»РЅРµРЅРёРµ 2 РЅРµРґРѕСЃС‚СѓРїРЅРѕ
           }
 
-          // Вывод параметров в гриде ( Диаметр шпильки - новые параметры )
+          // Р’С‹РІРѕРґ РїР°СЂР°РјРµС‚СЂРѕРІ РІ РіСЂРёРґРµ ( Р”РёР°РјРµС‚СЂ С€РїРёР»СЊРєРё - РЅРѕРІС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ )
           ShowParam();
-          // Перерисовать фантом и слайд
+          // РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ С„Р°РЅС‚РѕРј Рё СЃР»Р°Р№Рґ
           SetChanged(); 
         }
       }
@@ -1198,19 +1190,19 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
     }
 
 	
-    case ID_PROP_LENGHT: // Длина шпильки 
+    case ID_PROP_LENGHT: // Р”Р»РёРЅР° С€РїРёР»СЊРєРё 
     { 
       float lenght = (float)newVal.dblVal; 
       if ( fabs(lenght - tmp.l ) > EPSILON ) 
       {
         tmp.l = lenght;
 
-        // Перерисовать фантом и слайд
+        // РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ С„Р°РЅС‚РѕРј Рё СЃР»Р°Р№Рґ
         SetChanged(); 
       }
       break;
     }
-    case ID_PROP_SCREW_ENDING_LENGHT: // Длина ввинчиваемого конца шпильки 
+    case ID_PROP_SCREW_ENDING_LENGHT: // Р”Р»РёРЅР° РІРІРёРЅС‡РёРІР°РµРјРѕРіРѕ РєРѕРЅС†Р° С€РїРёР»СЊРєРё 
     {
       CString strScrewEnding = newVal.bstrVal;    
       for ( int i = 0; i < 6; i++ )
@@ -1223,7 +1215,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
 			      ksAPI7::IPropertyListPtr gostList( GetPropertyControl(ID_PROP_GOST) );
             if( gostList )
             {
-              // Выделяем в списке 
+              // Р’С‹РґРµР»СЏРµРј РІ СЃРїРёСЃРєРµ 
               LPCTSTR str = LoadStr( GetGostStr( gost ) );
               gostList->Value = str;
               OnChangeControlValue( ID_PROP_GOST, _variant_t( str ) );
@@ -1234,7 +1226,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
       } 
       break;
     }
-    case ID_PROP_CLASS: // Класс точности шпильки 
+    case ID_PROP_CLASS: // РљР»Р°СЃСЃ С‚РѕС‡РЅРѕСЃС‚Рё С€РїРёР»СЊРєРё 
     {
       CString strClass = newVal.bstrVal;    
       for ( int j = 0; j < 2; j++ )
@@ -1255,7 +1247,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
 				          ksAPI7::IPropertyListPtr gostList( GetPropertyControl(ID_PROP_GOST) );
                   if( gostList )
                   {
-                    // Выделяем в списке 
+                    // Р’С‹РґРµР»СЏРµРј РІ СЃРїРёСЃРєРµ 
                     LPCTSTR str = LoadStr( GetGostStr( gost ) );
                     gostList->Value = str;
                     OnChangeControlValue( ID_PROP_GOST, _variant_t( str ) );
@@ -1269,7 +1261,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
       }
       break;
     }
-    case ID_PROP_MATERIAL: // Материал шпильки  
+    case ID_PROP_MATERIAL: // РњР°С‚РµСЂРёР°Р» С€РїРёР»СЊРєРё  
     {
       CString strMaterial = newVal.bstrVal;    
       for ( int i = 0; i < 4; i++ )
@@ -1280,7 +1272,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
           {
             tmp.indexMassa = i;
 
-            // Вывод параметров в гриде ( Масса )
+            // Р’С‹РІРѕРґ РїР°СЂР°РјРµС‚СЂРѕРІ РІ РіСЂРёРґРµ ( РњР°СЃСЃР° )
             ShowParam(); 
             break;
           }
@@ -1293,52 +1285,52 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
 
 
 //---------------------------------------------------------------------------------------------------- 
-// Обработка нажатия кнопок
+// РћР±СЂР°Р±РѕС‚РєР° РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРѕРє
 // ---
 void Shpeel::OnButtonClick( long buttonID ) 
 { 
   switch ( buttonID ) 
   { 
-    case IDP_BMP_G_I1: // Исполнение 1       
+    case IDP_BMP_G_I1: // РСЃРїРѕР»РЅРµРЅРёРµ 1       
       tmp.f &= ~ISPOLN;
 
-      // Вывод параметров в гриде ( Исполнение влияет на массу ) 
+      // Р’С‹РІРѕРґ РїР°СЂР°РјРµС‚СЂРѕРІ РІ РіСЂРёРґРµ ( РСЃРїРѕР»РЅРµРЅРёРµ РІР»РёСЏРµС‚ РЅР° РјР°СЃСЃСѓ ) 
       ShowParam(); 
-      // Перерисовать фантом и слайд
+      // РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ С„Р°РЅС‚РѕРј Рё СЃР»Р°Р№Рґ
       SetChanged(); 
 
       break;
        
-    case IDP_BMP_G_I2: // Исполнение 2
+    case IDP_BMP_G_I2: // РСЃРїРѕР»РЅРµРЅРёРµ 2
       tmp.f |= ISPOLN; 
 
-      // Вывод параметров в гриде ( Исполнение влияет на массу ) 
+      // Р’С‹РІРѕРґ РїР°СЂР°РјРµС‚СЂРѕРІ РІ РіСЂРёРґРµ ( РСЃРїРѕР»РЅРµРЅРёРµ РІР»РёСЏРµС‚ РЅР° РјР°СЃСЃСѓ ) 
       ShowParam(); 
-      // Перерисовать фантом и слайд
+      // РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ С„Р°РЅС‚РѕРј Рё СЃР»Р°Р№Рґ
       SetChanged(); 
 
       break;
 
-    case ID_PROP_G_STEP : // Шаг 
+    case ID_PROP_G_STEP : // РЁР°Рі 
     { 
       tmp.f & PITCH ? tmp.f &= ~PITCH : tmp.f |= PITCH;
 
-      // Вывод параметров в гриде ( Шаг резьбы ) 
+      // Р’С‹РІРѕРґ РїР°СЂР°РјРµС‚СЂРѕРІ РІ РіСЂРёРґРµ ( РЁР°Рі СЂРµР·СЊР±С‹ ) 
       ShowParam();
 
       break; 
     }
-    case ID_SIMPLE : // Упрощенно         
+    case ID_SIMPLE : // РЈРїСЂРѕС‰РµРЅРЅРѕ         
     {
       tmp.f & SIMPLE ? tmp.f &= ~SIMPLE : tmp.f |= SIMPLE;
       
-      // Перерисовать фантом и слайд
+      // РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ С„Р°РЅС‚РѕРј Рё СЃР»Р°Р№Рґ
       SetChanged();       
       
       break;
     }
 
-    case pbEnter: // Вставка детали в сборку и окончание процесса
+    case pbEnter: // Р’СЃС‚Р°РІРєР° РґРµС‚Р°Р»Рё РІ СЃР±РѕСЂРєСѓ Рё РѕРєРѕРЅС‡Р°РЅРёРµ РїСЂРѕС†РµСЃСЃР°
     {
       fixingPart = TRUE;
 
@@ -1376,30 +1368,30 @@ void Shpeel::OnButtonClick( long buttonID )
         }
 
         ksAPI7::IModelObjectPtr obj(IUnknownPtr(ksTransferInterface(m_takePoint, ksAPI7Dual, 0), false));
-        m_process3D->RunTakeCreateObjectProcess(prPoint3D, obj, false, lost); // Запуска подпроцесса создания 3D- точки
+        m_process3D->RunTakeCreateObjectProcess(prPoint3D, obj, false, lost); // Р—Р°РїСѓСЃРєР° РїРѕРґРїСЂРѕС†РµСЃСЃР° СЃРѕР·РґР°РЅРёСЏ 3D- С‚РѕС‡РєРё
       }
       break;
     }
 
-    case ID_CHOSE_DETAIL:
-    {
-        LibMessage(_T("ID_CHOSE_DETAIL"));
-        break;
-    }
+    //case ID_CHOSE_DETAIL:
+    //{
+    //    LibMessage(_T("ID_CHOSE_DETAIL"));
+    //    break;
+    //}
   }
 }
 
 
 //------------------------------------------------------------------------------
-// Заполняет список диаметров
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґРёР°РјРµС‚СЂРѕРІ
 // ---
 void Shpeel::FillDiametr( SArray<double> & diamList, float & curDiam ) 
 {
   if( openBase )
   {
-    float lMin         = MAX_LENGTH; // Минимальное значение в списке
-    float lMax         = MIN_LENGTH; // Максимальное значение в списке
-    bool  enterInRange = false;      // Текущее значение не входит в новые значения
+    float lMin         = MAX_LENGTH; // РњРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ СЃРїРёСЃРєРµ
+    float lMax         = MIN_LENGTH; // РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ СЃРїРёСЃРєРµ
+    bool  enterInRange = false;      // РўРµРєСѓС‰РµРµ Р·РЅР°С‡РµРЅРёРµ РЅРµ РІС…РѕРґРёС‚ РІ РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
 
     ShpeelTmp2 tmpD;
     memset( &tmpD, 0, sizeof(tmpD) );
@@ -1407,35 +1399,35 @@ void Shpeel::FillDiametr( SArray<double> & diamList, float & curDiam )
     if ( ConditionT(bBase.bg, bBase.rg1, _T("t = 1")) ) 
     {
       int i = 1;
-      while( i ) // Просматриваем все записи базы данных
+      while( i ) // РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј РІСЃРµ Р·Р°РїРёСЃРё Р±Р°Р·С‹ РґР°РЅРЅС‹С…
       {                                 
-        i = ReadRecord( bBase.bg, bBase.rg1, &tmpD ); // Считываем данное
-        if ( i ) // Если запись найдена
+        i = ReadRecord( bBase.bg, bBase.rg1, &tmpD ); // РЎС‡РёС‚С‹РІР°РµРј РґР°РЅРЅРѕРµ
+        if ( i ) // Р•СЃР»Рё Р·Р°РїРёСЃСЊ РЅР°Р№РґРµРЅР°
         {                                     
-          // Заносим его в список
+          // Р—Р°РЅРѕСЃРёРј РµРіРѕ РІ СЃРїРёСЃРѕРє
           diamList.Add( tmpD.d );
 
           if ( tmpD.d == curDiam )
-            enterInRange = true; // Текущее значение диаметра входит в новые значения
+            enterInRange = true; // РўРµРєСѓС‰РµРµ Р·РЅР°С‡РµРЅРёРµ РґРёР°РјРµС‚СЂР° РІС…РѕРґРёС‚ РІ РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
           if ( tmpD.d < lMin )
-            lMin = tmpD.d;       // Находим минимальное значение
+            lMin = tmpD.d;       // РќР°С…РѕРґРёРј РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
           if ( tmpD.d > lMax )                          
-            lMax = tmpD.d;       // Находим максимальное значение
+            lMax = tmpD.d;       // РќР°С…РѕРґРёРј РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
         }
       }
-      if ( !enterInRange )  // Если текущее значение диаметра не входит в в новые значения
-        curDiam = lMin;     // Присваиваем диаметру минимальное значение
-      if ( curDiam < lMin ) // Если диаметр выходит за минимальную границу новых значений
-        curDiam = lMin;     // Присваиваем ему минимальное значение
-      if ( tmp.d > lMax )   // Если диаметр выходит за максимальную границу новых значений
-        curDiam = lMax;     // Присваиваем ему максимальное значение
+      if ( !enterInRange )  // Р•СЃР»Рё С‚РµРєСѓС‰РµРµ Р·РЅР°С‡РµРЅРёРµ РґРёР°РјРµС‚СЂР° РЅРµ РІС…РѕРґРёС‚ РІ РІ РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
+        curDiam = lMin;     // РџСЂРёСЃРІР°РёРІР°РµРј РґРёР°РјРµС‚СЂСѓ РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+      if ( curDiam < lMin ) // Р•СЃР»Рё РґРёР°РјРµС‚СЂ РІС‹С…РѕРґРёС‚ Р·Р° РјРёРЅРёРјР°Р»СЊРЅСѓСЋ РіСЂР°РЅРёС†Сѓ РЅРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№
+        curDiam = lMin;     // РџСЂРёСЃРІР°РёРІР°РµРј РµРјСѓ РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+      if ( tmp.d > lMax )   // Р•СЃР»Рё РґРёР°РјРµС‚СЂ РІС‹С…РѕРґРёС‚ Р·Р° РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РіСЂР°РЅРёС†Сѓ РЅРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№
+        curDiam = lMax;     // РџСЂРёСЃРІР°РёРІР°РµРј РµРјСѓ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
     }
   } 
 }
 
 
 //------------------------------------------------------------------------------
-// Заполняет список диаметров
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґРёР°РјРµС‚СЂРѕРІ
 // ---
 void Shpeel::FillDiametr(ksAPI7::IPropertyListPtr & diamList )
 {
@@ -1449,15 +1441,15 @@ void Shpeel::FillDiametr(ksAPI7::IPropertyListPtr & diamList )
 
 
 //------------------------------------------------------------------------------
-// Заполняет список длин
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ
 // ---
 void Shpeel::FillLenght( SArray<double> & lenList, float & curLen )
 {
   if( openBase )
   {
-    float lMin         = MAX_LENGTH; // Минимальное значение в списке
-    float lMax         = MIN_LENGTH; // Максимальное значение в списке
-    bool  enterInRange = false;      // Текущее значение не входит в новые значения
+    float lMin         = MAX_LENGTH; // РњРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ СЃРїРёСЃРєРµ
+    float lMax         = MIN_LENGTH; // РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ СЃРїРёСЃРєРµ
+    bool  enterInRange = false;      // РўРµРєСѓС‰РµРµ Р·РЅР°С‡РµРЅРёРµ РЅРµ РІС…РѕРґРёС‚ РІ РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
 
     ShpeelTmp3 tmpL;
     memset( &tmpL, 0, sizeof(tmpL) ); 
@@ -1468,35 +1460,35 @@ void Shpeel::FillLenght( SArray<double> & lenList, float & curLen )
     if ( ConditionT(bBase.bs, bBase.rs1, buf) ) 
     {
       int i = 1;
-      while( i ) // Просматриваем все записи базы данных
+      while( i ) // РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј РІСЃРµ Р·Р°РїРёСЃРё Р±Р°Р·С‹ РґР°РЅРЅС‹С…
       {    
-        i = ReadRecord( bBase.bs, bBase.rs1, &tmpL ); // Считываем данное
-        if ( i ) // Если запись найдена
+        i = ReadRecord( bBase.bs, bBase.rs1, &tmpL ); // РЎС‡РёС‚С‹РІР°РµРј РґР°РЅРЅРѕРµ
+        if ( i ) // Р•СЃР»Рё Р·Р°РїРёСЃСЊ РЅР°Р№РґРµРЅР°
         {      
-          // Заносим его в список
-          lenList.Add( tmpL.L ); // Заносим его в список
+          // Р—Р°РЅРѕСЃРёРј РµРіРѕ РІ СЃРїРёСЃРѕРє
+          lenList.Add( tmpL.L ); // Р—Р°РЅРѕСЃРёРј РµРіРѕ РІ СЃРїРёСЃРѕРє
 
           if ( tmpL.L == curLen )
-            enterInRange = true; // Текущее значение диаметра входит в новые значения
+            enterInRange = true; // РўРµРєСѓС‰РµРµ Р·РЅР°С‡РµРЅРёРµ РґРёР°РјРµС‚СЂР° РІС…РѕРґРёС‚ РІ РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
           if ( tmpL.L < lMin )
-            lMin = tmpL.L;       // Находим минимальное значение
+            lMin = tmpL.L;       // РќР°С…РѕРґРёРј РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
           if ( tmpL.L > lMax )                          
-            lMax = tmpL.L;       // Находим максимальное значение
+            lMax = tmpL.L;       // РќР°С…РѕРґРёРј РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
         }
       }
-      if ( !enterInRange ) // Если текущее значение диаметра не входит в в новые значения
-        curLen = lMin;      // Присваиваем диаметру минимальное значение
-      if ( curLen < lMin )  // Если диаметр выходит за минимальную границу новых значений
-        curLen = lMin;      // Присваиваем ему минимальное значение
-      if ( curLen > lMax )  // Если диаметр выходит за максимальную границу новых значений
-        curLen = lMax;      // Присваиваем ему максимальное значение
+      if ( !enterInRange ) // Р•СЃР»Рё С‚РµРєСѓС‰РµРµ Р·РЅР°С‡РµРЅРёРµ РґРёР°РјРµС‚СЂР° РЅРµ РІС…РѕРґРёС‚ РІ РІ РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
+        curLen = lMin;      // РџСЂРёСЃРІР°РёРІР°РµРј РґРёР°РјРµС‚СЂСѓ РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+      if ( curLen < lMin )  // Р•СЃР»Рё РґРёР°РјРµС‚СЂ РІС‹С…РѕРґРёС‚ Р·Р° РјРёРЅРёРјР°Р»СЊРЅСѓСЋ РіСЂР°РЅРёС†Сѓ РЅРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№
+        curLen = lMin;      // РџСЂРёСЃРІР°РёРІР°РµРј РµРјСѓ РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+      if ( curLen > lMax )  // Р•СЃР»Рё РґРёР°РјРµС‚СЂ РІС‹С…РѕРґРёС‚ Р·Р° РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РіСЂР°РЅРёС†Сѓ РЅРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№
+        curLen = lMax;      // РџСЂРёСЃРІР°РёРІР°РµРј РµРјСѓ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
     }
   }
 }
 
 
 //------------------------------------------------------------------------------
-// Заполняет список длин
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ
 // ---
 void Shpeel::FillLenght(ksAPI7::IPropertyListPtr & lenghtList )
 {
@@ -1509,7 +1501,7 @@ void Shpeel::FillLenght(ksAPI7::IPropertyListPtr & lenghtList )
 }
 
 //-------------------------------------------------------------------------------
-// Заполняет список длин ввинчиваемого конца
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ РІРІРёРЅС‡РёРІР°РµРјРѕРіРѕ РєРѕРЅС†Р°
 // ---
 void Shpeel::FillScrewEnding( PArray<_bstr_t> & screwEndingList )
 {
@@ -1518,7 +1510,7 @@ void Shpeel::FillScrewEnding( PArray<_bstr_t> & screwEndingList )
 }
 
 //-------------------------------------------------------------------------------
-// Заполняет список длин ввинчиваемого конца
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ РІРІРёРЅС‡РёРІР°РµРјРѕРіРѕ РєРѕРЅС†Р°
 // ---
 void Shpeel::FillScrewEnding(ksAPI7::IPropertyListPtr & screwEndingList )
 {
@@ -1531,7 +1523,7 @@ void Shpeel::FillScrewEnding(ksAPI7::IPropertyListPtr & screwEndingList )
 }
 
 //-------------------------------------------------------------------------------
-// Заполняет список длин ввинчиваемого конца
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ РІРІРёРЅС‡РёРІР°РµРјРѕРіРѕ РєРѕРЅС†Р°
 // ---
 void Shpeel::FillClass( PArray<_bstr_t> & classList )
 {
@@ -1540,7 +1532,7 @@ void Shpeel::FillClass( PArray<_bstr_t> & classList )
 }
 
 //-------------------------------------------------------------------------------
-// Заполняет список класса точности 
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РєР»Р°СЃСЃР° С‚РѕС‡РЅРѕСЃС‚Рё 
 // ---
 void Shpeel::FillClass(ksAPI7::IPropertyListPtr & classList )
 {
@@ -1554,7 +1546,7 @@ void Shpeel::FillClass(ksAPI7::IPropertyListPtr & classList )
 
 
 //-------------------------------------------------------------------------------
-// Заполняет список ГОСТов
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє Р“РћРЎРўРѕРІ
 // ---
 void Shpeel::FillGost( PArray<_bstr_t>  & gostList )
 {
@@ -1563,7 +1555,7 @@ void Shpeel::FillGost( PArray<_bstr_t>  & gostList )
 }
 
 //-------------------------------------------------------------------------------
-// Заполняет список ГОСТов
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє Р“РћРЎРўРѕРІ
 // ---
 void Shpeel::FillGost(ksAPI7::IPropertyListPtr & gostList )
 {
@@ -1572,14 +1564,14 @@ void Shpeel::FillGost(ksAPI7::IPropertyListPtr & gostList )
   _variant_t values;
   FillBSTRSafeArray(values, list);
   gostList->Add( values );
-  // Выделяем в списке 
+  // Р’С‹РґРµР»СЏРµРј РІ СЃРїРёСЃРєРµ 
   gostList->Value = LoadStr(GetGostStr(tmp.gost));
 }
 
 
 //-------------------------------------------------------------------------------
-// Определяет материал по indexMassa
-// 0 - металл 1 - алюмин сплав 2 - латунь 3 - бронза
+// РћРїСЂРµРґРµР»СЏРµС‚ РјР°С‚РµСЂРёР°Р» РїРѕ indexMassa
+// 0 - РјРµС‚Р°Р»Р» 1 - Р°Р»СЋРјРёРЅ СЃРїР»Р°РІ 2 - Р»Р°С‚СѓРЅСЊ 3 - Р±СЂРѕРЅР·Р°
 // ---
 static short GetMaterialStr( short indexMassa )
 {
@@ -1590,7 +1582,7 @@ static short GetMaterialStr( short indexMassa )
 }
 
 //-------------------------------------------------------------------------------
-// Заполняет список ГОСТов
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє Р“РћРЎРўРѕРІ
 // ---
 void Shpeel::FillMaterial( PArray<_bstr_t>  & materialList )
 {
@@ -1600,7 +1592,7 @@ void Shpeel::FillMaterial( PArray<_bstr_t>  & materialList )
 
 
 //-------------------------------------------------------------------------------
-// Заполняет список материалов  
+// Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РјР°С‚РµСЂРёР°Р»РѕРІ  
 // ---
 void Shpeel::FillMaterial(ksAPI7::IPropertyListPtr & materialList )
 {
@@ -1609,20 +1601,20 @@ void Shpeel::FillMaterial(ksAPI7::IPropertyListPtr & materialList )
   _variant_t values;
   FillBSTRSafeArray(values, list);
   materialList->Add( values );
-  // Выделяем в списке 
+  // Р’С‹РґРµР»СЏРµРј РІ СЃРїРёСЃРєРµ 
   materialList->Value = LoadStr(GetMaterialStr(tmp.indexMassa));
 }
 
 
 //-------------------------------------------------------------------------------
-// Наполнить панель контролами
+// РќР°РїРѕР»РЅРёС‚СЊ РїР°РЅРµР»СЊ РєРѕРЅС‚СЂРѕР»Р°РјРё
 // ---
 void Shpeel::ShowControls() 
 {
   if ( curentCollection )
   {
       ksAPI7::IPropertyListPtr chose_ditail = curentCollection->Add(ksControlListStr);
-      chose_ditail->Name = _T("Текущая деталь");
+      chose_ditail->Name = _T("РўРµРєСѓС‰Р°СЏ РґРµС‚Р°Р»СЊ");
       chose_ditail->Id = ID_CHOSE_DETAIL;
       info_list inf_l; 
       inf_l.id = ID_CHOSE_DETAIL;
@@ -1675,104 +1667,107 @@ void Shpeel::ShowControls()
           }
       }
 
-      //Комбобокс сбора размера панели 
+      //РљРѕРјР±РѕР±РѕРєСЃ СЃР±РѕСЂР° СЂР°Р·РјРµСЂР° РїР°РЅРµР»Рё 
       ksAPI7::IPropertyEditPtr edit_h = curentCollection->Add(ksControlEditReal);
-      edit_h->Name = _T("Высота");
+      edit_h->Name = _T("Р’С‹СЃРѕС‚Р°");
       edit_h->Id = ID_H_3D_PLATE;
+      edit_h->Value = 100;
       ksAPI7::IPropertyEditPtr edit_w = curentCollection->Add(ksControlEditReal);
-      edit_w->Name = _T("Ширина");
+      edit_w->Name = _T("РЁРёСЂРёРЅР°");
       edit_w->Id = ID_W_3D_PLATE;
+      edit_w->Value = 100;
       ksAPI7::IPropertyEditPtr edit_z = curentCollection->Add(ksControlEditReal);
-      edit_z->Name = _T("Толщина");
+      edit_z->Name = _T("РўРѕР»С‰РёРЅР°");
       edit_z->Id = ID_Z_3D_PLATE;
+      edit_z->Value = 20;
 
   }
-  //// Комбобокс ГОСТа
+  //// РљРѕРјР±РѕР±РѕРєСЃ Р“РћРЎРўР°
   //ksAPI7::IPropertyListPtr gostList( CreateStringList() );
   //if ( gostList ) 
   //{
   //  InitPropertyControl( gostList, ID_PROP_GOST, IDS_GOST_TIPS, IDS_GOST_TIPS );
-  //  FillGost( gostList ); // Заполняет список ГОСТов
+  //  FillGost( gostList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє Р“РћРЎРўРѕРІ
   //}
   //
-  //if ( openBase ) // Если БД открыта
-  //  CloseBase();  // Закрываем старую БД
+  //if ( openBase ) // Р•СЃР»Рё Р‘Р” РѕС‚РєСЂС‹С‚Р°
+  //  CloseBase();  // Р—Р°РєСЂС‹РІР°РµРј СЃС‚Р°СЂСѓСЋ Р‘Р”
 
-  //// Открываем новую БД и считываем текущие параметры
+  //// РћС‚РєСЂС‹РІР°РµРј РЅРѕРІСѓСЋ Р‘Р” Рё СЃС‡РёС‚С‹РІР°РµРј С‚РµРєСѓС‰РёРµ РїР°СЂР°РјРµС‚СЂС‹
   //if ( OpenBase() )
   //{ 
-  //  // Комбобокс диаметров резьбы
+  //  // РљРѕРјР±РѕР±РѕРєСЃ РґРёР°РјРµС‚СЂРѕРІ СЂРµР·СЊР±С‹
   //  ksAPI7::IPropertyListPtr diamList( CreateRealList() );
   //  if ( diamList ) 
   //  {
   //    InitPropertyControl( diamList, ID_PROP_DIAM, IDS_DIAM_TIPS, IDS_DIAM_TIPS );
-  //    FillDiametr( diamList ); // Заполняет список диаметров
+  //    FillDiametr( diamList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґРёР°РјРµС‚СЂРѕРІ
   //  }
 
-  //  // Комбобокс длин шпильки
+  //  // РљРѕРјР±РѕР±РѕРєСЃ РґР»РёРЅ С€РїРёР»СЊРєРё
   //  ksAPI7::IPropertyListPtr lenghtList( CreateRealList() );
   //  if ( lenghtList ) 
   //  {
   //    InitPropertyControl( lenghtList, ID_PROP_LENGHT, IDS_LENGHT_TIPS, IDS_LENGHT_TIPS );
-  //    FillLenght( lenghtList ); // Заполняет список длин
+  //    FillLenght( lenghtList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ
   //  }
 
-  //  // Комбобокс длин ввинчиваемого конца
+  //  // РљРѕРјР±РѕР±РѕРєСЃ РґР»РёРЅ РІРІРёРЅС‡РёРІР°РµРјРѕРіРѕ РєРѕРЅС†Р°
   //  ksAPI7::IPropertyListPtr screwEndingList( CreateStringList() );
   //  if ( screwEndingList ) 
   //  {
   //    InitPropertyControl( screwEndingList, ID_PROP_SCREW_ENDING_LENGHT, IDS_SCREW_ENDING_TIPS, IDS_SCREW_ENDING_TIPS );
-  //    FillScrewEnding( screwEndingList ); // Заполняет список длин ввинчиваемого конца
+  //    FillScrewEnding( screwEndingList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РґР»РёРЅ РІРІРёРЅС‡РёРІР°РµРјРѕРіРѕ РєРѕРЅС†Р°
   //  }
   //}
 
-  //// Комбобокс класса точности
+  //// РљРѕРјР±РѕР±РѕРєСЃ РєР»Р°СЃСЃР° С‚РѕС‡РЅРѕСЃС‚Рё
   //ksAPI7::IPropertyListPtr classList( CreateStringList() );
   //if ( classList ) 
   //{
   //  InitPropertyControl( classList, ID_PROP_CLASS, IDS_CLASS_TIPS, IDS_CLASS_TIPS );
-  //  FillClass( classList ); // Заполняет список класса точности
+  //  FillClass( classList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РєР»Р°СЃСЃР° С‚РѕС‡РЅРѕСЃС‚Рё
   //}
 
 
-  // Комбобокс материала
+  // РљРѕРјР±РѕР±РѕРєСЃ РјР°С‚РµСЂРёР°Р»Р°
   ksAPI7::IPropertyListPtr materialList( CreateStringList() );
   if ( materialList ) 
   {
     InitPropertyControl( materialList, ID_PROP_MATERIAL, IDS_MATERIAL_TIPS, IDS_MATERIAL_TIPS );
-    FillMaterial( materialList ); // Заполняет список материалов
+    FillMaterial( materialList ); // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РјР°С‚РµСЂРёР°Р»РѕРІ
   }
   
   //CreateSeparator(ksSeparatorDownName);
 
-  //// Исполнение
+  //// РСЃРїРѕР»РЅРµРЅРёРµ
   //ksAPI7::IPropertyMultiButtonPtr ispButtons( CreateMultiButton(ksRadioButton) );
   //if ( ispButtons ) 
   //{
   //  InitPropertyControl( ispButtons, ID_PROP_ISP, IDS_ISP_HINT, IDS_ISP_TIPS, TRUE, ksNameVerticalVisible );
   //  
-  //  // Кнопка исполнение 1
+  //  // РљРЅРѕРїРєР° РёСЃРїРѕР»РЅРµРЅРёРµ 1
   //  AddButton2( ispButtons, IDP_BMP_G_I1, IDF_BMP_G_I1, !(tmp.f & ISPOLN ) );
-  //  // Проверка возможности исполнения 2
-  //  bool enable = tmp.f & ALLST ? false : true; // ALLST - резьба до головки
-  //  // Кнопка исполнение 2
+  //  // РџСЂРѕРІРµСЂРєР° РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РёСЃРїРѕР»РЅРµРЅРёСЏ 2
+  //  bool enable = tmp.f & ALLST ? false : true; // ALLST - СЂРµР·СЊР±Р° РґРѕ РіРѕР»РѕРІРєРё
+  //  // РљРЅРѕРїРєР° РёСЃРїРѕР»РЅРµРЅРёРµ 2
   //  AddButton2( ispButtons, IDP_BMP_G_I2, IDF_BMP_G_I2, !!(tmp.f & ISPOLN ), enable );
   //}
 
   //CreateSeparator(ksSeparatorDownName);
 
-  //// Дополнительные параметры
+  //// Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹
   //ksAPI7::IPropertyMultiButtonPtr paramButtons( CreateMultiButton(ksCheckButton) );
   //if ( paramButtons ) 
   //{
   //  InitPropertyControl( paramButtons, IDP_FLAGS, IDS_FLAGS_TIPS, IDS_FLAGS_TIPS, TRUE, ksNameVerticalVisible );
-  //  // Шаг мелкий
+  //  // РЁР°Рі РјРµР»РєРёР№
   //  AddButton2( paramButtons, ID_PROP_G_STEP, IDF_PROP_G_STEP, !!(tmp.f & PITCH), !(tmp.f & PITCHOFF) );
-  //  // Упрощенно
+  //  // РЈРїСЂРѕС‰РµРЅРЅРѕ
   //  AddButton2( paramButtons, ID_PROP_SIMPLE, IDF_PROP_SIMPLE, !!(tmp.f & SIMPLE), true );
   //}
 
-  //// Создавать объект спецификации
+  //// РЎРѕР·РґР°РІР°С‚СЊ РѕР±СЉРµРєС‚ СЃРїРµС†РёС„РёРєР°С†РёРё
   //if ( IsSpcObjCreate() ) 
   //{
   //  ksAPI7::IPropertyCheckBoxPtr checkBox( CreateCheckBox(!!par.flagAttr) );
@@ -1785,20 +1780,20 @@ void Shpeel::ShowControls()
 
 
 //-------------------------------------------------------------------------------------
-// Перерисовать фантом, слайд, вывести новые параметры  
+// РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ С„Р°РЅС‚РѕРј, СЃР»Р°Р№Рґ, РІС‹РІРµСЃС‚Рё РЅРѕРІС‹Рµ РїР°СЂР°РјРµС‚СЂС‹  
 // ---
 void Shpeel::RedrawPhantom()
 {
   if( Changed() )
   {
-    // Изменения фантома
+    // РР·РјРµРЅРµРЅРёСЏ С„Р°РЅС‚РѕРјР°
     if ( m_part )
     {
       SetParam( m_part ); 
       m_part->Update();
     }
     
-    // Перерисовываем слайд в окне
+    // РџРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј СЃР»Р°Р№Рґ РІ РѕРєРЅРµ
     if ( slideBox ) 
     {
       long slideID    = (long)GetSlideID();
@@ -1814,36 +1809,40 @@ void Shpeel::RedrawPhantom()
 }
 
 //-------------------------------------------------------------------------------------
-// Перерисовать фантом, слайд, вывести новые параметры  
+// РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ С„Р°РЅС‚РѕРј, СЃР»Р°Р№Рґ, РІС‹РІРµСЃС‚Рё РЅРѕРІС‹Рµ РїР°СЂР°РјРµС‚СЂС‹  
 // ---
 void Shpeel::get_part()
 {
 
 }
 
-#include "draw_obj.h"
 //-------------------------------------------------------------------------------------
-// Рисование 3D объектов
+// Р РёСЃРѕРІР°РЅРёРµ 3D РѕР±СЉРµРєС‚РѕРІ
 // ---
 void Shpeel::Draw3D()
 {
-  if (doc && m_part) // Если есть документ и в классе и деталь 
+  if (doc && m_part) // Р•СЃР»Рё РµСЃС‚СЊ РґРѕРєСѓРјРµРЅС‚ Рё РІ РєР»Р°СЃСЃРµ Рё РґРµС‚Р°Р»СЊ 
   {
     long toolBarID  = IDP_STUDS;
     long firstTabID = IDP_STUDS;
     _bstr_t bstr;
-    if (flagMode)  //получение флагов 
+    if (flagMode)  //РїРѕР»СѓС‡РµРЅРёРµ С„Р»Р°РіРѕРІ 
       GetParam();
     else
     {
-      load_default_panel();
+
       /*LibMessage((L"Studs3d:" + std::to_wstring(__LINE__)).c_str());
       bstr = GetFileName();
       m_part->SetFileName(bstr);*/
     }
-    draw_panel(doc, m_part);
-
-
+    
+    load_default_panel();
+    IDocument3DPtr corrent_doc(ksGetActive3dDocument());
+    //auto cor_dir = std::filesystem::path(corrent_doc->GetFileName()).remove_filename().wstring();
+    //cor_dir += patch_resure_detales;
+    //cor_dir += _T("Tmp.m3d");
+    m_part->SetFileName((LPWSTR)(get_tmp_filename_tmp(corrent_doc)).c_str());
+    
     SpecPropertyToolBarEnum toolBarType = pnEnterEscHelp;
 
     if (InitProcessParam(toolBarID, toolBarType, firstTabID))
@@ -1865,11 +1864,11 @@ void Shpeel::Draw3D()
         m_process3D = m_process;
         if ( m_process3D )
         {
-          ksAPI7::IManipulatorsPtr manColl( m_process3D->Manipulators ); // Получаем коллекцию манипуляторов процесса
+          ksAPI7::IManipulatorsPtr manColl( m_process3D->Manipulators ); // РџРѕР»СѓС‡Р°РµРј РєРѕР»Р»РµРєС†РёСЋ РјР°РЅРёРїСѓР»СЏС‚РѕСЂРѕРІ РїСЂРѕС†РµСЃСЃР°
           if ( manColl )
           {
 
-            m_baseMan = manColl->Add(ksPlacement3DManipulator); // Добавляем новый манипулятор в коллекцию 
+            m_baseMan = manColl->Add(ksPlacement3DManipulator); // Р”РѕР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№ РјР°РЅРёРїСѓР»СЏС‚РѕСЂ РІ РєРѕР»Р»РµРєС†РёСЋ 
             m_manipulator = m_baseMan;
             if (  m_manipulator )
             {
@@ -1878,7 +1877,7 @@ void Shpeel::Draw3D()
               m_baseMan->Active  =  true;
               m_baseMan->Visible = false;
           
-              // Определение видимости определенных примитивов манипулятора
+              // РћРїСЂРµРґРµР»РµРЅРёРµ РІРёРґРёРјРѕСЃС‚Рё РѕРїСЂРµРґРµР»РµРЅРЅС‹С… РїСЂРёРјРёС‚РёРІРѕРІ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
               m_manipulator->PrimitiveVisible[ksMPPlaceXOY] =  false;
               m_manipulator->PrimitiveVisible[ksMPPlaceXOZ] =  false;
               m_manipulator->PrimitiveVisible[ksMPPlaceYOZ] =  false;
@@ -1911,18 +1910,20 @@ void Shpeel::Draw3D()
       }
     }
   }
+  set_info(partInfo->part->GetFileName());
+
 }
 
 
 //------------------------------------------------------------------------------
-// Функция фильтр
+// Р¤СѓРЅРєС†РёСЏ С„РёР»СЊС‚СЂ
 // ---
 BOOL Shpeel::FilterObject( LPDISPATCH entity ) 
 {
-  bool res = false;  // Признак неподходящего объекта
+  bool res = false;  // РџСЂРёР·РЅР°Рє РЅРµРїРѕРґС…РѕРґСЏС‰РµРіРѕ РѕР±СЉРµРєС‚Р°
   ksAPI7::IModelObject1Ptr Model1( entity );
 
-  if( !Model1->GetIsExternalObject())  // Используем только внутренние объекты
+  if( !Model1->GetIsExternalObject())  // РСЃРїРѕР»СЊР·СѓРµРј С‚РѕР»СЊРєРѕ РІРЅСѓС‚СЂРµРЅРЅРёРµ РѕР±СЉРµРєС‚С‹
   {
     IEntityPtr entity1(IUnknownPtr(ksTransferInterface(entity, ksAPI3DCom, o3d_entity),false));
     if (IsSurface(entity1) || IsSurface(entity1, false) || IsAxis(entity1)) 
@@ -1933,19 +1934,23 @@ BOOL Shpeel::FilterObject( LPDISPATCH entity )
 
 
 //-------------------------------------------------------------------------------------
-// ksEndProcess    -Окончание процесса.
+// ksEndProcess    -РћРєРѕРЅС‡Р°РЅРёРµ РїСЂРѕС†РµСЃСЃР°.
 // ---
 BOOL Shpeel::EndProcess()
 {
-  if ( fixingPart ) // Закрепляем деталь
+  if ( fixingPart ) // Р—Р°РєСЂРµРїР»СЏРµРј РґРµС‚Р°Р»СЊ
   {
+    //set_info("End process: Р·Р°СЂРµРїР»РµРЅРёРµ РґРµС‚Р°Р»Рё ");
+    //show(__LINE__);
     SetParam(m_part);
     if ( !flagMode )
     {
-      _bstr_t fileName = GetFileName();
-      doc->SetPartFromFile( fileName, m_part, false );
+      //_bstr_t fileName = GetFileName();
+      auto fileName = partInfo->part;
+     
+      doc->SetPartFromFile(fileName->GetFileName(), m_part, false );
     }
-    m_part->UpdatePlacement();  // Изменение положения детали
+    m_part->UpdatePlacement();  // РР·РјРµРЅРµРЅРёРµ РїРѕР»РѕР¶РµРЅРёСЏ РґРµС‚Р°Р»Рё
 
     PArray<ksAPI7::IModelObjectPtr> R;
 
@@ -1954,7 +1959,7 @@ BOOL Shpeel::EndProcess()
     for ( unsigned int Idx=0; Idx<R.Count(); Idx++ )
     {
       IEntityPtr next = IUnknownPtr(ksTransferInterface(*R[Idx], ksAPI3DCom, o3d_entity), false);
-    // Создаем постоянное сопряжение в зависимости от поверхности
+    // РЎРѕР·РґР°РµРј РїРѕСЃС‚РѕСЏРЅРЅРѕРµ СЃРѕРїСЂСЏР¶РµРЅРёРµ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РїРѕРІРµСЂС…РЅРѕСЃС‚Рё
       if (IsSurface(next))
         doc->AddMateConstraint (mc_Coincidence, next , GetEntityByName(_T("Plane"), m_part), GetDirectionElem(), 2, 0);
       
@@ -1964,15 +1969,18 @@ BOOL Shpeel::EndProcess()
       if (IsAxis(next))
         doc->AddMateConstraint(mc_Concentric , next , GetEntityByName(_T("Axis"),  m_part), 0, 2, 0);
     }
-    // Устанавливаем признак, стандартное изделие
+    // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїСЂРёР·РЅР°Рє, СЃС‚Р°РЅРґР°СЂС‚РЅРѕРµ РёР·РґРµР»РёРµ
     m_part->SetStandardComponent(true);
 
+
     reference spcObj;
-    if (DrawSpcObj(spcObj)) // Вывод объекта СП
+
+    if (DrawSpcObj(spcObj)) // Р’С‹РІРѕРґ РѕР±СЉРµРєС‚Р° РЎРџ
     {
-      // Редактируем параметры
+      // Р РµРґР°РєС‚РёСЂСѓРµРј РїР°СЂР°РјРµС‚СЂС‹
       ksEditWindowSpcObject(spcObj);
     }
+
   }
 
   return PropertyManagerObject::EndProcess();
@@ -1986,7 +1994,7 @@ void Shpeel::UnadviseEvents()
 }
 
 //-------------------------------------------------------------------------------------
-// ksEndProcess    -Событие создания объекта в - --подчиненном режиме.
+// ksEndProcess    -РЎРѕР±С‹С‚РёРµ СЃРѕР·РґР°РЅРёСЏ РѕР±СЉРµРєС‚Р° РІ - --РїРѕРґС‡РёРЅРµРЅРЅРѕРј СЂРµР¶РёРјРµ.
 // ---
 BOOL Shpeel::TakeObject(LPUNKNOWN  obj)
 {
@@ -2017,7 +2025,7 @@ BOOL Shpeel::TakeObject(LPUNKNOWN  obj)
 }
 
 //-------------------------------------------------------------------------------------
-// ksPlacementChanged    -Изменено положения объекта
+// ksPlacementChanged    -РР·РјРµРЅРµРЅРѕ РїРѕР»РѕР¶РµРЅРёСЏ РѕР±СЉРµРєС‚Р°
 // ---
 BOOL Shpeel::PlacementChanged(LPDISPATCH Object)
 {
@@ -2031,9 +2039,9 @@ BOOL Shpeel::PlacementChanged(LPDISPATCH Object)
 
   ksAPI7::IModelObjectPtr  ModelObject(Object);
 
-  if ( ModelObject && FilterObject( Object ) ) // Если поверхность под курсором подходит 
+  if ( ModelObject && FilterObject( Object ) ) // Р•СЃР»Рё РїРѕРІРµСЂС…РЅРѕСЃС‚СЊ РїРѕРґ РєСѓСЂСЃРѕСЂРѕРј РїРѕРґС…РѕРґРёС‚ 
   {
-    if ( ChooseMan->IsChoosen(ModelObject) )   // Проверяем, выбрана ли поверхность 
+    if ( ChooseMan->IsChoosen(ModelObject) )   // РџСЂРѕРІРµСЂСЏРµРј, РІС‹Р±СЂР°РЅР° Р»Рё РїРѕРІРµСЂС…РЅРѕСЃС‚СЊ 
       ChooseMan->Unchoose((LPDISPATCH)ModelObject);
     else 
       ChooseMan->Choose((LPDISPATCH)ModelObject);
@@ -2061,12 +2069,12 @@ BOOL Shpeel::PlacementChanged(LPDISPATCH Object)
   {
     ChooseMan->UnchooseAll();
 
-    ksAPI7::IPlacement3DPtr newPlace = m_process3D->Placement;  // Местоположение курсора при клике
+    ksAPI7::IPlacement3DPtr newPlace = m_process3D->Placement;  // РњРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ РєСѓСЂСЃРѕСЂР° РїСЂРё РєР»РёРєРµ
     if (  newPlace )
     {
       double x = 0.0, y = 0.0, z = 0.0;
 
-      newPlace->GetOrigin( &x, &y, &z );     // Получим координаты 
+      newPlace->GetOrigin( &x, &y, &z );     // РџРѕР»СѓС‡РёРј РєРѕРѕСЂРґРёРЅР°С‚С‹ 
 
       IPlacementPtr partPlace( m_part->GetPlacement() );
       if ( partPlace )
@@ -2081,14 +2089,14 @@ BOOL Shpeel::PlacementChanged(LPDISPATCH Object)
         if ( Place3D )
         {
           Place3D->SetOrigin( x, y, z );
-          m_baseMan->UpdatePlacement( TRUE );  // Обновим местоположение манипулятора
+          m_baseMan->UpdatePlacement( TRUE );  // РћР±РЅРѕРІРёРј РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
         }
-        m_baseMan->Visible = TRUE;         // Манипулятор виден 
+        m_baseMan->Visible = TRUE;         // РњР°РЅРёРїСѓР»СЏС‚РѕСЂ РІРёРґРµРЅ 
       }
 
       InitPoint3D( true/*visible*/, true/*fix*/ );
 
-      procParam->DefaultControlFix=ksAllFix; // Зафиксируем объекты
+      procParam->DefaultControlFix=ksAllFix; // Р—Р°С„РёРєСЃРёСЂСѓРµРј РѕР±СЉРµРєС‚С‹
 
     }
   }
@@ -2096,7 +2104,7 @@ BOOL Shpeel::PlacementChanged(LPDISPATCH Object)
 }
 
 //-------------------------------------------------------------------------------------
-//Создать временное сопряжение в соответствии с указанной поверхностью
+//РЎРѕР·РґР°С‚СЊ РІСЂРµРјРµРЅРЅРѕРµ СЃРѕРїСЂСЏР¶РµРЅРёРµ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ СѓРєР°Р·Р°РЅРЅРѕР№ РїРѕРІРµСЂС…РЅРѕСЃС‚СЊСЋ
 // ---
 int Shpeel::MateProcess(LPDISPATCH entity)
 {
@@ -2106,7 +2114,7 @@ int Shpeel::MateProcess(LPDISPATCH entity)
 
   m_mCol=IUnknownPtr(ksTransferInterface(mateCollection, ksAPI3DCom, o3d_mateConstraintCollection), false);  
 
-  // Создание временного сопряжение в зависимости от поверхности 
+  // РЎРѕР·РґР°РЅРёРµ РІСЂРµРјРµРЅРЅРѕРіРѕ СЃРѕРїСЂСЏР¶РµРЅРёРµ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РїРѕРІРµСЂС…РЅРѕСЃС‚Рё 
   if (IsSurface(entity1)) 
   {
     AddMate(mc_Coincidence, GetDirectionElem(), 1, 0, entity1, _T("Plane"), m_part, m_mCol);
@@ -2124,7 +2132,7 @@ int Shpeel::MateProcess(LPDISPATCH entity)
 }
 
 //-------------------------------------------------------------------------------------
-//Инициализация 3D-точки
+//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ 3D-С‚РѕС‡РєРё
 // ---
 bool Shpeel::InitPoint3D( bool visible, bool fix )
 {
@@ -2158,7 +2166,7 @@ bool Shpeel::InitPoint3D( bool visible, bool fix )
 
 
 //------------------------------------------------------------------------------
-// Находит у детали поверхность с заданным именем
+// РќР°С…РѕРґРёС‚ Сѓ РґРµС‚Р°Р»Рё РїРѕРІРµСЂС…РЅРѕСЃС‚СЊ СЃ Р·Р°РґР°РЅРЅС‹Рј РёРјРµРЅРµРј
 // ---
 IEntityPtr Shpeel::GetEntityByName( const TCHAR * name, IPartPtr& p ) 
 {
@@ -2173,16 +2181,16 @@ IEntityPtr Shpeel::GetEntityByName( const TCHAR * name, IPartPtr& p )
 
 // ILibPropertyObject
 //-----------------------------------------------------------------------------
-// Имя группы объектов по умолчанию макроэлементы
+// РРјСЏ РіСЂСѓРїРїС‹ РѕР±СЉРµРєС‚РѕРІ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РјР°РєСЂРѕСЌР»РµРјРµРЅС‚С‹
 // ---
 LPOLESTR _IFUNC Shpeel::GetGroupName()
 {
-  CString res(_T("Панели"));
+  CString res(_T("РџР°РЅРµР»Рё"));
   return res.AllocSysString();
 }
 
 //-----------------------------------------------------------------------------
-// Добавить свойство в список свойств
+// Р”РѕР±Р°РІРёС‚СЊ СЃРІРѕР№СЃС‚РІРѕ РІ СЃРїРёСЃРѕРє СЃРІРѕР№СЃС‚РІ
 // ---
 BOOL _IFUNC Shpeel::GetProperty( int index, PropertyParam * param )
 {
@@ -2196,7 +2204,7 @@ BOOL _IFUNC Shpeel::GetProperty( int index, PropertyParam * param )
       case ID_PROP_ELEMENT_PARAM:
       case ID_PROP_OTHER_PARAM:
       {
-        param->propertyType = ksOPControlGroup;      // Группа
+        param->propertyType = ksOPControlGroup;      // Р“СЂСѓРїРїР°
         break;
       }
       case ID_PROP_GOST               :
@@ -2218,17 +2226,17 @@ BOOL _IFUNC Shpeel::GetProperty( int index, PropertyParam * param )
         param->propertyType = ksOPControlListBmp;
         break;
       }
-      case ID_PROP_G_STEP: // Мелкий шаг
-      case ID_PROP_SIMPLE: // Упрощенно
+      case ID_PROP_G_STEP: // РњРµР»РєРёР№ С€Р°Рі
+      case ID_PROP_SIMPLE: // РЈРїСЂРѕС‰РµРЅРЅРѕ
       {
         param->propertyType = ksOPControlListCheck;
         break; 
       }
-      case ID_PROP_WRENCH_ENDING: // b(мм) Гаечный конец
-      case ID_PROP_SCREW_ENDING:  // b0(мм) Ввинчиваемый конец
-      case ID_PROP_PITCH:         // p(мм) Шаг резьбы
-      case ID_PROP_FACET:         // c(мм) Фаска
-      case ID_PROP_MASSA_1000:    // m(кг) Масса 1000 шт
+      case ID_PROP_WRENCH_ENDING: // b(РјРј) Р“Р°РµС‡РЅС‹Р№ РєРѕРЅРµС†
+      case ID_PROP_SCREW_ENDING:  // b0(РјРј) Р’РІРёРЅС‡РёРІР°РµРјС‹Р№ РєРѕРЅРµС†
+      case ID_PROP_PITCH:         // p(РјРј) РЁР°Рі СЂРµР·СЊР±С‹
+      case ID_PROP_FACET:         // c(РјРј) Р¤Р°СЃРєР°
+      case ID_PROP_MASSA_1000:    // m(РєРі) РњР°СЃСЃР° 1000 С€С‚
       {
         param->propertyType = ksOPControlEditDouble;
         param->enable       = false;
@@ -2241,15 +2249,15 @@ BOOL _IFUNC Shpeel::GetProperty( int index, PropertyParam * param )
 
 
 //-----------------------------------------------------------------------------
-// Обновить параметры свойства
+// РћР±РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ СЃРІРѕР№СЃС‚РІР°
 // ---
 BOOL _IFUNC Shpeel::UpdateProperty( PropertyParam * param )
 {
   BOOL res = TRUE;
   if ( param )
   {
-    if ( !openBase ) // Если БД открыта
-      OpenBase();  // Закрываем старую БД
+    if ( !openBase ) // Р•СЃР»Рё Р‘Р” РѕС‚РєСЂС‹С‚Р°
+      OpenBase();  // Р—Р°РєСЂС‹РІР°РµРј СЃС‚Р°СЂСѓСЋ Р‘Р”
 
     param->propertyInstance = StepDLL.hModule;
     switch ( param->propertyId )
@@ -2318,22 +2326,22 @@ BOOL _IFUNC Shpeel::UpdateProperty( PropertyParam * param )
       }
       case ID_PROP_ISP    :
       {
-        param->enable = tmp.f & ALLST ? false : true; // ALLST - резьба до головки
+        param->enable = tmp.f & ALLST ? false : true; // ALLST - СЂРµР·СЊР±Р° РґРѕ РіРѕР»РѕРІРєРё
         param->emptyValue = !param->enable;
-        param->propertyValue.lVal = tmp.f & ISPOLN ? IDP_BMP_G_I2 : IDP_BMP_G_I1; // Исполнение 1 становится текущим, тк. исполнение 2 недоступно
+        param->propertyValue.lVal = tmp.f & ISPOLN ? IDP_BMP_G_I2 : IDP_BMP_G_I1; // РСЃРїРѕР»РЅРµРЅРёРµ 1 СЃС‚Р°РЅРѕРІРёС‚СЃСЏ С‚РµРєСѓС‰РёРј, С‚Рє. РёСЃРїРѕР»РЅРµРЅРёРµ 2 РЅРµРґРѕСЃС‚СѓРїРЅРѕ
         break;
       }
-      case ID_PROP_G_STEP: param->propertyValue.boolVal = tmp.f & PITCH;  break; // Мелкий шаг
-      case ID_PROP_SIMPLE: param->propertyValue.boolVal = tmp.f & SIMPLE; break; // Упрощенно
+      case ID_PROP_G_STEP: param->propertyValue.boolVal = tmp.f & PITCH;  break; // РњРµР»РєРёР№ С€Р°Рі
+      case ID_PROP_SIMPLE: param->propertyValue.boolVal = tmp.f & SIMPLE; break; // РЈРїСЂРѕС‰РµРЅРЅРѕ
 
-      case ID_PROP_WRENCH_ENDING: param->propertyValue.dblVal = tmp.b;  break; // b(мм) Гаечный конец
-      case ID_PROP_SCREW_ENDING:  param->propertyValue.dblVal = tmp.b1; break; // b0(мм) Ввинчиваемый конец
-      case ID_PROP_PITCH:         param->propertyValue.dblVal = !(tmp.f & PITCHOFF || !(tmp.f & PITCH)) ? tmp.p1 : tmp.p2; break; // p(мм) Шаг резьбы
-      case ID_PROP_FACET:         param->propertyValue.dblVal = tmp.c;  break;// c(мм) Фаска
-      case ID_PROP_MASSA_1000:    // m(кг) Масса 1000 шт
+      case ID_PROP_WRENCH_ENDING: param->propertyValue.dblVal = tmp.b;  break; // b(РјРј) Р“Р°РµС‡РЅС‹Р№ РєРѕРЅРµС†
+      case ID_PROP_SCREW_ENDING:  param->propertyValue.dblVal = tmp.b1; break; // b0(РјРј) Р’РІРёРЅС‡РёРІР°РµРјС‹Р№ РєРѕРЅРµС†
+      case ID_PROP_PITCH:         param->propertyValue.dblVal = !(tmp.f & PITCHOFF || !(tmp.f & PITCH)) ? tmp.p1 : tmp.p2; break; // p(РјРј) РЁР°Рі СЂРµР·СЊР±С‹
+      case ID_PROP_FACET:         param->propertyValue.dblVal = tmp.c;  break;// c(РјРј) Р¤Р°СЃРєР°
+      case ID_PROP_MASSA_1000:    // m(РєРі) РњР°СЃСЃР° 1000 С€С‚
       {
         float massa = tmp.f & ISPOLN ? tmp.m2 : tmp.m1;
-        // 0 - металл 1 - алюмин сплав 3 - бронза 2 - латунь
+        // 0 - РјРµС‚Р°Р»Р» 1 - Р°Р»СЋРјРёРЅ СЃРїР»Р°РІ 3 - Р±СЂРѕРЅР·Р° 2 - Р»Р°С‚СѓРЅСЊ
         massa = massa*( !tmp.indexMassa ? 1 : tmp.indexMassa==1 ? 0.356f : tmp.indexMassa==3 ? 0.97f : 1.08f );
         param->propertyValue.dblVal = massa;
         break;
@@ -2345,7 +2353,7 @@ BOOL _IFUNC Shpeel::UpdateProperty( PropertyParam * param )
 
 
 //-----------------------------------------------------------------------------
-// Изменить свойство
+// РР·РјРµРЅРёС‚СЊ СЃРІРѕР№СЃС‚РІРѕ
 // ---
 int _IFUNC Shpeel::ApplyProperty( PropertyParam * param )
 {
@@ -2353,8 +2361,8 @@ int _IFUNC Shpeel::ApplyProperty( PropertyParam * param )
   bool setParam = TRUE;
   if ( param )
   {
-    if ( !openBase ) // Если БД открыта
-      OpenBase();  // Закрываем старую БД
+    if ( !openBase ) // Р•СЃР»Рё Р‘Р” РѕС‚РєСЂС‹С‚Р°
+      OpenBase();  // Р—Р°РєСЂС‹РІР°РµРј СЃС‚Р°СЂСѓСЋ Р‘Р”
     switch ( param->propertyId )
     {
       case ID_PROP_ISP:
@@ -2364,26 +2372,26 @@ int _IFUNC Shpeel::ApplyProperty( PropertyParam * param )
         break;
       }
 
-      case ID_PROP_G_STEP : // Шаг 
+      case ID_PROP_G_STEP : // РЁР°Рі 
       { 
         param->propertyValue.boolVal ? tmp.f |= PITCH : tmp.f &= ~PITCH;
         res = TRUE;
         break;
       }
-      case ID_PROP_SIMPLE : // Упрощенно         
+      case ID_PROP_SIMPLE : // РЈРїСЂРѕС‰РµРЅРЅРѕ         
       {
         param->propertyValue.boolVal ? tmp.f |= SIMPLE : tmp.f &= ~SIMPLE;
         res = TRUE;
         break;
       }
       break;
-      case ID_PROP_DIAM: // Диаметр 
+      case ID_PROP_DIAM: // Р”РёР°РјРµС‚СЂ 
       { 
         float diam = (float)param->propertyValue.dblVal; 
         if ( fabs(diam - tmp.d ) > EPSILON ) 
-          res = ReadShpeelBase( diam, bBase, &tmp ) && ReadShpeelStBase(bBase, &tmp ); // Чтение БД
+          res = ReadShpeelBase( diam, bBase, &tmp ) && ReadShpeelStBase(bBase, &tmp ); // Р§С‚РµРЅРёРµ Р‘Р”
       }
-      case ID_PROP_LENGHT: // Длина шпильки 
+      case ID_PROP_LENGHT: // Р”Р»РёРЅР° С€РїРёР»СЊРєРё 
       { 
         float lenght = (float)param->propertyValue.dblVal; 
         if ( fabs(lenght - tmp.l ) > EPSILON ) 
@@ -2452,7 +2460,7 @@ int _IFUNC Shpeel::ApplyProperty( PropertyParam * param )
           tmp.propertyValue.bstrVal = CString(LoadStr(GetGostStr(newGoct))).AllocSysString();
           res = ApplyProperty( &tmp );
           VariantClear(&tmp.propertyValue);
-          setParam = FALSE; // Параметры установлены в ApplyProperty
+          setParam = FALSE; // РџР°СЂР°РјРµС‚СЂС‹ СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹ РІ ApplyProperty
         }
         break;
       }
@@ -2465,7 +2473,7 @@ int _IFUNC Shpeel::ApplyProperty( PropertyParam * param )
           tmp.gost = gost;
           CloseBase();
           OpenBase();
-          res = ReadShpeelBase( tmp.d, bBase, &tmp ) && ReadShpeelStBase( bBase, &tmp ); // Чтение БД
+          res = ReadShpeelBase( tmp.d, bBase, &tmp ) && ReadShpeelStBase( bBase, &tmp ); // Р§С‚РµРЅРёРµ Р‘Р”
         }
         break;
       }
@@ -2478,36 +2486,36 @@ int _IFUNC Shpeel::ApplyProperty( PropertyParam * param )
 
 
 //-----------------------------------------------------------------------------
-// Выдать идентификатор свойства по индексу
+// Р’С‹РґР°С‚СЊ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРІРѕР№СЃС‚РІР° РїРѕ РёРЅРґРµРєСЃСѓ
 // ---
 int Shpeel::GetPropertyID ( int index )
 {
   int res = 0;
   switch ( index )
   {
-    case 0  : res = ID_PROP_ELEMENT_PARAM;       break; // Параметры элемента
-    case 1  : res = ID_PROP_GOST;                break; // Гост
-    case 2  : res = ID_PROP_DIAM;                break; // Диаметр
-    case 3  : res = ID_PROP_LENGHT;              break; // Длина
-    case 4  : res = ID_PROP_SCREW_ENDING_LENGHT; break; // Длина ввинчиваемого конца
-    case 5  : res = ID_PROP_CLASS;               break; // Класс точности
-    case 6  : res = ID_PROP_MATERIAL;            break; // Материал
-    case 7  : res = ID_PROP_ISP;                 break; // Исполнение
-    case 8  : res = ID_PROP_G_STEP;              break; // Мелкий шаг
-    case 9  : res = ID_PROP_SIMPLE;              break; // Упрощенно
+    case 0  : res = ID_PROP_ELEMENT_PARAM;       break; // РџР°СЂР°РјРµС‚СЂС‹ СЌР»РµРјРµРЅС‚Р°
+    case 1  : res = ID_PROP_GOST;                break; // Р“РѕСЃС‚
+    case 2  : res = ID_PROP_DIAM;                break; // Р”РёР°РјРµС‚СЂ
+    case 3  : res = ID_PROP_LENGHT;              break; // Р”Р»РёРЅР°
+    case 4  : res = ID_PROP_SCREW_ENDING_LENGHT; break; // Р”Р»РёРЅР° РІРІРёРЅС‡РёРІР°РµРјРѕРіРѕ РєРѕРЅС†Р°
+    case 5  : res = ID_PROP_CLASS;               break; // РљР»Р°СЃСЃ С‚РѕС‡РЅРѕСЃС‚Рё
+    case 6  : res = ID_PROP_MATERIAL;            break; // РњР°С‚РµСЂРёР°Р»
+    case 7  : res = ID_PROP_ISP;                 break; // РСЃРїРѕР»РЅРµРЅРёРµ
+    case 8  : res = ID_PROP_G_STEP;              break; // РњРµР»РєРёР№ С€Р°Рі
+    case 9  : res = ID_PROP_SIMPLE;              break; // РЈРїСЂРѕС‰РµРЅРЅРѕ
 
-    case 10 : res = ID_PROP_OTHER_PARAM;         break; // Справочные данные
-    case 11 : res = ID_PROP_WRENCH_ENDING;       break; // b(мм) Гаечный конец
-    case 12 : res = ID_PROP_SCREW_ENDING;        break; // b0(мм) Ввинчиваемый конец
-    case 13 : res = ID_PROP_PITCH;               break; // p(мм) Шаг резьбы
-    case 14 : res = ID_PROP_FACET;               break; // c(мм) Фаска
-    case 15 : res = ID_PROP_MASSA_1000;          break; // m(кг) Масса 1000 шт
+    case 10 : res = ID_PROP_OTHER_PARAM;         break; // РЎРїСЂР°РІРѕС‡РЅС‹Рµ РґР°РЅРЅС‹Рµ
+    case 11 : res = ID_PROP_WRENCH_ENDING;       break; // b(РјРј) Р“Р°РµС‡РЅС‹Р№ РєРѕРЅРµС†
+    case 12 : res = ID_PROP_SCREW_ENDING;        break; // b0(РјРј) Р’РІРёРЅС‡РёРІР°РµРјС‹Р№ РєРѕРЅРµС†
+    case 13 : res = ID_PROP_PITCH;               break; // p(РјРј) РЁР°Рі СЂРµР·СЊР±С‹
+    case 14 : res = ID_PROP_FACET;               break; // c(РјРј) Р¤Р°СЃРєР°
+    case 15 : res = ID_PROP_MASSA_1000;          break; // m(РєРі) РњР°СЃСЃР° 1000 С€С‚
   }
   return res;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------
-// ksRotateManipulator - Поворот манипулятора
+// ksRotateManipulator - РџРѕРІРѕСЂРѕС‚ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
 // ---
 bool Shpeel::RotateManipulator(double X0, double Y0, double Z0, double AxisZX, double AxisZXY, double AxisZZ, double angle, bool FromEdit)
 {
@@ -2519,7 +2527,7 @@ bool Shpeel::RotateManipulator(double X0, double Y0, double Z0, double AxisZX, d
   IPart7->UpdatePlacement(true);
   
   ksAPI7::IPlacement3DPtr PlaceBase(m_baseMan->Placement);
-  PlaceBase->InitByMatrix3D(Place->GetMatrix3D());  // Установка новой системы координат по матрице 
+  PlaceBase->InitByMatrix3D(Place->GetMatrix3D());  // РЈСЃС‚Р°РЅРѕРІРєР° РЅРѕРІРѕР№ СЃРёСЃС‚РµРјС‹ РєРѕРѕСЂРґРёРЅР°С‚ РїРѕ РјР°С‚СЂРёС†Рµ 
   m_baseMan->UpdatePlacement(true);
 
   InitPoint3D(true/*visible*/, true/*fix*/);
@@ -2528,7 +2536,7 @@ bool Shpeel::RotateManipulator(double X0, double Y0, double Z0, double AxisZX, d
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------
-// ksMoveManipulator   - Передвижение манипулятора
+// ksMoveManipulator   - РџРµСЂРµРґРІРёР¶РµРЅРёРµ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
 // ---
 bool Shpeel::MoveManipulator(long ManipulatorId, double VX, double VY, double VZ, double Delta, bool FromEdit)
 {
@@ -2539,7 +2547,7 @@ bool Shpeel::MoveManipulator(long ManipulatorId, double VX, double VY, double VZ
   ksAPI7::IPlacement3DPtr PlaceBase(m_baseMan->Placement);
   double x = 0.0, y = 0.0, z = 0.0;
   Place->GetOrigin(&x, &y, &z);
-  PlaceBase->SetOrigin(VX+x, VY+y, VZ+z);  // Установка новых координат манипулятора с добавлением смещения 
+  PlaceBase->SetOrigin(VX+x, VY+y, VZ+z);  // РЈСЃС‚Р°РЅРѕРІРєР° РЅРѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР° СЃ РґРѕР±Р°РІР»РµРЅРёРµРј СЃРјРµС‰РµРЅРёСЏ 
   
   Place->SetOrigin(VX + x, VY + y, VZ + z);
   m_baseMan->UpdatePlacement(true);
@@ -2550,7 +2558,7 @@ bool Shpeel::MoveManipulator(long ManipulatorId, double VX, double VY, double VZ
 
 
 //-------------------------------------------------------------------------------------------
-// ksBeginDragManipulator - Начало перетаскивания манипулятора
+// ksBeginDragManipulator - РќР°С‡Р°Р»Рѕ РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёСЏ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
 // ---
 bool Shpeel::BeginDragManipulator(long ManipulatorId, long PrimitiveType)
 {
@@ -2560,7 +2568,7 @@ bool Shpeel::BeginDragManipulator(long ManipulatorId, long PrimitiveType)
 
 
 //-------------------------------------------------------------------------------------------
-// ksEndDragManipulator - окончание перетаскивания манипулятора
+// ksEndDragManipulator - РѕРєРѕРЅС‡Р°РЅРёРµ РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёСЏ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
 // ---
 bool Shpeel::EndDragManipulator(long ManipulatorId, long PrimitiveType)
 {
@@ -2634,13 +2642,13 @@ HRESULT _IFUNC Shpeel::LtQueryInterface( int idType, void far*far* iface )
 
 
 //-------------------------------------------------------------------------------
-// Создает соответствующий объект для работы с Hot точками
+// РЎРѕР·РґР°РµС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ РѕР±СЉРµРєС‚ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Hot С‚РѕС‡РєР°РјРё
 // ---
 void WINAPI LibObjInterfaceEntry( int idType, unsigned int comm, void** object ) 
 {
   if ( object ) 
   {
-    if ( comm == 0 && idType == idd_ILibPropertyObject3D ) // Если не Hot точки обнулить
+    if ( comm == 0 && idType == idd_ILibPropertyObject3D ) // Р•СЃР»Рё РЅРµ Hot С‚РѕС‡РєРё РѕР±РЅСѓР»РёС‚СЊ
     { 
       Shpeel * obj = new Shpeel();
       obj->LtQueryInterface( idType, object );
@@ -2649,13 +2657,13 @@ void WINAPI LibObjInterfaceEntry( int idType, unsigned int comm, void** object )
 }  
 
 ////-------------------------------------------------------------------------------
-//// Создает соответствующий объект для работы с Hot точками
+//// РЎРѕР·РґР°РµС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ РѕР±СЉРµРєС‚ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Hot С‚РѕС‡РєР°РјРё
 //// ---
 //void WINAPI LibObjInterfaceEntry( int idType, unsigned int comm, void** object ) 
 //{
 //  if ( object ) 
 //  {
-//    if ( comm == 0 && idType == idd_ILibPropertyObject3D ) // Если не Hot точки обнулить
+//    if ( comm == 0 && idType == idd_ILibPropertyObject3D ) // Р•СЃР»Рё РЅРµ Hot С‚РѕС‡РєРё РѕР±РЅСѓР»РёС‚СЊ
 //    { 
 //      Shpeel * obj = new Shpeel();
 //      obj->LtQueryInterface( idType, object );
@@ -2667,7 +2675,7 @@ void WINAPI LibObjInterfaceEntry( int idType, unsigned int comm, void** object )
 
 
 bool Shpeel::CheckDir(CString lib)
-//sourse_proj папка сборки проекта 
+//sourse_proj РїР°РїРєР° СЃР±РѕСЂРєРё РїСЂРѕРµРєС‚Р° 
 {
     CString filename;
     const size_t LENG_BUF = 256;
@@ -2743,6 +2751,7 @@ bool Shpeel::_upload_list(ksAPI7::IPropertyListPtr& p_property_list, CString lib
     LibMessage(L"_upload_list");
 #endif // DEBUG_CH_DIR
     p_property_list->ClearList();
+    p_property_list->Add((new_detile_df));
     CString filename;
     const size_t LENG_BUF = 256;
     WCHAR work_patch[LENG_BUF];
@@ -2790,6 +2799,7 @@ bool Shpeel::_upload_list(ksAPI7::IPropertyListPtr& p_property_list, CString lib
 
     return true;
 }
+
 using namespace ksAPI7;
 
 CString get_value_from_list(Shpeel& shpeel, long id_control)
@@ -2830,124 +2840,135 @@ unsigned int Shpeel::get_order_control(variant_t ID)
     return -1;
 }
 
-#define DEBUG_LOAD_DEFAULT_PANEL 1 
-#if DEBUG_LOAD_DEFAULT_PANEL
-#define DEBUG_LOAD_DEFAULT_PANEL_ 1 
-#endif // DEBUG_GET_VALUE_FROM_LIST
+
 
 int Shpeel::load_default_panel()
 {
-    int h = 150, w = 100, z = 20;
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    IPartPtr part = GetPart();
-    
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
+    ////////////////////////////////////////////////////// TEST BLOCK 
+    IDocument3DPtr corrent_doc(ksGetActive3dDocument());
+    IDocument3DPtr pDocument3d(ksGet3dDocument(), false/*AddRef*/);
+
+    //auto hControl = this->GetPropertyControl(ID_H_3D_PLATE);
+    //auto wControl = this->GetPropertyControl(ID_W_3D_PLATE);
+    //auto zControl = this->GetPropertyControl(ID_Z_3D_PLATE);
+
+    int h = 20/*hControl->Value.intVal*/, w = 20/*wControl->Value.intVal*/, z = 10/*zControl->Value.intVal*/;
+
+    IPartPtr part = m_part;
+    part->ClearAllObj();
     try
     {
-        IEntityPtr p_obj(new IEntityPtr(part->NewEntity(o3d_sketch), false /*AddRef*/));//создание поинтера на обьект который будет очищен 
+        // РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±СЉРµРєС‚ РґРѕРєСѓРјРµРЅС‚Р° С‚СЂРµС…РјРµСЂРЅРѕР№ РјРѕРґРµР»Рё
 
-    }
-    catch (const std::exception&e)
-    {
-    
-    }
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-
-    // Получим интерфейс базовой плоскости XOY
-    IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    ISketchDefinitionPtr sketchDefinition = new ISketchDefinitionPtr(IUnknownPtr((basePlane)->GetDefinition(), false /*AddRef*/));
-    IEntityPtr entitySketch; 
-    // Установка параметров эскиза
-    (sketchDefinition)->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-    //(sketchDefinition)->SetAngle(0);        // Угол поворота эскиза
-
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    // Создадим эскиз
-    (entitySketch)->Create();
-
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    // Войти в режим редактирования эскиза
-    if ((sketchDefinition)->BeginEdit())
-    {
-        // Введем новый эскиз - квадрат
-        LineSeg(0, 0, w, 0, 1);
-        LineSeg(0, h, w, h, 1);
-        LineSeg(0, 0, 0, h, 1);
-        LineSeg(w, 0, w, h, 1);
-        // Выйти из режима редактирования эскиза
-        (sketchDefinition)->EndEdit();
-    }
-
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-    IEntityPtr entityExtrusion(part->NewEntity(o3d_bossExtrusion), false /*AddRef*/);
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
-
-    if (entityExtrusion)
-    {
-
-        // Интерфейс базовой операции выдавливания
-        IBossExtrusionDefinitionPtr extrusionDefinition(IUnknownPtr(entityExtrusion->GetDefinition(), false /*AddRef*/));
-        if (extrusionDefinition)
+        if (pDocument3d)
         {
-            // Установка параметров операции выдавливания
+            if (pDocument3d->Create(false,   // РџСЂРёР·РЅР°Рє СЂРµР¶РёРјР° СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РґРѕРєСѓРјРµРЅС‚Р° ( TRUE - РЅРµРІРёРґРёРјС‹Р№ СЂРµР¶РёРј, FALSE - РІРёРґРёРјС‹Р№ СЂРµР¶РёРј )
+                true)) // РўРёРї РґРѕРєСѓРјРµРЅС‚Р° ( TRUE - РґРµС‚Р°Р»СЊ, FALSE - СЃР±РѕСЂРєР° ) 
+            {
 
-            extrusionDefinition->SetDirectionType(dtNormal);     // Направление выдавливания ( dtNormal	- прямое
-            // направление, для тонкой стенки - наружу,
-            // dtReverse	- обратное направление, для тонкой стенки - внутрь
-            // dtBoth - в обе стороны, dtMiddlePlane от средней плоскости )
-            // Изменить параметры выдавливания в одном направлении
-            extrusionDefinition->SetSideParam(true,               // Направление выдавливания ( TRUE - прямое направление,
-                // FALSE - обратное направление )
-                etBlind,            // Тип выдавливания ( etBlind - строго на глубину,
-                // etThroughAll - через всю деталь, etUpToVertexTo - на расстояние до вершины,
-                // etUpToVertexFrom - на расстояние за вершину, etUpToSurfaceTo - на
-                // расстояние до поверхности, etUpToSurfaceFrom - на расстояние за поверхность,
-                // etUpToNearSurface	- до ближайшей поверхности )
-                z,                // Глубина выдавливания
-                0,                  // Угол уклона
-                false);            // Направление уклона ( TRUE - уклон наружу, FALSE - уклон внутрь )
-            // Изменить параметры тонкой стенки
-            extrusionDefinition->SetThinParam(false,              // Признак тонкостенной операции
-                0,                  // Направление построения тонкой стенки
-                0,                  // Толщина стенки в прямом направлении
-                0);                // Толщина стенки в обратном направлении
-            extrusionDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания
+                part = pDocument3d->GetPart(pTop_Part);
 
-            // Создать операцию выдавливания
-            entityExtrusion->Create();
+                if (part)
+                {
+                    // РЎРѕР·РґР°РґРёРј РЅРѕРІС‹Р№ СЌСЃРєРёР·
+                    IEntityPtr entitySketch(part->NewEntity(o3d_sketch), false /*AddRef*/);
+                    if (entitySketch)
+                    {
+                        // РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РёРЅС‚РµСЂС„РµР№СЃ РїР°СЂР°РјРµС‚СЂРѕРІ РѕР±СЉРµРєС‚РѕРІ Рё СЌР»РµРјРµРЅС‚РѕРІ
+                        ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+                        if (sketchDefinition)
+                        {
+                            // РџРѕР»СѓС‡РёРј РёРЅС‚РµСЂС„РµР№СЃ Р±Р°Р·РѕРІРѕР№ РїР»РѕСЃРєРѕСЃС‚Рё XOY
+                            IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
 
-            // Формирует массив объектов и возвращает указатель на его интерфейс - массив граней компонента       
-            IEntityCollectionPtr entityCollection(part->EntityCollection(o3d_face), false /*AddRef*/);
-            entityExtrusion->Update();
+                            // РЈСЃС‚Р°РЅРѕРІРєР° РїР°СЂР°РјРµС‚СЂРѕРІ СЌСЃРєРёР·Р°
+                            sketchDefinition->SetPlane(basePlane); // РЈСЃС‚Р°РЅРѕРІРёРј РїР»РѕСЃРєРѕСЃС‚СЊ XOY Р±Р°Р·РѕРІРѕР№ РґР»СЏ СЌСЃРєРёР·Р°
+                            sketchDefinition->SetAngle(0);        // РЈРіРѕР» РїРѕРІРѕСЂРѕС‚Р° СЌСЃРєРёР·Р°
 
+                            // РЎРѕР·РґР°РґРёРј СЌСЃРєРёР·
+                            entitySketch->Create();
+
+                            // Р’РѕР№С‚Рё РІ СЂРµР¶РёРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ СЌСЃРєРёР·Р°
+                            if (sketchDefinition->BeginEdit())
+                            {
+                                LineSeg(0, 0, w, 0, 1);
+                                LineSeg(0, h, w, h, 1);
+                                LineSeg(0, 0, 0, h, 1);
+                                LineSeg(w, 0, w, h, 1);
+
+                                sketchDefinition->EndEdit();
+                            }
+
+                            // РћРїРµСЂС†РёСЏ РІС‹РґР°РІР»РёРІР°РЅРё
+                            IEntityPtr entityExtrusion(part->NewEntity(o3d_bossExtrusion), false /*AddRef*/);
+                            if (entityExtrusion)
+                            {
+                                // РРЅС‚РµСЂС„РµР№СЃ Р±Р°Р·РѕРІРѕР№ РѕРїРµСЂР°С†РёРё РІС‹РґР°РІР»РёРІР°РЅРёСЏ
+                                IBossExtrusionDefinitionPtr extrusionDefinition(IUnknownPtr(entityExtrusion->GetDefinition(), false/*AddRef*/));
+                                if (extrusionDefinition)
+                                {
+                                    // РЈСЃС‚Р°РЅРѕРІРєР° РїР°СЂР°РјРµС‚СЂРѕРІ РѕРїРµСЂР°С†РёРё РІС‹РґР°РІР»РёРІР°РЅРёСЏ
+                                    extrusionDefinition->SetDirectionType(dtNormal);     // РќР°РїСЂР°РІР»РµРЅРёРµ РІС‹РґР°РІР»РёРІР°РЅРёСЏ ( dtNormal	- РїСЂСЏРјРѕРµ
+                                                                                           // РЅР°РїСЂР°РІР»РµРЅРёРµ, РґР»СЏ С‚РѕРЅРєРѕР№ СЃС‚РµРЅРєРё - РЅР°СЂСѓР¶Сѓ,
+                                                                                           // dtReverse	- РѕР±СЂР°С‚РЅРѕРµ РЅР°РїСЂР°РІР»РµРЅРёРµ, РґР»СЏ С‚РѕРЅРєРѕР№ СЃС‚РµРЅРєРё - РІРЅСѓС‚СЂСЊ
+                                                                                           // dtBoth - РІ РѕР±Рµ СЃС‚РѕСЂРѕРЅС‹, dtMiddlePlane РѕС‚ СЃСЂРµРґРЅРµР№ РїР»РѕСЃРєРѕСЃС‚Рё )
+                                    // РР·РјРµРЅРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РІС‹РґР°РІР»РёРІР°РЅРёСЏ РІ РѕРґРЅРѕРј РЅР°РїСЂР°РІР»РµРЅРёРё
+                                    extrusionDefinition->SetSideParam(true,               // РќР°РїСЂР°РІР»РµРЅРёРµ РІС‹РґР°РІР»РёРІР°РЅРёСЏ ( TRUE - РїСЂСЏРјРѕРµ РЅР°РїСЂР°РІР»РµРЅРёРµ,
+                                                                                           // FALSE - РѕР±СЂР°С‚РЅРѕРµ РЅР°РїСЂР°РІР»РµРЅРёРµ )
+                                        etBlind,            // РўРёРї РІС‹РґР°РІР»РёРІР°РЅРёСЏ ( etBlind - СЃС‚СЂРѕРіРѕ РЅР° РіР»СѓР±РёРЅСѓ,
+                                                            // etThroughAll - С‡РµСЂРµР· РІСЃСЋ РґРµС‚Р°Р»СЊ, etUpToVertexTo - РЅР° СЂР°СЃСЃС‚РѕСЏРЅРёРµ РґРѕ РІРµСЂС€РёРЅС‹,
+                                                            // etUpToVertexFrom - РЅР° СЂР°СЃСЃС‚РѕСЏРЅРёРµ Р·Р° РІРµСЂС€РёРЅСѓ, etUpToSurfaceTo - РЅР°
+                                                            // СЂР°СЃСЃС‚РѕСЏРЅРёРµ РґРѕ РїРѕРІРµСЂС…РЅРѕСЃС‚Рё, etUpToSurfaceFrom - РЅР° СЂР°СЃСЃС‚РѕСЏРЅРёРµ Р·Р° РїРѕРІРµСЂС…РЅРѕСЃС‚СЊ,
+                                                            // etUpToNearSurface	- РґРѕ Р±Р»РёР¶Р°Р№С€РµР№ РїРѕРІРµСЂС…РЅРѕСЃС‚Рё )
+                                        z,                // Р“Р»СѓР±РёРЅР° РІС‹РґР°РІР»РёРІР°РЅРёСЏ
+                                        0,                  // РЈРіРѕР» СѓРєР»РѕРЅР°
+                                        false);            // РќР°РїСЂР°РІР»РµРЅРёРµ СѓРєР»РѕРЅР° ( TRUE - СѓРєР»РѕРЅ РЅР°СЂСѓР¶Сѓ, FALSE - СѓРєР»РѕРЅ РІРЅСѓС‚СЂСЊ )
+     // РР·РјРµРЅРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ С‚РѕРЅРєРѕР№ СЃС‚РµРЅРєРё
+                                    //extrusionDefinition->SetThinParam(true,               // РџСЂРёР·РЅР°Рє С‚РѕРЅРєРѕСЃС‚РµРЅРЅРѕР№ РѕРїРµСЂР°С†РёРё
+                                    //    dtBoth,             // РќР°РїСЂР°РІР»РµРЅРёРµ РїРѕСЃС‚СЂРѕРµРЅРёСЏ С‚РѕРЅРєРѕР№ СЃС‚РµРЅРєРё
+                                    //    10,                 // РўРѕР»С‰РёРЅР° СЃС‚РµРЅРєРё РІ РїСЂСЏРјРѕРј РЅР°РїСЂР°РІР»РµРЅРёРё
+                                    //    10);               // РўРѕР»С‰РёРЅР° СЃС‚РµРЅРєРё РІ РѕР±СЂР°С‚РЅРѕРј РЅР°РїСЂР°РІР»РµРЅРёРё
+                                    extrusionDefinition->SetSketch(entitySketch);        // Р­СЃРєРёР· РѕРїРµСЂР°С†РёРё РІС‹РґР°РІР»РёРІР°РЅРёСЏ
+
+                                    // РЎРѕР·РґР°С‚СЊ РѕРїРµСЂР°С†РёСЋ РІС‹РґР°РІР»РёРІР°РЅРёСЏ
+                                    entityExtrusion->Create();
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                /*SaveDocument(0,NULL );*/
+                /*pDocument3d->SaveAs();*/
+                //pDocument3d->Close(); // Р—Р°РєСЂРѕРµРј РґРѕРєСѓРјРµРЅС‚
+            }
         }
-        entityExtrusion->Update();
+
     }
 
-#if DEBUG_LOAD_DEFAULT_PANEL_
-    LibMessage(std::to_wstring(__LINE__).c_str(), 0);
-#endif // DEBUG_LOAD_DEFAULT_PANEL_
+    catch (_com_error& e)
+    {
+        DumpError(e); // Р’С‹РІРѕРґ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РѕС€РёР±РєРµ
+    }
+    catch (LPCTSTR mes)
+    {
+        LibMessage(mes, MB_ICONERROR | MB_OK); // Р’С‹РІРѕРґ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РѕС€РёР±РєРµ
+    }
+    auto pPatch = ((LPWSTR)(LPCTSTR)get_tmp_filename_tmp(pDocument3d).c_str());
+    if (pDocument3d->SetFileName(pPatch))
+    {
+
+    }
+    
+    pDocument3d->Save();
+    m_part->SetFileName(pPatch);
+
+    save_part_info(part, pDocument3d,pPatch);
+    /////////////////////////////////////////////////////
+
+    corrent_doc->SetActive();
+    m_part->Update();
     return 1;
 }
 
@@ -2982,6 +3003,10 @@ CString get_value_from_list(PropertyManagerObject& shpeel, long id_control)
         {
             var_t = ctrl->GetValue();
             str = active_file_patch();
+            if(str.IsEmpty())
+            {
+                return str;
+            }
 #if DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
             LibMessage(_T("active_file_patch():"));
             LibMessage(str);
@@ -2994,7 +3019,7 @@ CString get_value_from_list(PropertyManagerObject& shpeel, long id_control)
         else
         {
 #if DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
-            LibMessage(_T("DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL: Отсутствует ID_CHOSE_DETAIL контрол"));
+            LibMessage(_T("DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL: РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ ID_CHOSE_DETAIL РєРѕРЅС‚СЂРѕР»"));
 #endif // DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
 
         }
@@ -3044,7 +3069,7 @@ CString get_value_from_list(Shpeel* shpeel, long id_control)
         else
         {
 #if DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
-            LibMessage(_T("DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL: Отсутствует ID_CHOSE_DETAIL контрол"));
+            LibMessage(_T("DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL: РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ ID_CHOSE_DETAIL РєРѕРЅС‚СЂРѕР»"));
 #endif // DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
 
         }
@@ -3055,4 +3080,20 @@ CString get_value_from_list(Shpeel* shpeel, long id_control)
         break;
     }
     return str;
+}
+
+std::wstring Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
+{
+    auto cor_dir = std::filesystem::path(doc->GetFileName()).remove_filename().wstring();
+    cor_dir += patch_resure_detales;
+    cor_dir += _T("Tmp.m3d");
+    return cor_dir;
+}
+
+bool Shpeel::save_part_info(IPartPtr part, IDocument3DPtr doc,CString patch_file)
+{
+    partInfo->patch = patch_file;
+    partInfo->part = part;
+    partInfo->doc = doc;
+    return 1;
 }

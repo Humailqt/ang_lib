@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3D69FC33-8ECA-493E-B061-DA26E60076F1}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -268,6 +268,7 @@
   <ItemGroup>
     <ClCompile Include="$(KOMPAS_SDK)\Include\SafeArrayUtils.cpp" />
     <ClCompile Include="BaseEvent.cpp" />
+    <ClCompile Include="info_base.cpp" />
     <ClCompile Include="PropMen.cpp" />
     <ClCompile Include="ResourceDir.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -287,9 +288,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(KOMPAS_SDK)\Include\SafeArrayUtils.h" />
+    <ClInclude Include="AngLogger.h" />
     <ClInclude Include="BaseEvent.h" />
-    <ClInclude Include="draw_obj.h" />
-    <ClInclude Include="Panel_Utilit.h" />
+    <ClInclude Include="info_base.h" />
     <ClInclude Include="PropMen.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceDir.h" />

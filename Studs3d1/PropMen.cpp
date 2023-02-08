@@ -131,16 +131,16 @@ bool PropertyManagerObject::InitProcessParam( long toolBarID, SpecPropertyToolBa
           // Наполнение закладки контролами для вывода параметров элемента
           ShowControls();
           
-          // Создать окно просмотра
-          slideBox = curentCollection->Add( ksControlSlideBox );            
-          slideBox->SlideType      = ksSlide;                 
-          slideBox->DrawingSlide   = (long)GetSlideID(); 
-          slideBox->ResModule      = (LONG_PTR)StepDLL.hModule;
-          slideBox->Hint           = _T("Hint для слайда");
-          slideBox->Tips           = _T("Tips для слайда");
-          slideBox->Id             = 10000;
-          slideBox->Name           = _T("Окно просмотра");
-          slideBox->NameVisibility = ksNameHorizontalVisible;
+          //// Создать окно просмотра
+          //slideBox = curentCollection->Add( ksControlSlideBox );            
+          //slideBox->SlideType      = ksSlide;                 
+          //slideBox->DrawingSlide   = (long)GetSlideID(); 
+          //slideBox->ResModule      = (LONG_PTR)StepDLL.hModule;
+          //slideBox->Hint           = _T("Hint для слайда");
+          //slideBox->Tips           = _T("Tips для слайда");
+          //slideBox->Id             = 10000;
+          //slideBox->Name           = _T("Окно просмотра");
+          //slideBox->NameVisibility = ksNameHorizontalVisible;
         }
    
         int  paramCount = ParamCount();                             // Нужно ли выводить грид ?
@@ -472,36 +472,116 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 
   if (control->Id == ID_CHOSE_DETAIL)
   {
-
       CString patch; 
       patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
-      auto &part = obj.GetPart();
-      if (!part)
+      if (!patch.IsEmpty())
       {
-          LibMessage(_T("part empty"), 0);
+         /* LibMessage(patch, 0);*/
+          int sumbolF = patch.Find(new_detile_df);
+          //LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
+          if (sumbolF>=0)
+          {
+              auto& part = obj.GetPart();
+              auto info = obj.get_part_info(); 
+              part->ClearAllObj();
+              obj.load_default_panel();
+              part->Update();
+              obj.RedrawPhantom();
+              info->part = part;
+              info->patch = patch;
+          }
+          else
+          {
+              auto& part = obj.GetPart();
+              if (!part)
+              {
+                  LibMessage(_T("part empty"), 0);
+              }
+              part->ClearAllObj();
+              part->SetFileName((LPWSTR)(LPCTSTR)patch);
+              part->Update();
+              obj.RedrawPhantom();
+              auto info = obj.get_part_info();
+              info->part = part;
+              info->patch = patch;
+          }
+
       }
-      part->ClearAllObj();
-      part->SetFileName((LPWSTR)(LPCTSTR)patch);
-      part->Update();
-      obj.RedrawPhantom();
+
 
   }
   else
-      if (control->Id == ID_H_3D_PLATE)
+  {
+      switch (control->Id)
       {
-           
+      case(ID_H_3D_PLATE):
+      {
           LibMessage(_T("ID_H_3D_PLATE"), 0);
+          auto cor_part = obj.GetPart();
+          IEntityPtr entitySketch(cor_part->NewEntity(o3d_sketch), false /*AddRef*/);
+          if (entitySketch)
+          {
+              ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+              if (sketchDefinition)
+              {
+                  
+                  // Получим интерфейс базовой плоскости XOY
+                  IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+
+                  // Установка параметров эскиза
+                  sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+                  sketchDefinition->SetAngle(0);        // Угол поворота эскиза
+
+                  // Создадим эскиз
+                  entitySketch->Create();
+                  
+                  // Войти в режим редактирования эскиза
+                  if (sketchDefinition->BeginEdit())
+                  {
+                      //LineSeg(0, 0, w, 0, 1);
+                      //LineSeg(0, h, w, h, 1);
+                      //LineSeg(0, 0, 0, h, 1);
+                      //LineSeg(w, 0, w, h, 1);
+
+                      sketchDefinition->EndEdit();
+                  }
+
+              }
+          }
+          break;
       }
-      else
-      if (control->Id == ID_W_3D_PLATE)
+      case(ID_W_3D_PLATE):
       {
           LibMessage(_T("ID_W_3D_PLATE"), 0);
+          break;
       }
-      else
-      if (control->Id == ID_Z_3D_PLATE)
+      case(ID_Z_3D_PLATE):
       {
           LibMessage(_T("ID_Z_3D_PLATE"), 0);
+          break;
       }
+
+      default:
+          break;
+      }
+      //LibMessage(CString(LPCWSTR (std::to_wstring(control->Id).c_str())), 0);
+      if (control->Id == ID_POINT_3D_X)
+      {
+          LibMessage(_T("ID_POINT_3D_X"), 0);
+      }
+      else
+          if (control->Id == ID_POINT_3D_Y)
+          {
+              LibMessage(_T("ID_POINT_3D_Y"), 0);
+          }
+          else
+              if (control->Id == ID_POINT_3D_Z)
+              {
+                  LibMessage(_T("ID_POINT_3D_Z"), 0);
+              }
+
+  }
+
     
   if ( control ) 
   {
@@ -535,10 +615,6 @@ afx_msg BOOL PropertyManagerEvent::ButtonClick(long buttonID)
 // ---
 afx_msg BOOL PropertyManagerEvent::ControlCommand(LPDISPATCH ctrl, long buttonID ) 
 {
-  CString S;
-  S.Format(_T("%d"), buttonID);
-  LibMessage(_T("ControlCommand"), 0);
-  LibMessage(S, 0);
   obj.OnButtonClick(buttonID); 
   obj.RedrawPhantom();  
   return true;
@@ -746,5 +822,6 @@ BOOL Process3DManipulatorsEvent::EndDragManipulator(long ManipulatorId, long Pri
 {
   return m_obj.EndDragManipulator(ManipulatorId, PrimitiveType);
 }
+
 
 
