@@ -2939,9 +2939,6 @@ int Shpeel::load_default_panel()
                     }
                 }
 
-                /*SaveDocument(0,NULL );*/
-                /*pDocument3d->SaveAs();*/
-                //pDocument3d->Close(); // Закроем документ
             }
         }
 
