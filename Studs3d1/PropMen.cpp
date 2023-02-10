@@ -469,7 +469,9 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 {
 
   ksAPI7::IPropertyControlPtr control( iCtrl );
+  auto part = obj.GetPart();
 
+   
   if (control->Id == ID_CHOSE_DETAIL)
   {
       CString patch; 
@@ -481,6 +483,10 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
           //LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
           if (sumbolF>=0)
           {
+              auto part_info = obj.get_part_info();
+
+              part_info->name_detail;
+
               auto& part = obj.GetPart();
               auto info = obj.get_part_info(); 
               part->ClearAllObj();
@@ -517,14 +523,22 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       case(ID_H_3D_PLATE):
       {
           LibMessage(_T("ID_H_3D_PLATE"), 0);
-          auto cor_part = obj.GetPart();
-          IEntityPtr entitySketch(cor_part->NewEntity(o3d_sketch), false /*AddRef*/);
+          InsertPartPtr part_info = obj.get_part_info();
+          part_info->doc->SetActive();
+          auto cor_part = part_info->part;
+          auto col_entity = cor_part->EntityCollection(o3d_sketch);
+          auto count = col_entity->GetCount();
+          LibMessage((LPCTSTR)std::to_string(count).c_str(), 0);
+          IEntityPtr entitySketch = col_entity->GetByIndex(0);
           if (entitySketch)
           {
-              ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+              LibMessage(_T("entitySketch"), 0);
+
+              ISketchDefinitionPtr sketchDefinition(entitySketch->GetDefinition());
               if (sketchDefinition)
               {
-                  
+                  LibMessage(_T("sketchDefinition"), 0);
+
                   // Получим интерфейс базовой плоскости XOY
                   IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
 
@@ -533,20 +547,25 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
                   sketchDefinition->SetAngle(0);        // Угол поворота эскиза
 
                   // Создадим эскиз
-                  entitySketch->Create();
-                  
+
+                  int w=300, h = 10;
                   // Войти в режим редактирования эскиза
                   if (sketchDefinition->BeginEdit())
                   {
-                      //LineSeg(0, 0, w, 0, 1);
-                      //LineSeg(0, h, w, h, 1);
-                      //LineSeg(0, 0, 0, h, 1);
-                      //LineSeg(w, 0, w, h, 1);
+                      LineSeg(0, 0, w, 0, 1);
+                      LineSeg(0, h, w, h, 1);
+                      LineSeg(0, 0, 0, h, 1);
+                      LineSeg(w, 0, w, h, 1);
 
                       sketchDefinition->EndEdit();
                   }
 
               }
+          }
+          else
+          {
+              LibMessage(_T("entitySketch is empty"), 0);
+
           }
           break;
       }
@@ -567,7 +586,9 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       //LibMessage(CString(LPCWSTR (std::to_wstring(control->Id).c_str())), 0);
       if (control->Id == ID_POINT_3D_X)
       {
+
           LibMessage(_T("ID_POINT_3D_X"), 0);
+
       }
       else
           if (control->Id == ID_POINT_3D_Y)

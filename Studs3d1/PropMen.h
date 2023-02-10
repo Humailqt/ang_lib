@@ -60,6 +60,11 @@ protected:
 
   
 public:
+
+  ///////////////////////////////////////////////////////////////////////////////
+  
+    double x, y, z;
+  ///////////////////////////////////////////////////////////////////////////////
   ksAPI7::IPropertyControlsPtr curentCollection; //  онтролы текущей закладки панели свойств 
            PropertyManagerObject();
   virtual ~PropertyManagerObject();

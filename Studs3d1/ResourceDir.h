@@ -53,6 +53,7 @@ struct InsertPart
     IPartPtr part;
     IDocument3DPtr doc;
     CString patch;
+    CString name_detail;
 };
 
 #define InsertPartPtr std::shared_ptr<InsertPart> 
