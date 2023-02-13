@@ -2883,7 +2883,7 @@ int Shpeel::load_default_panel()
 
                             // Установка параметров эскиза
                             sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-                            sketchDefinition->SetAngle(0);        // Угол поворота эскиза
+
 
                             // Создадим эскиз
                             entitySketch->Create();
@@ -2892,8 +2892,8 @@ int Shpeel::load_default_panel()
                             if (sketchDefinition->BeginEdit())
                             {
                                 LineSeg(0, 0, w, 0, 1);
-                                LineSeg(0, h, w, h, 1);
                                 LineSeg(0, 0, 0, h, 1);
+                                LineSeg(0, h, w, h, 1);
                                 LineSeg(w, 0, w, h, 1);
 
                                 sketchDefinition->EndEdit();
