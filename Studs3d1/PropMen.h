@@ -63,7 +63,10 @@ public:
 
   ///////////////////////////////////////////////////////////////////////////////
   
-    double x, y, z;
+    ksAPI7::IPropertyEditPtr prop_ed_W;
+    ksAPI7::IPropertyEditPtr prop_ed_H;
+    ksAPI7::IPropertyEditPtr prop_ed_Z;
+    INT w_tmp = -1, h_tmp = -1, z_tmp = -1;
   ///////////////////////////////////////////////////////////////////////////////
   ksAPI7::IPropertyControlsPtr curentCollection; //  онтролы текущей закладки панели свойств 
            PropertyManagerObject();
@@ -277,3 +280,4 @@ class PropertyManagerObject;
 CString get_value_from_list(Shpeel& shpeel, long id_control);
 CString get_value_from_list(PropertyManagerObject& shpeel, long id_control);
 CString get_value_from_list(Shpeel* shpeel, long id_control);
+void ClearCurrentSketch();

@@ -469,10 +469,11 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 {
 
   ksAPI7::IPropertyControlPtr control( iCtrl );
+  auto part_info = obj.get_part_info();
   auto part = obj.GetPart();
 
    
-  if (control->Id == ID_CHOSE_DETAIL)
+  if (control->Id == ID_CHOSE_DETAIL) // Выбор детали 
   {
       CString patch; 
       patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
@@ -504,8 +505,16 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
                   LibMessage(_T("part empty"), 0);
               }
               part->ClearAllObj();
-              part->SetFileName((LPWSTR)(LPCTSTR)patch);
+              part->SetFileName((LPWSTR)(LPCTSTR)patch); 
               part->Update();
+              //Получени и установка длинны и высоты 
+              IEntityPtr entitySketch(part->GetDefaultEntity(o3d_sketch), false /*AddRef*/);
+              IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+              ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+              IEntityPtr plane = sketchDefinition->GetPlane();
+              IEvolutionSurfaceDefinitionPtr kinPlane(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+              kinPlane->
+              
               obj.RedrawPhantom();
               auto info = obj.get_part_info();
               info->part = part;
@@ -522,60 +531,89 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       {
       case(ID_H_3D_PLATE):
       {
-          LibMessage(_T("ID_H_3D_PLATE"), 0);
-          InsertPartPtr part_info = obj.get_part_info();
+          obj.h_tmp = control->Value.intVal;
+          IDocument3DPtr corr_doc = ksGetActive3dDocument();
           part_info->doc->SetActive();
-          auto cor_part = part_info->part;
-          auto col_entity = cor_part->EntityCollection(o3d_sketch);
-          auto count = col_entity->GetCount();
-          LibMessage((LPCTSTR)std::to_string(count).c_str(), 0);
-          IEntityPtr entitySketch = col_entity->GetByIndex(0);
-          if (entitySketch)
+          IEntityPtr entitySketch(part_info->part->GetDefaultEntity(o3d_planeXOY));
+          ISketchDefinitionPtr sketchDefinition(IUnknownPtr (entitySketch->GetDefinition(),false));
+          if (sketchDefinition)
           {
-              LibMessage(_T("entitySketch"), 0);
-
-              ISketchDefinitionPtr sketchDefinition(entitySketch->GetDefinition());
-              if (sketchDefinition)
+              // Получим интерфейс базовой плоскости XOY
+              IEntityPtr basePlane(part_info->part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+              // Установка параметров эскиза
+              sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+              if (sketchDefinition->BeginEdit())
               {
-                  LibMessage(_T("sketchDefinition"), 0);
-
-                  // Получим интерфейс базовой плоскости XOY
-                  IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
-
-                  // Установка параметров эскиза
-                  sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-
-
-                  // Создадим эскиз
-
-                  int w=300, h = 10;
-                  // Войти в режим редактирования эскиза
-                  if (sketchDefinition->BeginEdit())
-                  {
-                      LineSeg(0, 0, w, 0, 1);
-                      LineSeg(0, 0, 0, h, 1);
-                      LineSeg(0, h, w, h, 1);
-                      LineSeg(w, 0, w, h, 1);
-
-                      sketchDefinition->EndEdit();
-                  }
-
+                  // Удалить все объекты из текущего эскиза
+                  ClearCurrentSketch();
+                  // Введем в эскиз окружность
+                  LineSeg(0, 0, obj.w_tmp, 0, 1);
+                  LineSeg(0, 0, 0, obj.h_tmp, 1);
+                  LineSeg(0, obj.h_tmp, obj.w_tmp, obj.h_tmp, 1);
+                  LineSeg(obj.w_tmp, 0, obj.w_tmp, obj.h_tmp, 1);
+                  // Выйти из режима редактирования эскиза
+                  sketchDefinition->EndEdit();
               }
-          }
-          else
-          {
-              LibMessage(_T("entitySketch is empty"), 0);
 
           }
-          break;
+
+          LibMessage(_T("ID_H_3D_PLATE"),0);
+          
+
+          
+
+          //InsertPartPtr part_info = obj.get_part_info();
+          //part_info->doc->SetActive();
+          //auto cor_part = part_info->part;
+          //auto col_entity = cor_part->EntityCollection(o3d_sketch);
+          //auto count = col_entity->GetCount();
+
+
+
+          //IEntityPtr entitySketch = col_entity->GetByIndex(0);
+          //if (entitySketch)
+          //{
+          //    ISketchDefinitionPtr sketchDefinition(entitySketch->GetDefinition());
+          //    if (sketchDefinition)
+          //    {
+          //        // Получим интерфейс базовой плоскости XOY
+          //        IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+
+          //        // Установка параметров эскиза
+          //        sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+
+          //        //// Создадим эскиз
+          //        //int w = obj.prop_ed_W->Value.intVal, h = obj.prop_ed_H->Value.intVal;
+          //        //// Войти в режим редактирования эскиза
+          //        //if (sketchDefinition->BeginEdit())
+          //        //{
+          //        //    LineSeg(0, 0, w, 0, 1);
+          //        //    LineSeg(0, 0, 0, h, 1);
+          //        //    LineSeg(0, h, w, h, 1);
+          //        //    LineSeg(w, 0, w, h, 1);
+          //        //    sketchDefinition->EndEdit();
+          //        //}
+
+
+          //    }
+          //}
+          //else
+          //{
+          //    LibMessage(_T("entitySketch is empty"), 0);
+
+          //}
+          //break;
       }
       case(ID_W_3D_PLATE):
       {
+          obj.w_tmp = control->Value.intVal;
+
           LibMessage(_T("ID_W_3D_PLATE"), 0);
           break;
       }
       case(ID_Z_3D_PLATE):
       {
+          obj.z_tmp = control->Value.intVal;
           LibMessage(_T("ID_Z_3D_PLATE"), 0);
           break;
       }
@@ -846,3 +884,26 @@ BOOL Process3DManipulatorsEvent::EndDragManipulator(long ManipulatorId, long Pri
 
 
 
+
+//-------------------------------------------------------------------------------
+// Удалить все объекты из текущего эскиза
+// ---
+void ClearCurrentSketch()
+{
+    // Создаим итератор и удалим все существующие объекты в эскизе
+    reference rIterator = CreateIterator(ALL_OBJ, 0);
+    if (rIterator)
+    {
+        reference rObject = MoveIterator(rIterator, 'F'); // Сместить указатель на первый элемент в списке
+        // В цикле сместить указатель на следующий элемент в списке пока не дойдем до последнего
+        while (rObject)
+        {
+            // Если объект существует удалить его
+            if (ExistObj(rObject))
+                DeleteObj(rObject);
+            // Следующий элемент в списке
+            rObject = MoveIterator(rIterator, 'N');
+        }
+        DeleteIterator(rIterator); // Удалим итератор
+    }
+}

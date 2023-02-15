@@ -88,7 +88,7 @@ IDP_BMP_G_I2            ICON  DISCARDABLE     "res\\G_I2.ico"
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDR_LIBID               "Крепежный элемент на Visual C++ с панелью"
+    IDR_LIBID               "Angstrem | Панели"
 END
 
 STRINGTABLE DISCARDABLE 
