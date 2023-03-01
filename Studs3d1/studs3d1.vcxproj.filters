@@ -95,5 +95,17 @@
     <Image Include="res\G_STEP.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\G_SIMPLE.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\G_STEP.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\G_I1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\G_I2.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

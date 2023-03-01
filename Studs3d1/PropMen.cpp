@@ -467,7 +467,8 @@ END_EVENTSINK_MAP()
 // ---
 afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 {
-
+    ksAPI7::IKompasAPIObjectPtr kompas; 
+    
   ksAPI7::IPropertyControlPtr control( iCtrl );
   auto part_info = obj.get_part_info();
   auto part = obj.GetPart();
@@ -504,6 +505,13 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
               {
                   LibMessage(_T("part empty"), 0);
               }
+              auto pl = part->GetPlacement();
+              auto vbCol = part->VariableCollection();
+              auto var = vbCol->GetByName(L"v12", false, false);
+              RectangleParam pr; 
+              
+              ksRectangle()
+
               part->ClearAllObj();
               part->SetFileName((LPWSTR)(LPCTSTR)patch); 
               part->Update();
@@ -513,7 +521,7 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
               ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
               IEntityPtr plane = sketchDefinition->GetPlane();
               IEvolutionSurfaceDefinitionPtr kinPlane(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
-              kinPlane->
+              
               
               obj.RedrawPhantom();
               auto info = obj.get_part_info();

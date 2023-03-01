@@ -8,7 +8,7 @@
 #include <string>
 #include "resource.h"
 
-
+    
 //#include "panel.h"
 #include <iostream>
 
@@ -834,7 +834,7 @@ reference Shpeel::EditSpcObj( reference spcObj )
   //ISpecification3DPtr specification( doc->GetSpecification(), false/*AddRef*/ );
   //if ( (!flagMode && !par.flagAttr) || !(bool)specification )
   //  return 0;
-
+  
   ksAPI7::ISpecificationBaseObjectPtr base;
   ksAPI7::IKompasDocumentPtr kompasDoc = pNewKompasAPI->ActiveDocument;
 
@@ -2870,11 +2870,28 @@ int Shpeel::load_default_panel()
     //auto wControl = this->GetPropertyControl(ID_W_3D_PLATE);
     //auto zControl = this->GetPropertyControl(ID_Z_3D_PLATE);,
     INT h,w,z;
-    if (prop_ed_H && prop_ed_W && prop_ed_Z)
+    
+    
+
+    //set_info(CString((std::to_wstring(int(prop_ed_H)).c_str())));
+    show_info(CString((std::to_wstring(int(prop_ed_H)).c_str())));
+    if (int(prop_ed_H) && int(prop_ed_W) && int(prop_ed_Z))
     {
         //show_info("not empty");
         h = (prop_ed_H->Value.intVal)/*hControl->Value.intVal*/, w = (prop_ed_W->Value.intVal)/*wControl->Value.intVal*/, z = (prop_ed_Z->Value.intVal)/*zControl->Value.intVal*/;
 
+    show_info("set <w h z> param ");
+        if (h<0&&w<0&&z<0)
+        {
+            show_info("<w h z> param < 0 ");
+            w = 15;
+            h = 25;
+            z = 3;
+            this->w_tmp = w;
+            this->h_tmp = h;
+            this->z_tmp = z;
+
+        }
     }
     else
     {
@@ -2887,9 +2904,10 @@ int Shpeel::load_default_panel()
 
     }
 
-   
+
 
     IPartPtr part = m_part;
+    show_info("set part");
     part->ClearAllObj();
     if (pDocument3d)
     {
@@ -2897,29 +2915,40 @@ int Shpeel::load_default_panel()
             true)) // Тип документа ( TRUE - деталь, FALSE - сборка ) 
         {
 
+            show_info("get top part");
             part = pDocument3d->GetPart(pTop_Part);
 
             if (part)
             {
-                // Создадим новый эскиз
+
+
                 IEntityPtr entitySketch(part->NewEntity(o3d_sketch), false /*AddRef*/);
+                // Создадим новый эскиз
                 if (entitySketch)
                 {
                     // Получить указатель на интерфейс параметров объектов и элементов
                     ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+                    IModelContainerPtr cont; 
                     if (sketchDefinition)
                     {
                         // Получим интерфейс базовой плоскости XOY
                         IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
 
+                        sketchDefinition->BeginEdit();
+
                         // Установка параметров эскиза
                         sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-
-
+                        //IViewsAndLayersManager views_and_layers_manager = pDocument3d->GetViewProjectionCollection();
+                        //auto vievs = views_and_layers_manager.Views();
+                        //ViewsAndLayersManager views_and_layers_manager;
+                        //
                         // Создадим эскиз
                         entitySketch->Create();
-
+                        
                         // Войти в режим редактирования эскиза
+
+ 
+
                         if (sketchDefinition->BeginEdit())
                         {
                             LineSeg(0, 0, w, 0, 1);
@@ -2964,6 +2993,7 @@ int Shpeel::load_default_panel()
                                 // Создать операцию выдавливания
                                 entityExtrusion->Create();
 
+
                             }
                         }
                     }
@@ -2972,6 +3002,7 @@ int Shpeel::load_default_panel()
 
         }
     }
+    show_info("Create ditale");
 
     auto pPatch = get_tmp_filename_tmp(corrent_doc);
 
@@ -2990,9 +3021,11 @@ int Shpeel::load_default_panel()
 /*        show_info(pPatch);*/
     }
 
+    show_info("Create filename");
     m_part->SetFileName((LPWSTR)(LPCWSTR)pPatch);
 
     save_part_info(part, pDocument3d,pPatch); //// Сохранение инф о детали 
+    show_info("Save info filename");
     /////////////////////////////////////////////////////
 
     corrent_doc->SetActive();

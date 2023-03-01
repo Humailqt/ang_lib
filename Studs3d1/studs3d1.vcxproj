@@ -299,9 +299,13 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\G_I1.bmp" />
+    <Image Include="res\G_I1.ico" />
     <Image Include="res\G_I2.bmp" />
+    <Image Include="res\G_I2.ico" />
     <Image Include="res\G_SIMPLE.bmp" />
+    <Image Include="res\G_SIMPLE.ico" />
     <Image Include="res\G_STEP.bmp" />
+    <Image Include="res\G_STEP.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

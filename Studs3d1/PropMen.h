@@ -63,9 +63,9 @@ public:
 
   ///////////////////////////////////////////////////////////////////////////////
   
-    ksAPI7::IPropertyEditPtr prop_ed_W;
-    ksAPI7::IPropertyEditPtr prop_ed_H;
-    ksAPI7::IPropertyEditPtr prop_ed_Z;
+    ksAPI7::IPropertyEditPtr prop_ed_W = NULL;
+    ksAPI7::IPropertyEditPtr prop_ed_H = NULL;
+    ksAPI7::IPropertyEditPtr prop_ed_Z = NULL;
     INT w_tmp = -1, h_tmp = -1, z_tmp = -1;
   ///////////////////////////////////////////////////////////////////////////////
   ksAPI7::IPropertyControlsPtr curentCollection; //  онтролы текущей закладки панели свойств 
