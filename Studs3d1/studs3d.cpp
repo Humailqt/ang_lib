@@ -1338,7 +1338,6 @@ void Shpeel::OnButtonClick( long buttonID )
 
       break;
     }
-
     case IDS_TAKE_POINT:
     {
       if (doc)
@@ -1371,6 +1370,23 @@ void Shpeel::OnButtonClick( long buttonID )
         m_process3D->RunTakeCreateObjectProcess(prPoint3D, obj, false, lost); // Запуска подпроцесса создания 3D- точки
       }
       break;
+    }
+    case ID_REBUILD_DETAIL:
+    {
+
+
+
+
+
+    }
+
+    {
+        
+
+
+
+
+        break; 
     }
 
     //case ID_CHOSE_DETAIL:
@@ -1685,8 +1701,6 @@ void Shpeel::ShowControls()
       ksAPI7::IPropertyControlPtr rebuild = curentCollection->Add(ksControlTextButton);
       rebuild->Name = _T("Перестроить");
       rebuild->Id = ID_REBUILD_DETAIL;
-
-
   }
   //// Комбобокс ГОСТа
   //ksAPI7::IPropertyListPtr gostList( CreateStringList() );
