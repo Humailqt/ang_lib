@@ -133,6 +133,7 @@
 #define ID_W_3D_PLATE                   3002
 #define ID_Z_3D_PLATE                   3003
 #define ID_CHOSE_DETAIL					3004
+#define ID_REBUILD_DETAIL					3005
 
 
 

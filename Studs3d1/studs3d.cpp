@@ -1676,10 +1676,16 @@ void Shpeel::ShowControls()
       edit_w->Name = _T("Ширина");
       edit_w->Id = ID_W_3D_PLATE;
       edit_w->Value = 100;
+
       ksAPI7::IPropertyEditPtr edit_z = curentCollection->Add(ksControlEditReal);
       edit_z->Name = _T("Толщина");
       edit_z->Id = ID_Z_3D_PLATE;
       edit_z->Value = 20;
+
+      ksAPI7::IPropertyControlPtr rebuild = curentCollection->Add(ksControlTextButton);
+      rebuild->Name = _T("Перестроить");
+      rebuild->Id = ID_REBUILD_DETAIL;
+
 
   }
   //// Комбобокс ГОСТа
@@ -1692,7 +1698,6 @@ void Shpeel::ShowControls()
   //
   //if ( openBase ) // Если БД открыта
   //  CloseBase();  // Закрываем старую БД
-
   //// Открываем новую БД и считываем текущие параметры
   //if ( OpenBase() )
   //{ 
@@ -1703,7 +1708,6 @@ void Shpeel::ShowControls()
   //    InitPropertyControl( diamList, ID_PROP_DIAM, IDS_DIAM_TIPS, IDS_DIAM_TIPS );
   //    FillDiametr( diamList ); // Заполняет список диаметров
   //  }
-
   //  // Комбобокс длин шпильки
   //  ksAPI7::IPropertyListPtr lenghtList( CreateRealList() );
   //  if ( lenghtList ) 
@@ -1711,7 +1715,6 @@ void Shpeel::ShowControls()
   //    InitPropertyControl( lenghtList, ID_PROP_LENGHT, IDS_LENGHT_TIPS, IDS_LENGHT_TIPS );
   //    FillLenght( lenghtList ); // Заполняет список длин
   //  }
-
   //  // Комбобокс длин ввинчиваемого конца
   //  ksAPI7::IPropertyListPtr screwEndingList( CreateStringList() );
   //  if ( screwEndingList ) 
@@ -1720,7 +1723,6 @@ void Shpeel::ShowControls()
   //    FillScrewEnding( screwEndingList ); // Заполняет список длин ввинчиваемого конца
   //  }
   //}
-
   //// Комбобокс класса точности
   //ksAPI7::IPropertyListPtr classList( CreateStringList() );
   //if ( classList ) 
@@ -1728,7 +1730,6 @@ void Shpeel::ShowControls()
   //  InitPropertyControl( classList, ID_PROP_CLASS, IDS_CLASS_TIPS, IDS_CLASS_TIPS );
   //  FillClass( classList ); // Заполняет список класса точности
   //}
-
 
   // Комбобокс материала
   ksAPI7::IPropertyListPtr materialList( CreateStringList() );
@@ -1753,9 +1754,7 @@ void Shpeel::ShowControls()
   //  // Кнопка исполнение 2
   //  AddButton2( ispButtons, IDP_BMP_G_I2, IDF_BMP_G_I2, !!(tmp.f & ISPOLN ), enable );
   //}
-
   //CreateSeparator(ksSeparatorDownName);
-
   //// Дополнительные параметры
   //ksAPI7::IPropertyMultiButtonPtr paramButtons( CreateMultiButton(ksCheckButton) );
   //if ( paramButtons ) 
@@ -1766,7 +1765,6 @@ void Shpeel::ShowControls()
   //  // Упрощенно
   //  AddButton2( paramButtons, ID_PROP_SIMPLE, IDF_PROP_SIMPLE, !!(tmp.f & SIMPLE), true );
   //}
-
   //// Создавать объект спецификации
   //if ( IsSpcObjCreate() ) 
   //{
@@ -1774,7 +1772,6 @@ void Shpeel::ShowControls()
   //  if ( checkBox ) 
   //    InitPropertyControl( checkBox, IDP_SPC_OBJ, IDS_SPC_OBJ_TIPS, IDS_SPC_OBJ_TIPS );
   //}
-
   //CreateTab( ID_PROP_ELEMENT_PARAM );
 }
 
