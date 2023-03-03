@@ -1841,7 +1841,7 @@ void Shpeel::Draw3D()
     //auto cor_dir = std::filesystem::path(corrent_doc->GetFileName()).remove_filename().wstring();
     //cor_dir += patch_resure_detales;
     //cor_dir += _T("Tmp.m3d");
-    m_part->SetFileName((LPWSTR)(get_tmp_filename_tmp(corrent_doc)).c_str());
+
     
     SpecPropertyToolBarEnum toolBarType = pnEnterEscHelp;
 
@@ -2952,16 +2952,28 @@ int Shpeel::load_default_panel()
     {
         LibMessage(mes, MB_ICONERROR | MB_OK); // Вывод сообщений о ошибке
     }
-    auto pPatch = ((LPWSTR)(LPCTSTR)get_tmp_filename_tmp(pDocument3d).c_str());
-    if (pDocument3d->SetFileName(pPatch))
+    auto pPatch = get_tmp_filename_tmp(corrent_doc);
+
+    if (pDocument3d->SetFileName((LPWSTR)(LPCWSTR)pPatch))
     {
 
     }
-    
-    pDocument3d->Save();
-    m_part->SetFileName(pPatch);
+    if (pDocument3d->Save())
+    {
+        //show_info("Save file");
+        //show_info(pPatch);
+    }
+    else
+    {
+        //show_info("Error save file detile");
+/*        show_info(pPatch);*/
+    }
 
-    save_part_info(part, pDocument3d,pPatch);
+
+    m_part->SetFileName((LPWSTR)(LPCWSTR)pPatch);
+
+    save_part_info(part, pDocument3d, pPatch); //// Сохранение инф о детали 
+
     /////////////////////////////////////////////////////
 
     corrent_doc->SetActive();
@@ -3079,12 +3091,30 @@ CString get_value_from_list(Shpeel* shpeel, long id_control)
     return str;
 }
 
-std::wstring Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
+CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
 {
     auto cor_dir = std::filesystem::path(doc->GetFileName()).remove_filename().wstring();
+    std::wstring tmp_name = (L"Tmp");
+    std::wstring tmp_ex = (L".m3d");
+    int counter = 0;
     cor_dir += patch_resure_detales;
-    cor_dir += _T("Tmp.m3d");
-    return cor_dir;
+    auto test_file = cor_dir;
+    std::error_code ec;
+    if (!std::filesystem::is_empty(cor_dir + tmp_name + tmp_ex, ec))
+    {
+        while (std::filesystem::is_empty(test_file + tmp_name + L"_" + (std::to_wstring(counter)) + tmp_ex, ec))
+        {
+            counter++;
+            if (counter > 10000)
+            {
+                tmp_name = +L"N";
+            }
+        }
+        test_file += tmp_name + tmp_ex;
+        cor_dir = test_file;
+    }
+    CString dir_str(cor_dir.c_str());
+    return dir_str;
 }
 
 bool Shpeel::save_part_info(IPartPtr part, IDocument3DPtr doc,CString patch_file)

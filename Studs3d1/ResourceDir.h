@@ -7,7 +7,7 @@
 
 #ifdef _UNICODE
 
-#define patch_resure_detales L"ang_detile//"
+#define patch_resure_detales L"ang_detile\\"
 
 #else
 
