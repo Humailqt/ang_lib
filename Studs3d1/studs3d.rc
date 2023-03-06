@@ -88,7 +88,7 @@ IDP_BMP_G_I2            ICON  DISCARDABLE     "res\\G_I2.ico"
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDR_LIBID               "Крепежный элемент на Visual C++ с панелью"
+    IDR_LIBID               "Angstream | Панель"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -144,7 +144,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    STUDS_COMMAND           "Шпилька"
+    STUDS_COMMAND           "Панель"
     STR_101                 "22032-76"
     STR_102                 "22033-76"
     STR_103                 "22034-76"

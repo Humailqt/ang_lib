@@ -35,7 +35,7 @@ AFX_EXTENSION_MODULE StepDLL = { NULL, NULL };
 // ---
 ksAPI7::IApplicationPtr pNewKompasAPI( NULL );
 
-
+#define show_info(info) set_info(info); show(__LINE__);
 
 //----------------------------------------------------------------------------------------------
 // Вспомогательная функция, перевод значения в строку
@@ -3111,20 +3111,27 @@ CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
     cor_dir += patch_resure_detales;
     auto test_file = cor_dir;
     std::error_code ec;
-    if (!std::filesystem::is_empty(cor_dir + tmp_name + tmp_ex, ec))
+    if (std::filesystem::exists(cor_dir + tmp_name + tmp_ex, ec))
     {
-        while (std::filesystem::is_empty(test_file + tmp_name + L"_" + (std::to_wstring(counter)) + tmp_ex, ec))
+        std::filesystem::path p_name_file_test((test_file + tmp_name + tmp_ex).c_str());
+
+        while (!std::filesystem::exists(p_name_file_test, ec))
         {
-            counter++;
-            if (counter > 10000)
+            tmp_name = L"Tmp";
+            if (counter++ < 10000)
             {
-                tmp_name = +L"N";
+                tmp_name += std::to_wstring(counter);
             }
+            p_name_file_test = (test_file + tmp_name + tmp_ex).c_str();
+            /*CString  name_file_test((test_file + tmp_name + tmp_ex).c_str());*/
+            show_info(p_name_file_test.c_str());
         }
-        test_file += tmp_name + tmp_ex;
+        test_file += tmp_name + std::to_wstring(counter) + tmp_ex;
         cor_dir = test_file;
     }
     CString dir_str(cor_dir.c_str());
+    show_info(dir_str);
+    
     return dir_str;
 }
 
