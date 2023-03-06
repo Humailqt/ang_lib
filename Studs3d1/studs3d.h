@@ -77,6 +77,8 @@
 #define MAX_LENGTH 1000       // Максимальная длина стержня
 #define MIN_LENGTH 0          // Минимальная длина стержня
 
+void ClearCurrentSketch();
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Структуры параметров и класс шпилек
@@ -209,16 +211,17 @@ extern class Shpeel : public PropertyManagerObject
 private :
   int                                     refCount;
   IDocument3DPtr                               doc; // Указатель на интерфейс текущего 3D-документа
-  IPartPtr                                  m_part; // Деталь
+  IPartPtr                                  m_part = NULL; // Деталь
   IEntityPtr                           m_takePoint; // Точка 3D
   bool                              collectChanged; // true - массив изменился
   CString                                 fileName; // Имя файла
+  CString                                 FilePatchName; // Имя файла
   int                                     flagMode; // Тип редактирования
   ShpeelBase                                 bBase; // Работа с БД
   bool                                     changed; // Признак изменения параметров
   bool                                    openBase; // Работа с БД
   _variant_t                               Objects;
-  InsertPartPtr                             partInfo;
+  InsertPartPtr                             partInfo = NULL;
 
   ksAPI7::ISpecificationBaseObjectsPtr m_spcBaseObjects;
 
