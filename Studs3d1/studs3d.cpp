@@ -1374,7 +1374,9 @@ void Shpeel::OnButtonClick( long buttonID )
     case ID_REBUILD_DETAIL:
     {
 
-
+        m_part->ClearAllObj();
+        m_part->Update();
+        m_part->RebuildModel();
 
 
 
@@ -3115,7 +3117,7 @@ CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
     {
         std::filesystem::path p_name_file_test((test_file + tmp_name + tmp_ex).c_str());
 
-        while (!std::filesystem::exists(p_name_file_test, ec))
+        while (std::filesystem::exists(p_name_file_test, ec))
         {
             tmp_name = L"Tmp";
             if (counter++ < 10000)
@@ -3124,13 +3126,13 @@ CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
             }
             p_name_file_test = (test_file + tmp_name + tmp_ex).c_str();
             /*CString  name_file_test((test_file + tmp_name + tmp_ex).c_str());*/
-            show_info(p_name_file_test.c_str());
+            //show_info(p_name_file_test.c_str());
         }
-        test_file += tmp_name + std::to_wstring(counter) + tmp_ex;
+        test_file = p_name_file_test.c_str();
         cor_dir = test_file;
     }
     CString dir_str(cor_dir.c_str());
-    show_info(dir_str);
+    //show_info(dir_str);
     
     return dir_str;
 }

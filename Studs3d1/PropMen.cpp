@@ -523,51 +523,44 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       case(ID_H_3D_PLATE):
       {
           LibMessage(_T("ID_H_3D_PLATE"), 0);
-          InsertPartPtr part_info = obj.get_part_info();
-          part_info->doc->SetActive();
-          auto cor_part = part_info->part;
-          auto col_entity = cor_part->EntityCollection(o3d_sketch);
-          auto count = col_entity->GetCount();
-          LibMessage((LPCTSTR)std::to_string(count).c_str(), 0);
-          IEntityPtr entitySketch = col_entity->GetByIndex(0);
-          if (entitySketch)
-          {
-              LibMessage(_T("entitySketch"), 0);
+          
+          //InsertPartPtr part_info = obj.get_part_info();
+          //part_info->doc->SetActive();
+          //auto cor_part = part_info->part;
+          //auto col_entity = cor_part->EntityCollection(o3d_sketch);
+          //auto count = col_entity->GetCount();
+          //LibMessage((LPCTSTR)std::to_string(count).c_str(), 0);
+          //IEntityPtr entitySketch = col_entity->GetByIndex(0);
+          //if (entitySketch)
+          //{
+          //    LibMessage(_T("entitySketch"), 0);
+          //    ISketchDefinitionPtr sketchDefinition(entitySketch->GetDefinition());
+          //    if (sketchDefinition)
+          //    {
+          //        LibMessage(_T("sketchDefinition"), 0);
+          //        // Получим интерфейс базовой плоскости XOY
+          //        IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+          //        // Установка параметров эскиза
+          //        sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+          //        // Создадим эскиз
+          //        int w=300, h = 10;
+          //        // Войти в режим редактирования эскиза
+          //        if (sketchDefinition->BeginEdit())
+          //        {
+          //            LineSeg(0, 0, w, 0, 1);
+          //            LineSeg(0, 0, 0, h, 1);
+          //            LineSeg(0, h, w, h, 1);
+          //            LineSeg(w, 0, w, h, 1);
+          //            sketchDefinition->EndEdit();
+          //        }
+          //    }
+          //}
+          //else
+          //{
+          //    LibMessage(_T("entitySketch is empty"), 0);
+          //}
+          //break;
 
-              ISketchDefinitionPtr sketchDefinition(entitySketch->GetDefinition());
-              if (sketchDefinition)
-              {
-                  LibMessage(_T("sketchDefinition"), 0);
-
-                  // Получим интерфейс базовой плоскости XOY
-                  IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
-
-                  // Установка параметров эскиза
-                  sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-
-
-                  // Создадим эскиз
-
-                  int w=300, h = 10;
-                  // Войти в режим редактирования эскиза
-                  if (sketchDefinition->BeginEdit())
-                  {
-                      LineSeg(0, 0, w, 0, 1);
-                      LineSeg(0, 0, 0, h, 1);
-                      LineSeg(0, h, w, h, 1);
-                      LineSeg(w, 0, w, h, 1);
-
-                      sketchDefinition->EndEdit();
-                  }
-
-              }
-          }
-          else
-          {
-              LibMessage(_T("entitySketch is empty"), 0);
-
-          }
-          break;
       }
       case(ID_W_3D_PLATE):
       {
