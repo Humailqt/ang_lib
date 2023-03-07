@@ -17,8 +17,8 @@
 #ifndef _ACTIVE_FILE_PATCH
 #include "ResourceDir.h"
 #endif
-
-
+#include <math.h>
+#include <charconv>
 //-------------------------------------------------------------------------------
 // Функции для выдачи сообщений библиотеки
 // ---
@@ -62,7 +62,7 @@ protected:
 public:
 
   ///////////////////////////////////////////////////////////////////////////////
-  
+    bool rotated = false;
     double x, y, z;
   ///////////////////////////////////////////////////////////////////////////////
   ksAPI7::IPropertyControlsPtr curentCollection; // Контролы текущей закладки панели свойств 
@@ -121,7 +121,7 @@ public:
   virtual void RedrawPhantom(){}
   virtual void get_part(){}
   virtual IPartPtr& GetPart() { 
-      IPartPtr i = nullptr;
+      IPartPtr i = NULL;
       return i; }
   // Количество параметров выводимых в гриде 
   virtual int  ParamCount(){ return 0; }

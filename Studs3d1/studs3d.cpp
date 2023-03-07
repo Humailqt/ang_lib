@@ -1377,7 +1377,7 @@ void Shpeel::OnButtonClick( long buttonID )
         IDocument3DPtr corDoc = ksGetActive3dDocument();
         if (!FilePatchName.IsEmpty())
         {
-            show_info(FilePatchName);
+            //show_info(FilePatchName);
             IDocument3DPtr mDoc(OpenDocumentT(CT2W(FilePatchName), 0));
             IPartPtr mPart = mDoc->GetPart(pTop_Part);
 
@@ -1780,9 +1780,22 @@ void Shpeel::ShowControls()
       edit_z->Id = ID_Z_3D_PLATE;
       edit_z->Value = 20;
 
-      ksAPI7::IPropertyControlPtr rebuild = curentCollection->Add(ksControlTextButton);
+
+      ksAPI7::IPropertyControlPtr rotate= curentCollection->Add(ksControlTextButton);
+      rotate->Name = _T("Повернуть");
+      rotate->Id = ID_ROTATE_DETAIL;
+      
+
+      ksAPI7::IPropertyControlPtr rebuild = curentCollection->Add(ksControlEditLength
+      );
       rebuild->Name = _T("Перестроить");
-      rebuild->Id = ID_REBUILD_DETAIL;
+      rebuild->Id = ID_W_RESIZE_DETAIL;
+
+      ksAPI7::IPropertyControlPtr angle = curentCollection->Add(ksControlEditAngle
+
+      );
+      angle->Name = _T("angle");
+      angle->Id = ID_ANGLE_ROTATE_DETAIL;
   }
   //// Комбобокс ГОСТа
   //ksAPI7::IPropertyListPtr gostList( CreateStringList() );
@@ -1928,13 +1941,13 @@ void Shpeel::Draw3D()
       bstr = GetFileName();
       m_part->SetFileName(bstr);*/
     }
-    
+    MessageT(_T("load_default_panel"));
     load_default_panel();
     IDocument3DPtr corrent_doc(ksGetActive3dDocument());
     //auto cor_dir = std::filesystem::path(corrent_doc->GetFileName()).remove_filename().wstring();
     //cor_dir += patch_resure_detales;
     //cor_dir += _T("Tmp.m3d");
-
+    MessageT(_T("Afther load_default_panel"));
     
     SpecPropertyToolBarEnum toolBarType = pnEnterEscHelp;
 
@@ -2951,16 +2964,12 @@ int Shpeel::load_default_panel()
     part->ClearAllObj();
     try
     {
-        // Получить указатель на объект документа трехмерной модели
-
         if (pDocument3d)
         {
             if (pDocument3d->Create(false,   // Признак режима редактирования документа ( TRUE - невидимый режим, FALSE - видимый режим )
                 true)) // Тип документа ( TRUE - деталь, FALSE - сборка ) 
             {
-
                 part = pDocument3d->GetPart(pTop_Part);
-
                 if (part)
                 {
                     // Создадим новый эскиз
@@ -3036,7 +3045,6 @@ int Shpeel::load_default_panel()
         }
 
     }
-
     catch (_com_error& e)
     {
         DumpError(e); // Вывод сообщений о ошибке
@@ -3066,7 +3074,7 @@ int Shpeel::load_default_panel()
     m_part->SetFileName((LPWSTR)(LPCWSTR)pPatch);
 
     save_part_info(part, pDocument3d, pPatch); //// Сохранение инф о детали 
-    show_info(pPatch);
+    //show_info(pPatch);
     FilePatchName = pPatch;
     /////////////////////////////////////////////////////
 

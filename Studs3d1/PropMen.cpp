@@ -501,7 +501,7 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
               auto& part = obj.GetPart();
               if (!part)
               {
-                  LibMessage(_T("part empty"), 0);
+                  //LibMessage(_T("part empty"), 0);
               }
               part->ClearAllObj();
               part->SetFileName((LPWSTR)(LPCTSTR)patch);
@@ -522,7 +522,7 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       {
       case(ID_H_3D_PLATE):
       {
-          LibMessage(_T("ID_H_3D_PLATE"), 0);
+          //LibMessage(_T("ID_H_3D_PLATE"), 0);
           
           //InsertPartPtr part_info = obj.get_part_info();
           //part_info->doc->SetActive();
@@ -564,13 +564,86 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       }
       case(ID_W_3D_PLATE):
       {
-          LibMessage(_T("ID_W_3D_PLATE"), 0);
+          //LibMessage(_T("ID_W_3D_PLATE"), 0);
           break;
       }
       case(ID_Z_3D_PLATE):
       {
-          LibMessage(_T("ID_Z_3D_PLATE"), 0);
+          //LibMessage(_T("ID_Z_3D_PLATE"), 0);
           break;
+      }
+      case(ID_ROTATE_DETAIL):
+      {
+          CString str;
+
+          str.Format(_T("%.1f"), control->Value.dblVal);
+          IDocument3DPtr doc(ksGetActive3dDocument());
+          IPartPtr part = doc->GetPart(pEdit_Part);
+          if (part != NULL)
+          {
+              MessageT(_T("Базовая операция вращения"));
+              IEntityPtr entitySketch(part->GetDefaultEntity(o3d_sketch), false/*AddRef*/);
+              if (entitySketch)
+              {
+                  // Получить указатель на интерфейс параметров объектов и элементов
+                  // Интерфейс свойств эскиза
+                  ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+                  if (sketchDefinition)
+                  {
+                      // Получим интерфейс базовой плоскости XOY
+                      IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+
+                      // Установка параметров эскиза
+                      sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+
+                      // Создадим эскиз
+                      entitySketch->Create();
+
+                      
+                      // Войти в режим редактирования эскиза
+                      if (sketchDefinition->BeginEdit())
+                      {
+                          // Введем новый эскиз
+                          ArcByAngle(0, 0, 20, -90, 90, 1, 1);
+                          LineSeg(0, -20, 0, 20, 3);
+                          // Выйти из режима редактирования эскиза
+                          sketchDefinition->EndEdit();
+                      }
+                      // Операции вращения
+                      IEntityPtr entityRotate(part->NewEntity(o3d_bossRotated), false/*AddRef*/);
+                      if (entityRotate)
+                      {
+                          // Получить указатель на интерфейс параметров объектов и элементов
+                          // Интерфейс базовой операции вращения
+                          IBossRotatedDefinitionPtr baseRotatedDefinition(IUnknownPtr(entityRotate->GetDefinition(), false/*AddRef*/));
+                          if (baseRotatedDefinition)
+                          {
+                              baseRotatedDefinition->SetToroidShapeType(false);      // Признак тороида ( TRUE - тороид, FALSE - сфероид )
+                              baseRotatedDefinition->SetDirectionType(dtBoth);       // Направление вращения ( dtNormal - прямое направление, для тонкой стенки - наружу
+                                                                                       // dtReverse - обратное направление, для тонкой стенки - внутрь, dtBoth - в обе стороны,
+                                                                                       // dtMiddlePlane - от средней плоскости )
+                              // Изменить параметры тонкой стенки
+                              baseRotatedDefinition->SetThinParam(true,               // Признак тонкостенной операции
+                                  dtBoth,             // Направление построения тонкой стенки
+                                  1,                  // Толщина стенки в прямом направлении
+                                  1);                // Толщина стенки в обратном направлении
+// Изменить параметры выдавливания в одном направлении
+                              baseRotatedDefinition->SetSideParam(obj.rotated,               // Направление вращения ( TRUE - прямое, FALSE - обратное )
+                                  180);    
+                              obj.rotated = !obj.rotated; // Угол вращения
+//// Изменить параметры выдавливания в одном направлении
+//                              baseRotatedDefinition->SetSideParam(false,              // Направление вращения ( TRUE - прямое, FALSE - обратное )
+//                                  180);              // Угол вращения
+                              baseRotatedDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания                                                                 
+                              // Создать операцию              
+                              entityRotate->Create();
+                              MessageT(_T("Базовая операция вращения"));
+                          }
+                      }
+                  }
+              }
+          }
+          break; 
       }
 
       default:
@@ -580,18 +653,18 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       if (control->Id == ID_POINT_3D_X)
       {
 
-          LibMessage(_T("ID_POINT_3D_X"), 0);
+          //LibMessage(_T("ID_POINT_3D_X"), 0);
 
       }
       else
           if (control->Id == ID_POINT_3D_Y)
           {
-              LibMessage(_T("ID_POINT_3D_Y"), 0);
+              //LibMessage(_T("ID_POINT_3D_Y"), 0);
           }
           else
               if (control->Id == ID_POINT_3D_Z)
               {
-                  LibMessage(_T("ID_POINT_3D_Z"), 0);
+                  //LibMessage(_T("ID_POINT_3D_Z"), 0);
               }
 
   }

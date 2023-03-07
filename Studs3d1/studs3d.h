@@ -220,6 +220,7 @@ private :
   ShpeelBase                                 bBase; // Работа с БД
   bool                                     changed; // Признак изменения параметров
   bool                                    openBase; // Работа с БД
+  bool                                    rotated = false;
   _variant_t                               Objects;
   InsertPartPtr                             partInfo = NULL;
 
