@@ -1409,15 +1409,10 @@ void Shpeel::OnButtonClick( long buttonID )
                 if (sketchDefinition->BeginEdit())
                 {
                     ClearCurrentSketch(); part->ClearAllObj();
-                    RectangleParam* rP = new RectangleParam;
-                    rP->height = (h);
-                    rP->width = (w);
-                    rP->ang = 0;
-                    rP->x = 0;
-                    rP->y = 0;
-                    rP->style = 1;
-
-                    ksRectangle(rP, 0);
+                    LineSeg(0, 0, w, 0, 1);
+                    LineSeg(0, h, w, h, 1);
+                    LineSeg(0, 0, 0, h, 1);
+                    LineSeg(w, 0, w, h, 1);
                     // Выйти из режима редактирования эскиза
                     sketchDefinition->EndEdit();
                 }
@@ -1810,16 +1805,16 @@ void Shpeel::ShowControls()
       ksAPI7::IPropertyEditPtr edit_h = curentCollection->Add(ksControlEditReal);
       edit_h->Name = _T("Высота");
       edit_h->Id = ID_H_3D_PLATE;
-      edit_h->Value = 100;
+      edit_h->Value = h;
       ksAPI7::IPropertyEditPtr edit_w = curentCollection->Add(ksControlEditReal);
       edit_w->Name = _T("Ширина");
       edit_w->Id = ID_W_3D_PLATE;
-      edit_w->Value = 100;
+      edit_w->Value = w;
 
       ksAPI7::IPropertyEditPtr edit_z = curentCollection->Add(ksControlEditReal);
       edit_z->Name = _T("Толщина");
       edit_z->Id = ID_Z_3D_PLATE;
-      edit_z->Value = 20;
+      edit_z->Value = z;
 
 
       ksAPI7::IPropertyControlPtr rotate= curentCollection->Add(ksControlTextButton);
@@ -3004,7 +2999,7 @@ int Shpeel::load_default_panel()
     //auto wControl = this->GetPropertyControl(ID_W_3D_PLATE);
     //auto zControl = this->GetPropertyControl(ID_Z_3D_PLATE);
 
-    int h = 100/*hControl->Value.intVal*/, w = 20/*wControl->Value.intVal*/, z = 100/*zControl->Value.intVal*/;
+    //int h = 100/*hControl->Value.intVal*/, w = 100/*wControl->Value.intVal*/, z = 20/*zControl->Value.intVal*/;
 
     IPartPtr part = m_part;
     part->ClearAllObj();
@@ -3039,9 +3034,10 @@ int Shpeel::load_default_panel()
                             // Войти в режим редактирования эскиза
                             if (sketchDefinition->BeginEdit())
                             {
+                                ClearCurrentSketch(); part->ClearAllObj();
                                 LineSeg(0, 0, w, 0, 1);
-                                LineSeg(0, 0, 0, h, 1);
                                 LineSeg(0, h, w, h, 1);
+                                LineSeg(0, 0, 0, h, 1);
                                 LineSeg(w, 0, w, h, 1);
 
                                 sketchDefinition->EndEdit();

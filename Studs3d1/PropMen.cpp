@@ -581,7 +581,7 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
               IPartPtr m_part = obj.GetPart();
               if (m_part != NULL)
               {
-
+                  LibMessage(L"Mpart", 0);
                   IEntityPtr entitySketch(m_part->GetDefaultEntity(o3d_sketch), false/*AddRef*/);
                   if (entitySketch)
                   {
@@ -598,11 +598,21 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 
                           // Создадим эскиз
                           entitySketch->Create();
+                          // Войти в режим редактирования эскиза
+                          if (sketchDefinition->BeginEdit())
+                          {
+                              // Введем новый эскиз
+                              ArcByAngle(15, 0, 10, -90, 90, 1, 1);
+                              LineSeg(15, -10, 15, 10, 3);
+                              // Выйти из режима редактирования эскиза
+                              sketchDefinition->EndEdit();
+                          }
 
                           // Операции вращения
                           IEntityPtr entityRotate(m_part->NewEntity(o3d_bossRotated), false/*AddRef*/);
                           if (entityRotate)
                           {
+                              LibMessage(L"Mpart", 0);
                               // Получить указатель на интерфейс параметров объектов и элементов
                               // Интерфейс базовой операции вращения
                               IBossRotatedDefinitionPtr baseRotatedDefinition(IUnknownPtr(entityRotate->GetDefinition(), false/*AddRef*/));
@@ -633,7 +643,10 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
                       }
                   }
               }
-
+              m_part->RebuildModel();
+              m_part->Update();
+              IPartPtr prtRotate= obj.GetPart();
+              prtRotate->Update();
               break;
           }
 
