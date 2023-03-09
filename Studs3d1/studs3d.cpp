@@ -3004,7 +3004,7 @@ int Shpeel::load_default_panel()
     //auto wControl = this->GetPropertyControl(ID_W_3D_PLATE);
     //auto zControl = this->GetPropertyControl(ID_Z_3D_PLATE);
 
-    int h = 100/*hControl->Value.intVal*/, w = 100/*wControl->Value.intVal*/, z = 20/*zControl->Value.intVal*/;
+    int h = 100/*hControl->Value.intVal*/, w = 20/*wControl->Value.intVal*/, z = 100/*zControl->Value.intVal*/;
 
     IPartPtr part = m_part;
     part->ClearAllObj();

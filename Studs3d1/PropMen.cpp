@@ -520,155 +520,149 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
   {
       switch (control->Id)
       {
-      case(ID_H_3D_PLATE):
-      {
-          //LibMessage(_T("ID_H_3D_PLATE"), 0);
-          obj.h = control->Value.dblVal;
-          //InsertPartPtr part_info = obj.get_part_info();
-          //part_info->doc->SetActive();
-          //auto cor_part = part_info->part;
-          //auto col_entity = cor_part->EntityCollection(o3d_sketch);
-          //auto count = col_entity->GetCount();
-          //LibMessage((LPCTSTR)std::to_string(count).c_str(), 0);
-          //IEntityPtr entitySketch = col_entity->GetByIndex(0);
-          //if (entitySketch)
-          //{
-          //    LibMessage(_T("entitySketch"), 0);
-          //    ISketchDefinitionPtr sketchDefinition(entitySketch->GetDefinition());
-          //    if (sketchDefinition)
-          //    {
-          //        LibMessage(_T("sketchDefinition"), 0);
-          //        // Получим интерфейс базовой плоскости XOY
-          //        IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
-          //        // Установка параметров эскиза
-          //        sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-          //        // Создадим эскиз
-          //        int w=300, h = 10;
-          //        // Войти в режим редактирования эскиза
-          //        if (sketchDefinition->BeginEdit())
-          //        {
-          //            LineSeg(0, 0, w, 0, 1);
-          //            LineSeg(0, 0, 0, h, 1);
-          //            LineSeg(0, h, w, h, 1);
-          //            LineSeg(w, 0, w, h, 1);
-          //            sketchDefinition->EndEdit();
-          //        }
-          //    }
-          //}
-          //else
-          //{
-          //    LibMessage(_T("entitySketch is empty"), 0);
-          //}
-          //break;
-
-      }
-      case(ID_W_3D_PLATE):
-      {
-          //LibMessage(_T("ID_W_3D_PLATE"), 0);
-          obj.w = control->Value.dblVal;
-          break;
-      }
-      case(ID_Z_3D_PLATE):
-      {
-          obj.z = control->Value.dblVal;
-          //LibMessage(_T("ID_Z_3D_PLATE"), 0);
-          break;
-      }
-      case(ID_ROTATE_DETAIL):
-      {
-          CString str;
-
-          str.Format(_T("%.1f"), control->Value.dblVal);
-          IDocument3DPtr doc(ksGetActive3dDocument());
-          IPartPtr part = doc->GetPart(pEdit_Part);
-          if (part != NULL)
+          case(ID_H_3D_PLATE):
           {
-              MessageT(_T("Базовая операция вращения"));
-              IEntityPtr entitySketch(part->GetDefaultEntity(o3d_sketch), false/*AddRef*/);
-              if (entitySketch)
+              //LibMessage(_T("ID_H_3D_PLATE"), 0);
+              obj.h = control->Value.dblVal;
+              //InsertPartPtr part_info = obj.get_part_info();
+              //part_info->doc->SetActive();
+              //auto cor_part = part_info->part;
+              //auto col_entity = cor_part->EntityCollection(o3d_sketch);
+              //auto count = col_entity->GetCount();
+              //LibMessage((LPCTSTR)std::to_string(count).c_str(), 0);
+              //IEntityPtr entitySketch = col_entity->GetByIndex(0);
+              //if (entitySketch)
+              //{
+              //    LibMessage(_T("entitySketch"), 0);
+              //    ISketchDefinitionPtr sketchDefinition(entitySketch->GetDefinition());
+              //    if (sketchDefinition)
+              //    {
+              //        LibMessage(_T("sketchDefinition"), 0);
+              //        // Получим интерфейс базовой плоскости XOY
+              //        IEntityPtr basePlane(cor_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+              //        // Установка параметров эскиза
+              //        sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+              //        // Создадим эскиз
+              //        int w=300, h = 10;
+              //        // Войти в режим редактирования эскиза
+              //        if (sketchDefinition->BeginEdit())
+              //        {
+              //            LineSeg(0, 0, w, 0, 1);
+              //            LineSeg(0, 0, 0, h, 1);
+              //            LineSeg(0, h, w, h, 1);
+              //            LineSeg(w, 0, w, h, 1);
+              //            sketchDefinition->EndEdit();
+              //        }
+              //    }
+              //}
+              //else
+              //{
+              //    LibMessage(_T("entitySketch is empty"), 0);
+              //}
+              //break;
+
+          }
+          case(ID_W_3D_PLATE):
+          {
+              //LibMessage(_T("ID_W_3D_PLATE"), 0);
+              obj.w = control->Value.dblVal;
+              break;
+          }
+          case(ID_Z_3D_PLATE):
+          {
+              obj.z = control->Value.dblVal;
+              //LibMessage(_T("ID_Z_3D_PLATE"), 0);
+              break;
+          }
+
+          case(ID_ROTATE_DETAIL):
+          {
+              CString str;
+              IPartPtr m_part = obj.GetPart();
+              if (m_part != NULL)
               {
-                  // Получить указатель на интерфейс параметров объектов и элементов
-                  // Интерфейс свойств эскиза
-                  ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
-                  if (sketchDefinition)
+
+                  IEntityPtr entitySketch(m_part->GetDefaultEntity(o3d_sketch), false/*AddRef*/);
+                  if (entitySketch)
                   {
-                      // Получим интерфейс базовой плоскости XOY
-                      IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
-
-                      // Установка параметров эскиза
-                      sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-
-                      // Создадим эскиз
-                      entitySketch->Create();
-
-                      
-                      // Войти в режим редактирования эскиза
-                      if (sketchDefinition->BeginEdit())
+                      // Получить указатель на интерфейс параметров объектов и элементов
+                      // Интерфейс свойств эскиза
+                      ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+                      if (sketchDefinition)
                       {
-                          // Введем новый эскиз
-                          ArcByAngle(0, 0, 20, -90, 90, 1, 1);
-                          LineSeg(0, -20, 0, 20, 3);
-                          // Выйти из режима редактирования эскиза
-                          sketchDefinition->EndEdit();
-                      }
-                      // Операции вращения
-                      IEntityPtr entityRotate(part->NewEntity(o3d_bossRotated), false/*AddRef*/);
-                      if (entityRotate)
-                      {
-                          // Получить указатель на интерфейс параметров объектов и элементов
-                          // Интерфейс базовой операции вращения
-                          IBossRotatedDefinitionPtr baseRotatedDefinition(IUnknownPtr(entityRotate->GetDefinition(), false/*AddRef*/));
-                          if (baseRotatedDefinition)
+                          // Получим интерфейс базовой плоскости XOY
+                          IEntityPtr basePlane(m_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+
+                          // Установка параметров эскиза
+                          sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+
+                          // Создадим эскиз
+                          entitySketch->Create();
+
+                          // Операции вращения
+                          IEntityPtr entityRotate(m_part->NewEntity(o3d_bossRotated), false/*AddRef*/);
+                          if (entityRotate)
                           {
-                              baseRotatedDefinition->SetToroidShapeType(false);      // Признак тороида ( TRUE - тороид, FALSE - сфероид )
-                              baseRotatedDefinition->SetDirectionType(dtBoth);       // Направление вращения ( dtNormal - прямое направление, для тонкой стенки - наружу
-                                                                                       // dtReverse - обратное направление, для тонкой стенки - внутрь, dtBoth - в обе стороны,
-                                                                                       // dtMiddlePlane - от средней плоскости )
-                              // Изменить параметры тонкой стенки
-                              baseRotatedDefinition->SetThinParam(true,               // Признак тонкостенной операции
-                                  dtBoth,             // Направление построения тонкой стенки
-                                  1,                  // Толщина стенки в прямом направлении
-                                  1);                // Толщина стенки в обратном направлении
-// Изменить параметры выдавливания в одном направлении
-                              baseRotatedDefinition->SetSideParam(obj.rotated,               // Направление вращения ( TRUE - прямое, FALSE - обратное )
-                                  180);    
-                              obj.rotated = !obj.rotated; // Угол вращения
-//// Изменить параметры выдавливания в одном направлении
-//                              baseRotatedDefinition->SetSideParam(false,              // Направление вращения ( TRUE - прямое, FALSE - обратное )
-//                                  180);              // Угол вращения
-                              baseRotatedDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания                                                                 
-                              // Создать операцию              
-                              entityRotate->Create();
-                              MessageT(_T("Базовая операция вращения"));
+                              // Получить указатель на интерфейс параметров объектов и элементов
+                              // Интерфейс базовой операции вращения
+                              IBossRotatedDefinitionPtr baseRotatedDefinition(IUnknownPtr(entityRotate->GetDefinition(), false/*AddRef*/));
+                              if (baseRotatedDefinition)
+                              {
+                                  baseRotatedDefinition->SetToroidShapeType(false);      // Признак тороида ( TRUE - тороид, FALSE - сфероид )
+                                  baseRotatedDefinition->SetDirectionType(dtBoth);       // Направление вращения ( dtNormal - прямое направление, для тонкой стенки - наружу
+                                                                                           // dtReverse - обратное направление, для тонкой стенки - внутрь, dtBoth - в обе стороны,
+                                                                                           // dtMiddlePlane - от средней плоскости )
+                                  // Изменить параметры тонкой стенки
+                                  baseRotatedDefinition->SetThinParam(true,               // Признак тонкостенной операции
+                                      dtBoth,             // Направление построения тонкой стенки
+                                      1,                  // Толщина стенки в прямом направлении
+                                      1);                // Толщина стенки в обратном направлении
+    // Изменить параметры выдавливания в одном направлении
+                                  baseRotatedDefinition->SetSideParam(obj.rotated,               // Направление вращения ( TRUE - прямое, FALSE - обратное )
+                                      obj.angle);
+                                  obj.rotated = !obj.rotated; // Угол вращения
+    //// Изменить параметры выдавливания в одном направлении
+    //                              baseRotatedDefinition->SetSideParam(false,              // Направление вращения ( TRUE - прямое, FALSE - обратное )
+    //                                  180);              // Угол вращения
+                                  baseRotatedDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания                                                                 
+                                  // Создать операцию              
+                                  entityRotate->Create();
+
+                              }
                           }
                       }
                   }
               }
+
+              break;
           }
-          break; 
-      }
 
-      default:
-          break;
-      }
-      //LibMessage(CString(LPCWSTR (std::to_wstring(control->Id).c_str())), 0);
-      if (control->Id == ID_POINT_3D_X)
-      {
 
-          //LibMessage(_T("ID_POINT_3D_X"), 0);
-
-      }
-      else
-          if (control->Id == ID_POINT_3D_Y)
+          default:
           {
-              //LibMessage(_T("ID_POINT_3D_Y"), 0);
+              break;
+
+          }
+
+      }
+            
+          //LibMessage(CString(LPCWSTR (std::to_wstring(control->Id).c_str())), 0);
+          if (control->Id == ID_POINT_3D_X)
+          {
+
+              //LibMessage(_T("ID_POINT_3D_X"), 0);
+
           }
           else
-              if (control->Id == ID_POINT_3D_Z)
+              if (control->Id == ID_POINT_3D_Y)
               {
-                  //LibMessage(_T("ID_POINT_3D_Z"), 0);
+                  //LibMessage(_T("ID_POINT_3D_Y"), 0);
               }
-
+              else
+                  if (control->Id == ID_POINT_3D_Z)
+                  {
+                      //LibMessage(_T("ID_POINT_3D_Z"), 0);
+                  }
   }
 
     
