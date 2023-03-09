@@ -1375,157 +1375,135 @@ void Shpeel::OnButtonClick( long buttonID )
     {
         
         IDocument3DPtr corDoc = ksGetActive3dDocument();
-        show_info("FilePatchName ");
-        if (!FilePatchName.IsEmpty())
+        //show_info(FilePatchName);
+        //IDocument3DPtr mDoc(ksGet3dDocument());
+        //IPartPtr part = m_part->GetPart(pTop_Part);
+
+        dPart->SetActive();
+        IPartPtr part = dPart->GetPart(pTop_Part);
+        // Создадим новый эскиз
+        auto col = part->EntityCollection(o3d_sketch);
+        IEntityPtr entitySketch(col->GetByIndex(0), false /*AddRef*/);
+        if (entitySketch)
         {
-            //show_info(FilePatchName);
-            show_info("FilePatchName!emprty");
-            //IDocument3DPtr mDoc(ksGet3dDocument());
-            //IPartPtr part = m_part->GetPart(pTop_Part);
 
-
-            // Создадим новый эскиз
-            auto col = m_part->EntityCollection(o3d_sketch);
-            IEntityPtr entitySketch(col->GetByIndex(0), false /*AddRef*/);
-            show_info("entitySketch");
-
-            if (entitySketch)
+            // Получить указатель на интерфейс параметров объектов и элементов
+            ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+            if (sketchDefinition)
             {
+                // Получим интерфейс базовой плоскости XOY
+                IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
 
-                // Получить указатель на интерфейс параметров объектов и элементов
-                ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
-                if (sketchDefinition)
+                // Установка параметров эскиза
+                sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза 
+
+                // Создадим эскиз
+                entitySketch->Create();
+                //IPropertyControlPtr h = new IPropertyControlPtr(curentCollection->Item[2],false);
+                //IPropertyControlPtr w = new IPropertyControlPtr(curentCollection->Item[3],false);
+
+                //VARIANT h_var; h_var.intVal = ID_H_3D_PLATE;
+                //VARIANT w_var; w_var.intVal = ID_W_3D_PLATE;
+                //VARIANT z_var; z_var.intVal = ID_Z_3D_PLATE;
+                // Войти в режим редактирования эскиза
+                if (sketchDefinition->BeginEdit())
                 {
-                    // Получим интерфейс базовой плоскости XOY
-                    IEntityPtr basePlane(m_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+                    ClearCurrentSketch(); part->ClearAllObj();
+                    RectangleParam* rP = new RectangleParam;
+                    rP->height = (h);
+                    rP->width = (w);
+                    rP->ang = 0;
+                    rP->x = 0;
+                    rP->y = 0;
+                    rP->style = 1;
 
-                    // Установка параметров эскиза
-                    sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза 
+                    ksRectangle(rP, 0);
+                    // Выйти из режима редактирования эскиза
+                    sketchDefinition->EndEdit();
+                }
 
-                    // Создадим эскиз
-                    entitySketch->Create();
-                    //IPropertyControlPtr h = new IPropertyControlPtr(curentCollection->Item[2],false);
-                    //IPropertyControlPtr w = new IPropertyControlPtr(curentCollection->Item[3],false);
-                    //IPropertyControlPtr z = new IPropertyControlPtr(curentCollection->Item[4],false);
-
-                    show_info("entitySketch");
-
-                    //VARIANT h_var; h_var.intVal = ID_H_3D_PLATE;
-                    //VARIANT w_var; w_var.intVal = ID_W_3D_PLATE;
-                    //VARIANT z_var; z_var.intVal = ID_Z_3D_PLATE;
-                    // Войти в режим редактирования эскиза
-                    if (sketchDefinition->BeginEdit())
+                // Оперция выдавливани
+                IEntityCollectionPtr  boss_coll = part->EntityCollection(o3d_bossExtrusion);
+                IEntityPtr entityExtrusion;
+                if (boss_coll->GetCount() > 0)
+                {
+                    for (size_t i = 0; i < boss_coll->GetCount(); i++)
                     {
-                        ClearCurrentSketch(); m_part->ClearAllObj();
-
-                        // Введем новый эскиз - квадрат
-                        
-                        show_info((std::to_wstring(h).c_str()));
-                        show_info(std::to_wstring(w).c_str());
-                        show_info(std::to_wstring(z).c_str());
-                        RectangleParam* rP = new RectangleParam;
-                        rP->height = (h);
-                        rP->width = (w);
-                        rP->ang = 0;
-                        rP->x = 0;
-                        rP->y = 0;
-                        rP->style = 1;
-
-                        ksRectangle(rP, 0);
-                        // Выйти из режима редактирования эскиза
-                        sketchDefinition->EndEdit();
-                    }
-
-                    // Оперция выдавливани
-                    MessageT(_T("END EDIT "));
-                    
-                    // Оперция выдавливани
-                    IEntityCollectionPtr  boss_coll = m_part->EntityCollection(o3d_bossExtrusion);
-                    IEntityPtr entityExtrusion;
-                    if (boss_coll->GetCount() > 0)
-                    {
-                        for (size_t i = 0; i < boss_coll->GetCount(); i++)
-                        {
-
-
-                        }
-                        show_info("boss_coll");
-                        entityExtrusion = boss_coll->GetByIndex(0);
 
 
                     }
-                    else
-                    {
+                    entityExtrusion = boss_coll->GetByIndex(0);
 
-                        entityExtrusion = m_part->NewEntity(o3d_bossExtrusion);
+                }
+                else
+                {
 
-                    }
+                    entityExtrusion = part->NewEntity(o3d_bossExtrusion);
+
+                }
+
+
+                if (entityExtrusion)
+                {
+                    // Интерфейс базовой операции выдавливания     
+
+                    //IBossExtrusionDefinitionPtr extrusionDefinition(basePlane);
+                    IBossExtrusionDefinitionPtr extrusionDefinition((entityExtrusion->GetDefinition()));
 
 
                     if (entityExtrusion)
                     {
-
-                        show_info("entityExtrusion");
-
-                        // Интерфейс базовой операции выдавливания     
-
-                        //IBossExtrusionDefinitionPtr extrusionDefinition(basePlane);
-                        IBossExtrusionDefinitionPtr extrusionDefinition((entityExtrusion->GetDefinition()));
-
-
-                        if (entityExtrusion)
+                        // Интерфейс базовой операции выдавливания
+                        IBossExtrusionDefinitionPtr extrusionDefinition(IUnknownPtr(entityExtrusion->GetDefinition(), false /*AddRef*/));
+                        if (extrusionDefinition)
                         {
-                            show_info("entityExtrusion");
+                            // Установка параметров операции выдавливания
+                            extrusionDefinition->SetDirectionType(dtNormal);     // Направление выдавливания ( dtNormal	- прямое
+                            // направление, для тонкой стенки - наружу,
+                            // dtReverse	- обратное направление, для тонкой стенки - внутрь
+                            // dtBoth - в обе стороны, dtMiddlePlane от средней плоскости )
+                            // Изменить параметры выдавливания в одном направлении
+                            extrusionDefinition->SetSideParam(true,               // Направление выдавливания ( TRUE - прямое направление,
+                                // FALSE - обратное направление )
+                                etBlind,            // Тип выдавливания ( etBlind - строго на глубину,
+                                // etThroughAll - через всю деталь, etUpToVertexTo - на расстояние до вершины,
+                                // etUpToVertexFrom - на расстояние за вершину, etUpToSurfaceTo - на
+                                // расстояние до поверхности, etUpToSurfaceFrom - на расстояние за поверхность,
+                                // etUpToNearSurface	- до ближайшей поверхности )
+                                z,                // Глубина выдавливания
+                                0,                  // Угол уклона
+                                false);            // Направление уклона ( TRUE - уклон наружу, FALSE - уклон внутрь )
+                            // Изменить параметры тонкой стенки
+                            extrusionDefinition->SetThinParam(false,              // Признак тонкостенной операции
+                                0,                  // Направление построения тонкой стенки
+                                0,                  // Толщина стенки в прямом направлении
+                                0);                // Толщина стенки в обратном направлении
+                            extrusionDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания
 
-                            // Интерфейс базовой операции выдавливания
-                            IBossExtrusionDefinitionPtr extrusionDefinition(IUnknownPtr(entityExtrusion->GetDefinition(), false /*AddRef*/));
-                            if (extrusionDefinition)
-                            {
-                                // Установка параметров операции выдавливания
-                                show_info("extrusionDefinition");
+                            // Создать операцию выдавливания
+                            entityExtrusion->Create();
 
-                                extrusionDefinition->SetDirectionType(dtNormal);     // Направление выдавливания ( dtNormal	- прямое
-                                // направление, для тонкой стенки - наружу,
-                                // dtReverse	- обратное направление, для тонкой стенки - внутрь
-                                // dtBoth - в обе стороны, dtMiddlePlane от средней плоскости )
-                                // Изменить параметры выдавливания в одном направлении
-                                extrusionDefinition->SetSideParam(true,               // Направление выдавливания ( TRUE - прямое направление,
-                                    // FALSE - обратное направление )
-                                    etBlind,            // Тип выдавливания ( etBlind - строго на глубину,
-                                    // etThroughAll - через всю деталь, etUpToVertexTo - на расстояние до вершины,
-                                    // etUpToVertexFrom - на расстояние за вершину, etUpToSurfaceTo - на
-                                    // расстояние до поверхности, etUpToSurfaceFrom - на расстояние за поверхность,
-                                    // etUpToNearSurface	- до ближайшей поверхности )
-                                    z,                // Глубина выдавливания
-                                    0,                  // Угол уклона
-                                    false);            // Направление уклона ( TRUE - уклон наружу, FALSE - уклон внутрь )
-                                // Изменить параметры тонкой стенки
-                                extrusionDefinition->SetThinParam(false,              // Признак тонкостенной операции
-                                    0,                  // Направление построения тонкой стенки
-                                    0,                  // Толщина стенки в прямом направлении
-                                    0);                // Толщина стенки в обратном направлении
-                                extrusionDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания
-
-                                // Создать операцию выдавливания
-                                entityExtrusion->Create();
-
-                                // Формирует массив объектов и возвращает указатель на его интерфейс - массив граней компонента       
-                                IEntityCollectionPtr entityCollection(m_part->EntityCollection(o3d_face), false /*AddRef*/);
-                                entityExtrusion->Update();
-
-                            }
+                            // Формирует массив объектов и возвращает указатель на его интерфейс - массив граней компонента       
+                            IEntityCollectionPtr entityCollection(part->EntityCollection(o3d_face), false /*AddRef*/);
                             entityExtrusion->Update();
 
                         }
+                        entityExtrusion->Update();
+
                     }
                 }
             }
-            m_part->RebuildModel();
-            m_part->Update();
-            SetChanged();
-            RedrawPhantom();
-            corDoc->SetActive();
         }
+
+        part->Update();
+        dPart->Save();
+        dPart->RebuildDocument();
+
+        m_part->RebuildModel();
+        m_part->Update();
+        SetChanged();
+        RedrawPhantom();
+        corDoc->SetActive();
 
         //IDocument3DPtr partDoc = ksGetActive3dDocument();
 
@@ -1539,21 +1517,6 @@ void Shpeel::OnButtonClick( long buttonID )
 
         break;
     }
-
-    {
-        
-
-
-
-
-        break; 
-    }
-
-    //case ID_CHOSE_DETAIL:
-    //{
-    //    LibMessage(_T("ID_CHOSE_DETAIL"));
-    //    break;
-    //}
   }
 }
 
@@ -3035,24 +2998,24 @@ int Shpeel::load_default_panel()
 {
     ////////////////////////////////////////////////////// TEST BLOCK 
     IDocument3DPtr corrent_doc(ksGetActive3dDocument());
-    IDocument3DPtr pDocument3d(ksGet3dDocument(), false/*AddRef*/);
+    dPart = IDocument3DPtr(ksGet3dDocument(), false/*AddRef*/);
 
     //auto hControl = this->GetPropertyControl(ID_H_3D_PLATE);
     //auto wControl = this->GetPropertyControl(ID_W_3D_PLATE);
     //auto zControl = this->GetPropertyControl(ID_Z_3D_PLATE);
 
-    int h = 20/*hControl->Value.intVal*/, w = 20/*wControl->Value.intVal*/, z = 10/*zControl->Value.intVal*/;
+    int h = 100/*hControl->Value.intVal*/, w = 100/*wControl->Value.intVal*/, z = 20/*zControl->Value.intVal*/;
 
     IPartPtr part = m_part;
     part->ClearAllObj();
     try
     {
-        if (pDocument3d)
+        if (dPart)
         {
-            if (pDocument3d->Create(true,   // Признак режима редактирования документа ( TRUE - невидимый режим, FALSE - видимый режим )
+            if (dPart->Create(true,   // Признак режима редактирования документа ( TRUE - невидимый режим, FALSE - видимый режим )
                 true)) // Тип документа ( TRUE - деталь, FALSE - сборка ) 
             {
-                part = pDocument3d->GetPart(pTop_Part);
+                part = dPart->GetPart(pTop_Part);
                 if (part)
                 {
                     // Создадим новый эскиз
@@ -3138,11 +3101,11 @@ int Shpeel::load_default_panel()
     }
     auto pPatch = get_tmp_filename_tmp(corrent_doc);
 
-    if (pDocument3d->SetFileName((LPWSTR)(LPCWSTR)pPatch))
+    if (dPart->SetFileName((LPWSTR)(LPCWSTR)pPatch))
     {
 
     }
-    if (pDocument3d->Save())
+    if (dPart->Save())
     {
         //show_info("Save file");
         //show_info(pPatch);
@@ -3157,7 +3120,7 @@ int Shpeel::load_default_panel()
     m_part->SetFileName((LPWSTR)(LPCWSTR)pPatch);
 
     
-    save_part_info(part, pDocument3d, pPatch); //// Сохранение инф о детали 
+    save_part_info(part, dPart, pPatch); //// Сохранение инф о детали 
     //show_info(pPatch);
     FilePatchName = pPatch;
     /////////////////////////////////////////////////////

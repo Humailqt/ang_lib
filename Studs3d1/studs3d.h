@@ -211,6 +211,7 @@ extern class Shpeel : public PropertyManagerObject
 private :
   int                                     refCount;
   IDocument3DPtr                               doc; // Указатель на интерфейс текущего 3D-документа
+  IDocument3DPtr                               dPart; // Указатель на интерфейс текущего 3D-документа
   IPartPtr                                  m_part = NULL; // Деталь
   IEntityPtr                           m_takePoint; // Точка 3D
   bool                              collectChanged; // true - массив изменился
