@@ -1670,10 +1670,13 @@ void Shpeel::OnButtonClick( long buttonID )
                 IDocument3DPtr corDoc(ksGet3dDocument());
                 show_info(patch);
                 corDoc->Open((LPWSTR)LPCWSTR(patch), true);
+                dPart = corDoc;
                 show_info("open");
                 m_part->ClearAllObj();
                 m_part->Update();
                 m_part = corDoc->GetPart(pTop_Part);
+                m_part->Update();
+                m_part->RebuildModel();
                 show_info("GET Part");
                 
 
