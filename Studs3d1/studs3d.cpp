@@ -1283,6 +1283,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
   }
 } 
 
+#define debug_ID_REBUILD_DETAIL 1 ;
 
 //---------------------------------------------------------------------------------------------------- 
 // Обработка нажатия кнопок
@@ -1373,13 +1374,47 @@ void Shpeel::OnButtonClick( long buttonID )
     }
     case ID_REBUILD_DETAIL:
     {
-        
+        double h_contr = 1 , w_contr = 1 , z_contr = 1 ;
+#if debug_ID_REBUILD_DETAIL
+        show_info("debug_ID_REBUILD_DETAIL");
+#endif // debug_ID_REBUILD_DETAIL
+
+        show_info(std::to_wstring(curentCollection->GetCount()).c_str());
+        for (int i = 0; i < curentCollection->GetCount(); i++)
+        {
+            _variant_t v_iter; v_iter = i;
+            auto pControl  = curentCollection->GetItem(v_iter);
+            switch (pControl->Id)
+            {
+            case(ID_H_3D_PLATE):
+            {
+                h_contr = pControl->Value;
+                break;
+            }
+            case(ID_W_3D_PLATE):
+            {
+
+                w_contr = pControl->Value;
+                break;
+            }
+            case(ID_Z_3D_PLATE):
+            {
+
+                z_contr = pControl->Value;
+                break;
+            }
+            default:
+                break;
+            }
+            
+        }
         IDocument3DPtr corDoc = ksGetActive3dDocument();
-        show_info("FilePatchName ");
+        show_info(m_part->GetFileName());
+        //show_info("FilePatchName ");
         if (!FilePatchName.IsEmpty())
         {
             //show_info(FilePatchName);
-            show_info("FilePatchName!emprty");
+            //show_info("FilePatchName!emprty");
             //IDocument3DPtr mDoc(ksGet3dDocument());
             //IPartPtr part = m_part->GetPart(pTop_Part);
 
@@ -1387,7 +1422,7 @@ void Shpeel::OnButtonClick( long buttonID )
             // Создадим новый эскиз
             auto col = m_part->EntityCollection(o3d_sketch);
             IEntityPtr entitySketch(col->GetByIndex(0), false /*AddRef*/);
-            show_info("entitySketch");
+            //show_info("entitySketch");
 
             if (entitySketch)
             {
@@ -1408,7 +1443,7 @@ void Shpeel::OnButtonClick( long buttonID )
                     //IPropertyControlPtr w = new IPropertyControlPtr(curentCollection->Item[3],false);
                     //IPropertyControlPtr z = new IPropertyControlPtr(curentCollection->Item[4],false);
 
-                    show_info("entitySketch");
+                    //show_info("entitySketch");
 
                     //VARIANT h_var; h_var.intVal = ID_H_3D_PLATE;
                     //VARIANT w_var; w_var.intVal = ID_W_3D_PLATE;
@@ -1420,12 +1455,12 @@ void Shpeel::OnButtonClick( long buttonID )
 
                         // Введем новый эскиз - квадрат
                         
-                        show_info((std::to_wstring(h).c_str()));
-                        show_info(std::to_wstring(w).c_str());
-                        show_info(std::to_wstring(z).c_str());
+                        show_info((std::to_wstring(h_contr).c_str()));
+                        show_info(std::to_wstring(w_contr).c_str());
+                        show_info(std::to_wstring(z_contr).c_str());
                         RectangleParam* rP = new RectangleParam;
-                        rP->height = (h);
-                        rP->width = (w);
+                        rP->height = (h_contr);
+                        rP->width = (w_contr);
                         rP->ang = 0;
                         rP->x = 0;
                         rP->y = 0;
@@ -1437,8 +1472,10 @@ void Shpeel::OnButtonClick( long buttonID )
                     }
 
                     // Оперция выдавливани
-                    MessageT(_T("END EDIT "));
-                    
+                    //MessageT(_T("END EDIT "));
+#if debug_ID_REBUILD_DETAIL
+                    show_info("debug_ID_REBUILD_DETAIL");
+#endif // debug_ID_REBUILD_DETAIL
                     // Оперция выдавливани
                     IEntityCollectionPtr  boss_coll = m_part->EntityCollection(o3d_bossExtrusion);
                     IEntityPtr entityExtrusion;
@@ -1449,7 +1486,7 @@ void Shpeel::OnButtonClick( long buttonID )
 
 
                         }
-                        show_info("boss_coll");
+                        //show_info("boss_coll");
                         entityExtrusion = boss_coll->GetByIndex(0);
 
 
@@ -1461,22 +1498,18 @@ void Shpeel::OnButtonClick( long buttonID )
 
                     }
 
-
+#if debug_ID_REBUILD_DETAIL
+                    show_info("debug_ID_REBUILD_DETAIL");
+#endif // debug_ID_REBUILD_DETAIL
                     if (entityExtrusion)
                     {
-
-                        show_info("entityExtrusion");
-
-                        // Интерфейс базовой операции выдавливания     
-
-                        //IBossExtrusionDefinitionPtr extrusionDefinition(basePlane);
                         IBossExtrusionDefinitionPtr extrusionDefinition((entityExtrusion->GetDefinition()));
-
-
                         if (entityExtrusion)
                         {
-                            show_info("entityExtrusion");
-
+                           // show_info("entityExtrusion");
+#if debug_ID_REBUILD_DETAIL
+                            show_info("debug_ID_REBUILD_DETAIL");
+#endif // debug_ID_REBUILD_DETAIL
                             // Интерфейс базовой операции выдавливания
                             IBossExtrusionDefinitionPtr extrusionDefinition(IUnknownPtr(entityExtrusion->GetDefinition(), false /*AddRef*/));
                             if (extrusionDefinition)
@@ -1496,7 +1529,7 @@ void Shpeel::OnButtonClick( long buttonID )
                                     // etUpToVertexFrom - на расстояние за вершину, etUpToSurfaceTo - на
                                     // расстояние до поверхности, etUpToSurfaceFrom - на расстояние за поверхность,
                                     // etUpToNearSurface	- до ближайшей поверхности )
-                                    z,                // Глубина выдавливания
+                                    z_contr,                // Глубина выдавливания
                                     0,                  // Угол уклона
                                     false);            // Направление уклона ( TRUE - уклон наружу, FALSE - уклон внутрь )
                                 // Изменить параметры тонкой стенки
@@ -1781,12 +1814,16 @@ void Shpeel::FillMaterial(ksAPI7::IPropertyListPtr & materialList )
   materialList->Value = LoadStr(GetMaterialStr(tmp.indexMassa));
 }
 
+#define debug_ShowControls 1; 
 
 //-------------------------------------------------------------------------------
 // Наполнить панель контролами
 // ---
 void Shpeel::ShowControls() 
 {
+#if  debug_ShowControls
+    show_info("debug_ShowControls");
+#endif // debug_ShowControls
   if ( curentCollection )
   {
       ksAPI7::IPropertyListPtr chose_ditail = curentCollection->Add(ksControlListStr);
@@ -1795,12 +1832,17 @@ void Shpeel::ShowControls()
       info_list inf_l; 
       inf_l.id = ID_CHOSE_DETAIL;
       inf_l.order_id = 0; v_info_list.push_back(inf_l);
-      
+#if  debug_ShowControls
+      show_info("debug_ShowControls");
+#endif // debug_ShowControls
       _upload_list(chose_ditail, patch_resure_detales);
 
       ksAPI7::IPropertyPoint3DPtr point3D(curentCollection->Add(ksControlPoint3D));
       if (point3D)
       {
+#if  debug_ShowControls
+          show_info("debug_ShowControls");
+#endif // debug_ShowControls
           InitPropertyControl(point3D, ID_POINT_3D, ID_POINT_3D, ID_POINT_3D);
           ksAPI7::IPropertyEditPtr xEdit = point3D->Coordinate[0];
           if (xEdit)
@@ -1842,21 +1884,23 @@ void Shpeel::ShowControls()
               procParam->DefaultControlFix = ksAllFix;
           }
       }
-
+#if  debug_ShowControls
+      show_info("debug_ShowControls");
+#endif // debug_ShowControls
       //Комбобокс сбора размера панели 
       ksAPI7::IPropertyEditPtr edit_h = curentCollection->Add(ksControlEditReal);
       edit_h->Name = _T("Высота");
       edit_h->Id = ID_H_3D_PLATE;
-      edit_h->Value = 100;
+      edit_h->Value = 20;
       ksAPI7::IPropertyEditPtr edit_w = curentCollection->Add(ksControlEditReal);
       edit_w->Name = _T("Ширина");
       edit_w->Id = ID_W_3D_PLATE;
-      edit_w->Value = 100;
+      edit_w->Value = 20;
 
       ksAPI7::IPropertyEditPtr edit_z = curentCollection->Add(ksControlEditReal);
       edit_z->Name = _T("Толщина");
       edit_z->Id = ID_Z_3D_PLATE;
-      edit_z->Value = 20;
+      edit_z->Value = 10;
 
 
       ksAPI7::IPropertyControlPtr rotate= curentCollection->Add(ksControlTextButton);
@@ -2005,11 +2049,18 @@ void Shpeel::get_part()
 
 }
 
+
+#define debug_Draw3D 0 ;
 //-------------------------------------------------------------------------------------
 // Рисование 3D объектов
 // ---
 void Shpeel::Draw3D()
 {
+
+#if  debug_Draw3D 
+    show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
+
   if (doc && m_part) // Если есть документ и в классе и деталь 
   {
     long toolBarID  = IDP_STUDS;
@@ -2031,24 +2082,36 @@ void Shpeel::Draw3D()
     //cor_dir += patch_resure_detales;
     //cor_dir += _T("Tmp.m3d");
 
-    
+#if  debug_Draw3D 
+    show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
     SpecPropertyToolBarEnum toolBarType = pnEnterEscHelp;
-
+#if  debug_Draw3D 
+    show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
     if (InitProcessParam(toolBarID, toolBarType, firstTabID))
     {
       procParam->AutoReduce = false;
-
+#if  debug_Draw3D 
+      show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
       ksAPI7::IKompasDocument3D1Ptr doc3D(pNewKompasAPI->ActiveDocument);
-
+#if  debug_Draw3D 
+      show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
       ksAPI7::IPart7Ptr IPart7(IUnknownPtr(ksTransferInterface(m_part, ksAPI7Dual, 0), false));
-
+#if  debug_Draw3D 
+      show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
 
       if (doc3D)
       {
         ksAPI7::IModelObjectPtr Model(IPart7);
         
 
-
+#if  debug_Draw3D 
+        show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
         m_process = doc3D->LibProcess[ksProcess3DPlacementAndEntity];
         m_process3D = m_process;
         if ( m_process3D )
@@ -2061,6 +2124,9 @@ void Shpeel::Draw3D()
             m_manipulator = m_baseMan;
             if (  m_manipulator )
             {
+#if  debug_Draw3D 
+                show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
 
                 m_baseMan->Id = IDR_BASEMANID;
               m_baseMan->Active  =  true;
@@ -2080,7 +2146,9 @@ void Shpeel::Draw3D()
 
             }
           }
-
+#if  debug_Draw3D 
+          show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
           m_process3D->PhantomObject = Model;
 
 
@@ -2089,18 +2157,27 @@ void Shpeel::Draw3D()
 
           new Process3DEvent( m_process3D, *this, true );
           SetChanged();
-
+#if  debug_Draw3D 
+          show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
           RedrawPhantom();
 
           m_process->Run( false, false );
 
-
+#if  debug_Draw3D 
+          show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
         }
       }
     }
   }
+#if  debug_Draw3D 
+  show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
   set_info(partInfo->part->GetFileName());
-
+#if  debug_Draw3D 
+  show_info("debug_Draw3D ");
+#endif // debug_Draw3D 
 }
 
 
@@ -3029,7 +3106,7 @@ unsigned int Shpeel::get_order_control(variant_t ID)
     return -1;
 }
 
-
+#define debug_load_default_panel 0;
 
 int Shpeel::load_default_panel()
 {
@@ -3040,6 +3117,9 @@ int Shpeel::load_default_panel()
     //auto hControl = this->GetPropertyControl(ID_H_3D_PLATE);
     //auto wControl = this->GetPropertyControl(ID_W_3D_PLATE);
     //auto zControl = this->GetPropertyControl(ID_Z_3D_PLATE);
+#if debug_load_default_panel
+    show_info("debug_load_default_panel");
+#endif // debug_load_default_panel
 
     int h = 20/*hControl->Value.intVal*/, w = 20/*wControl->Value.intVal*/, z = 10/*zControl->Value.intVal*/;
 
@@ -3055,6 +3135,9 @@ int Shpeel::load_default_panel()
                 part = pDocument3d->GetPart(pTop_Part);
                 if (part)
                 {
+#if  debug_load_default_panel
+                    show_info("debug_load_default_panel");
+#endif // debug_load_default_panel
                     // Создадим новый эскиз
                     IEntityPtr entitySketch(part->NewEntity(o3d_sketch), false /*AddRef*/);
                     if (entitySketch)
@@ -3069,7 +3152,9 @@ int Shpeel::load_default_panel()
                             // Установка параметров эскиза
                             sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
 
-
+#if  debug_load_default_panel
+                            show_info("debug_load_default_panel");
+#endif // debug_load_default_panel
                             // Создадим эскиз
                             entitySketch->Create();
 
@@ -3088,6 +3173,9 @@ int Shpeel::load_default_panel()
                             IEntityPtr entityExtrusion(part->NewEntity(o3d_bossExtrusion), false /*AddRef*/);
                             if (entityExtrusion)
                             {
+#if  debug_load_default_panel
+                                show_info("debug_load_default_panel");
+#endif // debug_load_default_panel
                                 // Интерфейс базовой операции выдавливания
                                 IBossExtrusionDefinitionPtr extrusionDefinition(IUnknownPtr(entityExtrusion->GetDefinition(), false/*AddRef*/));
                                 if (extrusionDefinition)
@@ -3119,6 +3207,9 @@ int Shpeel::load_default_panel()
                                     entityExtrusion->Create();
 
                                 }
+#if  debug_load_default_panel
+                                show_info("debug_load_default_panel");
+#endif // debug_load_default_panel
                             }
                         }
                     }
@@ -3152,7 +3243,9 @@ int Shpeel::load_default_panel()
         //show_info("Error save file detile");
 /*        show_info(pPatch);*/
     }
-
+#if  debug_load_default_panel
+    show_info("debug_load_default_panel");
+#endif // debug_load_default_panel
 
     m_part->SetFileName((LPWSTR)(LPCWSTR)pPatch);
 
@@ -3161,7 +3254,9 @@ int Shpeel::load_default_panel()
     //show_info(pPatch);
     FilePatchName = pPatch;
     /////////////////////////////////////////////////////
-
+#if  debug_load_default_panel
+    show_info("debug_load_default_panel");
+#endif // debug_load_default_panel
     corrent_doc->SetActive();
     m_part->Update();
     return 1;
@@ -3304,9 +3399,13 @@ CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
         test_file = p_name_file_test.c_str();
         cor_dir = test_file;
     }
+    else
+    {
+        cor_dir = (test_file + tmp_name + tmp_ex).c_str();
+    }
     CString dir_str(cor_dir.c_str());
     //show_info(dir_str);
-    
+    show_info(dir_str);
     return dir_str;
 }
 

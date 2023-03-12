@@ -93,7 +93,7 @@ PropertyManagerObject::~PropertyManagerObject()
   flagMode         = 0;    // Признак редактирования по дабл-клику
 }     
 
-
+#define debug_InitProcessParam 1 ;
 //----------------------------------------------------------------------------------------------
 // Инициализация параметров процесса
 // ---
@@ -105,11 +105,16 @@ bool PropertyManagerObject::InitProcessParam( long toolBarID, SpecPropertyToolBa
   {
     try 
     { 
+#if  debug_InitProcessParam 
+        LibMessage((std::wstring(L"debug_InitProcessParam") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_InitProcessParam 
       procParam = pNewKompasAPI->CreateProcessParam();  // Получаем параметры процессы
       if ( procParam ) 
       {
         new PropertyManagerEvent( procParam, *this );   // Подписываемся на события процесса 
-        
+#if  debug_InitProcessParam 
+        LibMessage((std::wstring(L"debug_InitProcessParam") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_InitProcessParam 
         // Получаем интерфейс панели свойств
         procParam->SpecToolbar = toolBarType;           // Тип кнопок на панели свойств  
         _bstr_t tmpBstr( LoadStr( toolBarID ) );
@@ -120,7 +125,9 @@ bool PropertyManagerObject::InitProcessParam( long toolBarID, SpecPropertyToolBa
         {
           procParam->DefaultControlFix = ksAllFix;
         }
-
+#if  debug_InitProcessParam 
+        LibMessage((std::wstring(L"debug_InitProcessParam") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_InitProcessParam 
         // Получаем коллекцию закладок панели свойств
         propTabs = procParam->PropertyTabs;                       
 
@@ -129,8 +136,13 @@ bool PropertyManagerObject::InitProcessParam( long toolBarID, SpecPropertyToolBa
         {
           CreateTab( firstTabID, TRUE, TRUE );
           // Наполнение закладки контролами для вывода параметров элемента
+#if  debug_InitProcessParam 
+          LibMessage((std::wstring(L"debug_InitProcessParam") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_InitProcessParam 
           ShowControls();
-          
+#if  debug_InitProcessParam 
+          LibMessage((std::wstring(L"debug_InitProcessParam") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_InitProcessParam 
           //// Создать окно просмотра
           //slideBox = curentCollection->Add( ksControlSlideBox );            
           //slideBox->SlideType      = ksSlide;                 
@@ -142,7 +154,9 @@ bool PropertyManagerObject::InitProcessParam( long toolBarID, SpecPropertyToolBa
           //slideBox->Name           = _T("Окно просмотра");
           //slideBox->NameVisibility = ksNameHorizontalVisible;
         }
-   
+#if  debug_InitProcessParam 
+        LibMessage((std::wstring(L"debug_InitProcessParam") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_InitProcessParam 
         int  paramCount = ParamCount();                             // Нужно ли выводить грид ?
         if ( paramCount )
         {
@@ -522,8 +536,10 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       {
       case(ID_H_3D_PLATE):
       {
+          //obj.h = control->Value.dblVal;
+
+
           //LibMessage(_T("ID_H_3D_PLATE"), 0);
-          obj.h = control->Value.dblVal;
           //InsertPartPtr part_info = obj.get_part_info();
           //part_info->doc->SetActive();
           //auto cor_part = part_info->part;
@@ -565,12 +581,12 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       case(ID_W_3D_PLATE):
       {
           //LibMessage(_T("ID_W_3D_PLATE"), 0);
-          obj.w = control->Value.dblVal;
+          //obj.w = control->Value.dblVal;
           break;
       }
       case(ID_Z_3D_PLATE):
       {
-          obj.z = control->Value.dblVal;
+          //obj.z = control->Value.dblVal;
           //LibMessage(_T("ID_Z_3D_PLATE"), 0);
           break;
       }

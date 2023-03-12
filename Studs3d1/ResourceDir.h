@@ -1,7 +1,7 @@
 #pragma once
 #include "StdAfx.h"
 #include <filesystem>
-#define patch_lib_detail L"D:/ang_lib/ang_detile/"
+//#define patch_lib_detail L"D:/ang_lib/ang_detile/"
 
 #define new_detile_df L"Новая деталь" 
 
