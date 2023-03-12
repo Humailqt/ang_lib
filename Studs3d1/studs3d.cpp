@@ -1379,6 +1379,36 @@ void Shpeel::OnButtonClick( long buttonID )
         //IDocument3DPtr mDoc(ksGet3dDocument());
         //IPartPtr part = m_part->GetPart(pTop_Part);
 
+        double h_contr = 1, w_contr = 1, z_contr = 1;
+        
+        for (int i = 0; i < curentCollection->GetCount(); i++)
+        {
+            _variant_t v_iter; v_iter = i;
+            auto pControl = curentCollection->GetItem(v_iter);
+            switch (pControl->Id)
+            {
+            case(ID_H_3D_PLATE):
+            {
+                h_contr = pControl->Value;
+                break;
+            }
+            case(ID_W_3D_PLATE):
+            {
+
+                w_contr = pControl->Value;
+                break;
+            }
+            case(ID_Z_3D_PLATE):
+            {
+
+                z_contr = pControl->Value;
+                break;
+            }
+            default:
+                break;
+            }
+
+        }
         dPart->SetActive();
         IPartPtr part = dPart->GetPart(pTop_Part);
         // Создадим новый эскиз
@@ -1409,10 +1439,10 @@ void Shpeel::OnButtonClick( long buttonID )
                 if (sketchDefinition->BeginEdit())
                 {
                     ClearCurrentSketch(); part->ClearAllObj();
-                    LineSeg(0, 0, w, 0, 1);
-                    LineSeg(0, h, w, h, 1);
-                    LineSeg(0, 0, 0, h, 1);
-                    LineSeg(w, 0, w, h, 1);
+                    LineSeg(0, 0, w_contr, 0, 1);
+                    LineSeg(0, h_contr, w_contr, h_contr, 1);
+                    LineSeg(0, 0, 0, h_contr, 1);
+                    LineSeg(w_contr, 0, w_contr, h_contr, 1);
                     // Выйти из режима редактирования эскиза
                     sketchDefinition->EndEdit();
                 }
@@ -1465,7 +1495,7 @@ void Shpeel::OnButtonClick( long buttonID )
                                 // etUpToVertexFrom - на расстояние за вершину, etUpToSurfaceTo - на
                                 // расстояние до поверхности, etUpToSurfaceFrom - на расстояние за поверхность,
                                 // etUpToNearSurface	- до ближайшей поверхности )
-                                z,                // Глубина выдавливания
+                                z_contr,                // Глубина выдавливания
                                 0,                  // Угол уклона
                                 false);            // Направление уклона ( TRUE - уклон наружу, FALSE - уклон внутрь )
                             // Изменить параметры тонкой стенки
@@ -1805,16 +1835,16 @@ void Shpeel::ShowControls()
       ksAPI7::IPropertyEditPtr edit_h = curentCollection->Add(ksControlEditReal);
       edit_h->Name = _T("Высота");
       edit_h->Id = ID_H_3D_PLATE;
-      edit_h->Value = h;
+      edit_h->Value = 20;
       ksAPI7::IPropertyEditPtr edit_w = curentCollection->Add(ksControlEditReal);
       edit_w->Name = _T("Ширина");
       edit_w->Id = ID_W_3D_PLATE;
-      edit_w->Value = w;
+      edit_w->Value = 20;
 
       ksAPI7::IPropertyEditPtr edit_z = curentCollection->Add(ksControlEditReal);
       edit_z->Name = _T("Толщина");
       edit_z->Id = ID_Z_3D_PLATE;
-      edit_z->Value = z;
+      edit_z->Value = 10;
 
 
       ksAPI7::IPropertyControlPtr rotate= curentCollection->Add(ksControlTextButton);
@@ -2999,7 +3029,7 @@ int Shpeel::load_default_panel()
     //auto wControl = this->GetPropertyControl(ID_W_3D_PLATE);
     //auto zControl = this->GetPropertyControl(ID_Z_3D_PLATE);
 
-    //int h = 100/*hControl->Value.intVal*/, w = 100/*wControl->Value.intVal*/, z = 20/*zControl->Value.intVal*/;
+    int h = 20/*hControl->Value.intVal*/, w = 20/*wControl->Value.intVal*/, z = 10/*zControl->Value.intVal*/;
 
     IPartPtr part = m_part;
     part->ClearAllObj();
