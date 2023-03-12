@@ -137,6 +137,7 @@
 #define ID_ROTATE_DETAIL				3006
 #define ID_W_RESIZE_DETAIL				3007
 #define ID_ANGLE_ROTATE_DETAIL			3008
+#define ID_NAME_DETAIL					3009
 
 
 

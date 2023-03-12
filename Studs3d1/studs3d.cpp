@@ -1282,7 +1282,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
     }
   }
 } 
-
+#define debug_ID_ROTATE_DETAIL 1;
 
 //---------------------------------------------------------------------------------------------------- 
 // Обработка нажатия кнопок
@@ -1337,6 +1337,100 @@ void Shpeel::OnButtonClick( long buttonID )
       m_process->Stop();
 
       break;
+    }
+    case ID_ROTATE_DETAIL:
+    {
+        CString str;
+        
+        IBossRotatedDefinitionPtr rot;
+        LibMessage(L"ROTATE", 0);
+#if debug_ID_ROTATE_DETAIL
+        LibMessage((std::wstring(L"debug_ID_ROTATE_DETAIL") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_ID_ROTATE_DETAIL
+        if (m_part != NULL)
+        {
+#if debug_ID_ROTATE_DETAIL
+            LibMessage((std::wstring(L"debug_ID_ROTATE_DETAIL") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_ID_ROTATE_DETAIL
+            auto coll = m_part->EntityCollection(o3d_sketch);
+            
+            IEntityPtr entitySketch(coll->GetByIndex(0), false/*AddRef*/);
+            if (entitySketch)
+            {
+#if debug_ID_ROTATE_DETAIL
+                LibMessage((std::wstring(L"debug_ID_ROTATE_DETAIL") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_ID_ROTATE_DETAIL
+                // Получить указатель на интерфейс параметров объектов и элементов
+                // Интерфейс свойств эскиза
+                ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+                if (sketchDefinition)
+                {
+#if debug_ID_ROTATE_DETAIL
+                    LibMessage((std::wstring(L"debug_ID_ROTATE_DETAIL") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_ID_ROTATE_DETAIL
+                    IEntityPtr entityRotate(m_part->GetDefaultEntity(o3d_bossRotated), false/*AddRef*/);
+                    if (!entityRotate)
+                    {
+                        entityRotate = IEntityPtr(m_part->NewEntity(o3d_bossRotated), false/*AddRef*/);
+
+                    }
+                    // Операции вращения
+                   
+                    if (entityRotate)
+                    {
+#if debug_ID_ROTATE_DETAIL
+                        LibMessage((std::wstring(L"debug_ID_ROTATE_DETAIL") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_ID_ROTATE_DETAIL
+                        // Получить указатель на интерфейс параметров объектов и элементов
+                        // Интерфейс базовой операции вращения
+                        IBossRotatedDefinitionPtr baseRotatedDefinition(IUnknownPtr(entityRotate->GetDefinition(), false/*AddRef*/));
+                        if (true)
+                        {
+
+                        }
+
+                        if (baseRotatedDefinition)
+                        {
+#if debug_ID_ROTATE_DETAIL
+                            LibMessage((std::wstring(L"debug_ID_ROTATE_DETAIL") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_ID_ROTATE_DETAIL
+                            baseRotatedDefinition->SetToroidShapeType(false);      // Признак тороида ( TRUE - тороид, FALSE - сфероид )
+                            baseRotatedDefinition->SetDirectionType(dtBoth);       // Направление вращения ( dtNormal - прямое направление, для тонкой стенки - наружу
+                            // dtReverse - обратное направление, для тонкой стенки - внутрь, dtBoth - в обе стороны,
+                            // dtMiddlePlane - от средней плоскости )
+// Изменить параметры тонкой стенки
+                            baseRotatedDefinition->SetThinParam(true,               // Признак тонкостенной операции
+                                dtBoth,             // Направление построения тонкой стенки
+                                1,                  // Толщина стенки в прямом направлении
+                                1);                // Толщина стенки в обратном направлении
+                            // Изменить параметры выдавливания в одном направлении
+                            baseRotatedDefinition->SetSideParam(rotated,               // Направление вращения ( TRUE - прямое, FALSE - обратное )
+                                angle);
+                            rotated = !rotated; // Угол вращения
+                            //// Изменить параметры выдавливания в одном направлении
+                            //                              baseRotatedDefinition->SetSideParam(false,              // Направление вращения ( TRUE - прямое, FALSE - обратное )
+                            //                                  180);              // Угол вращения
+                            baseRotatedDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания                                                                 
+                            // Создать операцию              
+                            entityRotate->Create();
+#if debug_ID_ROTATE_DETAIL
+                            LibMessage((std::wstring(L"debug_ID_ROTATE_DETAIL") + std::to_wstring(__LINE__)).c_str(), 0);
+#endif // debug_ID_ROTATE_DETAIL
+                        }
+                    }
+                }
+            }
+        }
+        m_part->Update();
+        dPart->Save();
+        dPart->RebuildDocument();
+
+        m_part->RebuildModel();
+        m_part->Update();
+        SetChanged();
+        RedrawPhantom();
+        
+        break;
     }
     case IDS_TAKE_POINT:
     {
@@ -1539,6 +1633,62 @@ void Shpeel::OnButtonClick( long buttonID )
         //rp->x = 0; rp->y = 0; rp->height = 10; rp->width = 2; rp->style = 1; rp->ang = 0;
         //ksRectangle(rp, 0);
         //m_part->EndEdit(TRUE);
+
+        break;
+    }
+    case ID_CHOSE_DETAIL:
+    {
+
+
+
+        CString patch;
+        patch = get_value_from_list(ID_CHOSE_DETAIL);
+
+        if (!patch.IsEmpty())
+        {
+            /* LibMessage(patch, 0);*/
+            int sumbolF = patch.Find(new_detile_df);
+            //LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
+            if (sumbolF >= 0)
+            {
+                auto part_info = get_part_info();
+
+                part_info->name_detail;
+
+                auto part = m_part;
+                part->ClearAllObj();
+                load_default_panel();
+                part->Update();
+                RedrawPhantom();
+
+                //auto info = obj.get_part_info(); 
+                //info->part = part;
+                //info->patch = patch;
+            }
+            else
+            {
+                IDocument3DPtr corDoc(ksGet3dDocument());
+                show_info(patch);
+                corDoc->Open((LPWSTR)LPCWSTR(patch), true);
+                show_info("open");
+                m_part->ClearAllObj();
+                m_part->Update();
+                m_part = corDoc->GetPart(pTop_Part);
+                show_info("GET Part");
+                
+
+                show_info(patch);
+
+                doc->RebuildDocument();
+                SetChanged();
+                RedrawPhantom();
+                corDoc->Close();
+                //auto info = obj.get_part_info();
+                //info->part = part;
+                //info->patch = patch;
+            }
+
+        }
 
         break;
     }
@@ -1780,6 +1930,11 @@ void Shpeel::ShowControls()
       ksAPI7::IPropertyListPtr chose_ditail = curentCollection->Add(ksControlListStr);
       chose_ditail->Name = _T("Текущая деталь");
       chose_ditail->Id = ID_CHOSE_DETAIL;
+
+      ksAPI7::IPropertyEditPtr name_detail = curentCollection->Add(ksControlEditStr);
+      name_detail->Name = _T("Имя детали");
+      name_detail->Id = ID_NAME_DETAIL;
+
       info_list inf_l; 
       inf_l.id = ID_CHOSE_DETAIL;
       inf_l.order_id = 0; v_info_list.push_back(inf_l);
@@ -3006,6 +3161,34 @@ CString get_value_from_list(Shpeel& shpeel, long id_control)
         break;
     }
 }
+CString Shpeel::get_value_from_list( long id_control)
+{
+    CString str;
+    IPropertyControlPtr ctrl;
+    _variant_t val_t;
+    for (int i = 0; i < curentCollection->GetCount(); i++)
+    {
+        _variant_t v_iter; v_iter = i;
+        auto pControl = curentCollection->GetItem(v_iter);
+        switch (pControl->Id)
+        {
+        case(ID_CHOSE_DETAIL):
+        {
+            val_t = pControl->GetValue();
+            str = active_file_patch();
+            str += (std::wstring(patch_resure_detales) + std::wstring(val_t.bstrVal)).c_str();
+
+            return str;
+            break;
+        }
+        default:
+            break;
+        }
+
+    }
+
+    return str;
+}
 
 unsigned int Shpeel::get_order_control(variant_t ID)
 {
@@ -3292,6 +3475,10 @@ CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
         }
         test_file = p_name_file_test.c_str();
         cor_dir = test_file;
+    }
+    else
+    {
+        cor_dir = (test_file + tmp_name + tmp_ex).c_str();
     }
     CString dir_str(cor_dir.c_str());
     //show_info(dir_str);

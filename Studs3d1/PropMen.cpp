@@ -461,7 +461,7 @@ BEGIN_EVENTSINK_MAP(PropertyManagerEvent, BaseEvent)
   ON_EVENT( PropertyManagerEvent, (unsigned int)-1, prFillContextPanel  , FillContextPanel  , VTS_DISPATCH          )
 END_EVENTSINK_MAP()
 
-
+#define debug_ID_ROTATE_DETAIL 1;
 //-----------------------------------------------------------------------------
 // prChangeControlValue - Событие изменения значения контрола 
 // ---
@@ -474,45 +474,49 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
    
   if (control->Id == ID_CHOSE_DETAIL)
   {
-      CString patch; 
-      patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
-      if (!patch.IsEmpty())
-      {
-         /* LibMessage(patch, 0);*/
-          int sumbolF = patch.Find(new_detile_df);
-          //LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
-          if (sumbolF>=0)
-          {
-              auto part_info = obj.get_part_info();
+      obj.OnButtonClick(control->Id);
+      //CString patch; 
+      //patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
 
-              part_info->name_detail;
+      //if (!patch.IsEmpty())
+      //{
+      //   /* LibMessage(patch, 0);*/
+      //    int sumbolF = patch.Find(new_detile_df);
+      //    //LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
+      //    if (sumbolF>=0)
+      //    {
+      //        auto part_info = obj.get_part_info();
 
-              auto& part = obj.GetPart();
-              auto info = obj.get_part_info(); 
-              part->ClearAllObj();
-              obj.load_default_panel();
-              part->Update();
-              obj.RedrawPhantom();
-              info->part = part;
-              info->patch = patch;
-          }
-          else
-          {
-              auto& part = obj.GetPart();
-              if (!part)
-              {
-                  //LibMessage(_T("part empty"), 0);
-              }
-              part->ClearAllObj();
-              part->SetFileName((LPWSTR)(LPCTSTR)patch);
-              part->Update();
-              obj.RedrawPhantom();
-              auto info = obj.get_part_info();
-              info->part = part;
-              info->patch = patch;
-          }
+      //        part_info->name_detail;
 
-      }
+      //        auto& part = obj.GetPart();
+      //        part->ClearAllObj();
+      //        obj.load_default_panel();
+      //        part->Update();
+      //        obj.RedrawPhantom();
+
+      //        //auto info = obj.get_part_info(); 
+      //        //info->part = part;
+      //        //info->patch = patch;
+      //    }
+      //    else
+      //    {
+      //        
+      //        auto& part = obj.GetPart();
+      //        if (!part)
+      //        {
+      //            //LibMessage(_T("part empty"), 0);
+      //        }
+      //        part->ClearAllObj();
+      //        part->SetFileName((LPWSTR)(LPCTSTR)patch);
+      //        part->Update();
+      //        obj.RedrawPhantom();
+      //        //auto info = obj.get_part_info();
+      //        //info->part = part;
+      //        //info->patch = patch;
+      //    }
+
+      //}
 
 
   }
@@ -577,77 +581,7 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
 
           case(ID_ROTATE_DETAIL):
           {
-              CString str;
-              IPartPtr m_part = obj.GetPart();
-              if (m_part != NULL)
-              {
-                  LibMessage(L"Mpart", 0);
-                  IEntityPtr entitySketch(m_part->GetDefaultEntity(o3d_sketch), false/*AddRef*/);
-                  if (entitySketch)
-                  {
-                      // Получить указатель на интерфейс параметров объектов и элементов
-                      // Интерфейс свойств эскиза
-                      ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
-                      if (sketchDefinition)
-                      {
-                          // Получим интерфейс базовой плоскости XOY
-                          IEntityPtr basePlane(m_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
-
-                          // Установка параметров эскиза
-                          sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-
-                          // Создадим эскиз
-                          entitySketch->Create();
-                          // Войти в режим редактирования эскиза
-                          if (sketchDefinition->BeginEdit())
-                          {
-                              // Введем новый эскиз
-                              ArcByAngle(15, 0, 10, -90, 90, 1, 1);
-                              LineSeg(15, -10, 15, 10, 3);
-                              // Выйти из режима редактирования эскиза
-                              sketchDefinition->EndEdit();
-                          }
-
-                          // Операции вращения
-                          IEntityPtr entityRotate(m_part->NewEntity(o3d_bossRotated), false/*AddRef*/);
-                          if (entityRotate)
-                          {
-                              LibMessage(L"Mpart", 0);
-                              // Получить указатель на интерфейс параметров объектов и элементов
-                              // Интерфейс базовой операции вращения
-                              IBossRotatedDefinitionPtr baseRotatedDefinition(IUnknownPtr(entityRotate->GetDefinition(), false/*AddRef*/));
-                              if (baseRotatedDefinition)
-                              {
-                                  baseRotatedDefinition->SetToroidShapeType(false);      // Признак тороида ( TRUE - тороид, FALSE - сфероид )
-                                  baseRotatedDefinition->SetDirectionType(dtBoth);       // Направление вращения ( dtNormal - прямое направление, для тонкой стенки - наружу
-                                                                                           // dtReverse - обратное направление, для тонкой стенки - внутрь, dtBoth - в обе стороны,
-                                                                                           // dtMiddlePlane - от средней плоскости )
-                                  // Изменить параметры тонкой стенки
-                                  baseRotatedDefinition->SetThinParam(true,               // Признак тонкостенной операции
-                                      dtBoth,             // Направление построения тонкой стенки
-                                      1,                  // Толщина стенки в прямом направлении
-                                      1);                // Толщина стенки в обратном направлении
-    // Изменить параметры выдавливания в одном направлении
-                                  baseRotatedDefinition->SetSideParam(obj.rotated,               // Направление вращения ( TRUE - прямое, FALSE - обратное )
-                                      obj.angle);
-                                  obj.rotated = !obj.rotated; // Угол вращения
-    //// Изменить параметры выдавливания в одном направлении
-    //                              baseRotatedDefinition->SetSideParam(false,              // Направление вращения ( TRUE - прямое, FALSE - обратное )
-    //                                  180);              // Угол вращения
-                                  baseRotatedDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания                                                                 
-                                  // Создать операцию              
-                                  entityRotate->Create();
-
-                              }
-                          }
-                      }
-                  }
-              }
-              m_part->RebuildModel();
-              m_part->Update();
-              IPartPtr prtRotate= obj.GetPart();
-              prtRotate->Update();
-              break;
+             
           }
 
 
