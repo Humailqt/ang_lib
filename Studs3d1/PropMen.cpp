@@ -471,11 +471,14 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
   ksAPI7::IPropertyControlPtr control( iCtrl );
   auto part = obj.GetPart();
 
-   
+  LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+
   if (control->Id == ID_CHOSE_DETAIL)
   {
       CString patch; 
       patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
+      LibMessage((LPCTSTR)(LPCWSTR)(patch), 0);
+      LibMessage(std::to_wstring(__LINE__).c_str(), 0);
       if (!patch.IsEmpty())
       {
          /* LibMessage(patch, 0);*/
@@ -499,10 +502,16 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
           else
           {
               auto& part = obj.GetPart();
+              LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+              IDocument3DPtr opPartDoc(ksGet3dDocument());
+              opPartDoc->Open((LPWSTR)(LPCTSTR)patch, true);
+              LibMessage(std::to_wstring(__LINE__).c_str(), 0);
+              obj.dPart = opPartDoc;
               if (!part)
               {
-                  //LibMessage(_T("part empty"), 0);
+                  LibMessage(_T("part empty"), 0);
               }
+              LibMessage(std::to_wstring(__LINE__).c_str(), 0);
               part->ClearAllObj();
               part->SetFileName((LPWSTR)(LPCTSTR)patch);
               part->Update();
