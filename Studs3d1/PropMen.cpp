@@ -522,8 +522,8 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
       {
           case(ID_H_3D_PLATE):
           {
+              //obj.h = control->Value.dblVal;
               //LibMessage(_T("ID_H_3D_PLATE"), 0);
-              obj.h = control->Value.dblVal;
               //InsertPartPtr part_info = obj.get_part_info();
               //part_info->doc->SetActive();
               //auto cor_part = part_info->part;
@@ -565,12 +565,12 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
           case(ID_W_3D_PLATE):
           {
               //LibMessage(_T("ID_W_3D_PLATE"), 0);
-              obj.w = control->Value.dblVal;
+              //obj.w = control->Value.dblVal;
               break;
           }
           case(ID_Z_3D_PLATE):
           {
-              obj.z = control->Value.dblVal;
+              //obj.z = control->Value.dblVal;
               //LibMessage(_T("ID_Z_3D_PLATE"), 0);
               break;
           }

@@ -64,8 +64,8 @@ public:
   ///////////////////////////////////////////////////////////////////////////////
     bool rotated = false;
     double angle = 90;
-    double x, y, z=20;
-    double h = 20, w=20;
+    //double x, y, z=20;
+    //double h = 20, w=20;
   ///////////////////////////////////////////////////////////////////////////////
   ksAPI7::IPropertyControlsPtr curentCollection; //  онтролы текущей закладки панели свойств 
            PropertyManagerObject();
