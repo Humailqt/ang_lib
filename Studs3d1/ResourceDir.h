@@ -8,6 +8,7 @@
 #ifdef _UNICODE
 
 #define patch_resure_detales L"ang_detile\\"
+#define name_dir_detales L"ang_detile"
 
 #else
 

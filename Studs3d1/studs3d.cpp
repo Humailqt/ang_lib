@@ -3672,9 +3672,16 @@ CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
     std::wstring tmp_name = (L"Tmp");
     std::wstring tmp_ex = (L".m3d");
     int counter = 0;
+    if (!std::filesystem::exists(cor_dir + std::wstring(name_dir_detales)))
+    {
+        std::filesystem::create_directory(cor_dir + std::wstring(name_dir_detales));
+    }
     cor_dir += patch_resure_detales;
     auto test_file = cor_dir;
     std::error_code ec;
+    {
+
+    }
     if (std::filesystem::exists(cor_dir + tmp_name + tmp_ex, ec))
     {
         std::filesystem::path p_name_file_test((test_file + tmp_name + tmp_ex).c_str());
@@ -3692,6 +3699,10 @@ CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
         }
         test_file = p_name_file_test.c_str();
         cor_dir = test_file;
+    }
+    else
+    {
+        cor_dir = (test_file + tmp_name + tmp_ex).c_str();
     }
     CString dir_str(cor_dir.c_str());
     //show_info(dir_str);
