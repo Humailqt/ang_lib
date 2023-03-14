@@ -1188,7 +1188,169 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
       }
       break;
     }
+    case ID_H_3D_PLATE:
+    case ID_W_3D_PLATE:
+    case ID_Z_3D_PLATE:
+    {
 
+        IDocument3DPtr corDoc = ksGetActive3dDocument();
+        //show_info(FilePatchName);
+        //IDocument3DPtr mDoc(ksGet3dDocument());
+        //IPartPtr part = m_part->GetPart(pTop_Part);
+
+        double h_contr = 1, w_contr = 1, z_contr = 1;
+
+        for (int i = 0; i < curentCollection->GetCount(); i++)
+        {
+            _variant_t v_iter; v_iter = i;
+            auto pControl = curentCollection->GetItem(v_iter);
+            switch (pControl->Id)
+            {
+            case(ID_H_3D_PLATE):
+            {
+                h_contr = pControl->Value;
+                break;
+            }
+            case(ID_W_3D_PLATE):
+            {
+
+                w_contr = pControl->Value;
+                break;
+            }
+            case(ID_Z_3D_PLATE):
+            {
+
+                z_contr = pControl->Value;
+                break;
+            }
+            default:
+                break;
+            }
+
+        }
+        dPart->SetActive();
+        IPartPtr part = dPart->GetPart(pTop_Part);
+        // Создадим новый эскиз
+        auto col = part->EntityCollection(o3d_sketch);
+        IEntityPtr entitySketch(col->GetByIndex(0), false /*AddRef*/);
+        if (entitySketch)
+        {
+
+            // Получить указатель на интерфейс параметров объектов и элементов
+            ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+            if (sketchDefinition)
+            {
+                // Получим интерфейс базовой плоскости XOY
+                IEntityPtr basePlane(part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+
+                // Установка параметров эскиза
+                sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза 
+
+                // Создадим эскиз
+                entitySketch->Create();
+                //IPropertyControlPtr h = new IPropertyControlPtr(curentCollection->Item[2],false);
+                //IPropertyControlPtr w = new IPropertyControlPtr(curentCollection->Item[3],false);
+
+                //VARIANT h_var; h_var.intVal = ID_H_3D_PLATE;
+                //VARIANT w_var; w_var.intVal = ID_W_3D_PLATE;
+                //VARIANT z_var; z_var.intVal = ID_Z_3D_PLATE;
+                // Войти в режим редактирования эскиза
+                if (sketchDefinition->BeginEdit())
+                {
+                    ClearCurrentSketch(); part->ClearAllObj();
+                    LineSeg(0, 0, w_contr, 0, 1);
+                    LineSeg(0, h_contr, w_contr, h_contr, 1);
+                    LineSeg(0, 0, 0, h_contr, 1);
+                    LineSeg(w_contr, 0, w_contr, h_contr, 1);
+                    // Выйти из режима редактирования эскиза
+                    sketchDefinition->EndEdit();
+                }
+
+                // Оперция выдавливани
+                IEntityCollectionPtr  boss_coll = part->EntityCollection(o3d_bossExtrusion);
+                IEntityPtr entityExtrusion;
+                if (boss_coll->GetCount() > 0)
+                {
+                    for (size_t i = 0; i < boss_coll->GetCount(); i++)
+                    {
+
+
+                    }
+                    entityExtrusion = boss_coll->GetByIndex(0);
+
+                }
+                else
+                {
+
+                    entityExtrusion = part->NewEntity(o3d_bossExtrusion);
+
+                }
+
+
+                if (entityExtrusion)
+                {
+                    // Интерфейс базовой операции выдавливания     
+
+                    //IBossExtrusionDefinitionPtr extrusionDefinition(basePlane);
+                    IBossExtrusionDefinitionPtr extrusionDefinition((entityExtrusion->GetDefinition()));
+
+
+                    if (entityExtrusion)
+                    {
+                        // Интерфейс базовой операции выдавливания
+                        IBossExtrusionDefinitionPtr extrusionDefinition(IUnknownPtr(entityExtrusion->GetDefinition(), false /*AddRef*/));
+                        if (extrusionDefinition)
+                        {
+                            // Установка параметров операции выдавливания
+                            extrusionDefinition->SetDirectionType(dtNormal);     // Направление выдавливания ( dtNormal	- прямое
+                            // направление, для тонкой стенки - наружу,
+                            // dtReverse	- обратное направление, для тонкой стенки - внутрь
+                            // dtBoth - в обе стороны, dtMiddlePlane от средней плоскости )
+                            // Изменить параметры выдавливания в одном направлении
+                            extrusionDefinition->SetSideParam(true,               // Направление выдавливания ( TRUE - прямое направление,
+                                // FALSE - обратное направление )
+                                etBlind,            // Тип выдавливания ( etBlind - строго на глубину,
+                                // etThroughAll - через всю деталь, etUpToVertexTo - на расстояние до вершины,
+                                // etUpToVertexFrom - на расстояние за вершину, etUpToSurfaceTo - на
+                                // расстояние до поверхности, etUpToSurfaceFrom - на расстояние за поверхность,
+                                // etUpToNearSurface	- до ближайшей поверхности )
+                                z_contr,                // Глубина выдавливания
+                                0,                  // Угол уклона
+                                false);            // Направление уклона ( TRUE - уклон наружу, FALSE - уклон внутрь )
+                            // Изменить параметры тонкой стенки
+                            extrusionDefinition->SetThinParam(false,              // Признак тонкостенной операции
+                                0,                  // Направление построения тонкой стенки
+                                0,                  // Толщина стенки в прямом направлении
+                                0);                // Толщина стенки в обратном направлении
+                            extrusionDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания
+
+                            // Создать операцию выдавливания
+                            entityExtrusion->Create();
+
+                            // Формирует массив объектов и возвращает указатель на его интерфейс - массив граней компонента       
+                            IEntityCollectionPtr entityCollection(part->EntityCollection(o3d_face), false /*AddRef*/);
+                            entityExtrusion->Update();
+
+                        }
+                        entityExtrusion->Update();
+
+                    }
+                }
+            }
+        }
+
+        part->Update();
+        dPart->Save();
+        dPart->RebuildDocument();
+
+        m_part->RebuildModel();
+        m_part->Update();
+        SetChanged();
+        RedrawPhantom();
+        corDoc->SetActive();
+        m_process->Update();
+        break;  
+    }
 	
     case ID_PROP_LENGHT: // Длина шпильки 
     { 
@@ -1530,17 +1692,6 @@ void Shpeel::OnButtonClick( long buttonID )
         SetChanged();
         RedrawPhantom();
         corDoc->SetActive();
-
-        //IDocument3DPtr partDoc = ksGetActive3dDocument();
-
-
-        //m_part->BeginEdit();
-        //ClearCurrentSketch();
-        //RectangleParam * rp = new RectangleParam;
-        //rp->x = 0; rp->y = 0; rp->height = 10; rp->width = 2; rp->style = 1; rp->ang = 0;
-        //ksRectangle(rp, 0);
-        //m_part->EndEdit(TRUE);
-
         break;
     }
         case(ID_VERT_ROTATE_DETAIL):
@@ -2084,9 +2235,9 @@ void Shpeel::ShowControls()
       }
 
 
-      ksAPI7::IPropertyControlPtr rebuild= curentCollection->Add(ksControlTextButton);
-      rebuild->Name = _T("Перестроить");
-      rebuild->Id = ID_REBUILD_DETAIL;
+      //ksAPI7::IPropertyControlPtr rebuild= curentCollection->Add(ksControlTextButton);
+      //rebuild->Name = _T("Перестроить");
+      //rebuild->Id = ID_REBUILD_DETAIL;
 
       ksAPI7::IPropertyControlPtr vert_rotate = curentCollection->Add(ksControlTextButton);
       vert_rotate->Name = _T("Вертикально");
