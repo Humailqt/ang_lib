@@ -1442,7 +1442,56 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
       } 
       break;
     }
+    case ID_CHOSE_DETAIL:
+    {
+        CString patch;
+        show_info("22");
+        patch = get_value_from_list(ID_CHOSE_DETAIL);
+        show_info(patch);
+        if (!patch.IsEmpty())
+        {
+            /* LibMessage(patch, 0);*/
+            int sumbolF = patch.Find(new_detile_df);
+            //LibMessage(LPCTSTR(std::to_wstring(sumbolF).c_str()),0);
+            if (sumbolF >= 0)
+            {
+                IDocument3DPtr corDoc(ksGet3dDocument());
+                corDoc->Open((LPWSTR)(LPCTSTR)patch,true);
 
+                m_part->ClearAllObj();
+                load_default_panel();
+                m_part->Update();
+                SetChanged();
+                RedrawPhantom();
+
+            }
+            else
+            {
+                IDocument3DPtr corDoc(ksGet3dDocument());
+                IDocument3DPtr activeDok  = ksGetActive3dDocument();
+                
+                show_info("Open");
+                corDoc->Open((LPWSTR)(LPCTSTR)patch, true);
+                show_info(patch);
+                dPart = corDoc;
+                m_part->ClearAllObj();
+                corDoc->SetActive();
+                m_part = corDoc->GetPart(pTop_Part);
+                m_part->SetFileName((LPWSTR)(LPCTSTR)patch);
+                m_part->RebuildModel();
+                show_info(patch);
+                m_part->Update();
+                SetChanged();
+                RedrawPhantom();
+                show_info("SET activ");
+                activeDok->SetActive();
+                show_info(patch);
+            }
+
+        }
+
+
+    }
   }
 } 
 
@@ -3632,6 +3681,56 @@ CString get_value_from_list(Shpeel* shpeel, long id_control)
     {
         var_t = shpeel->get_order_control(ID_CHOSE_DETAIL);
         shpeel->curentCollection->get_Item(var_t, &ctrl);
+        
+//#if DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
+//        LibMessage(_T("DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL:")); 
+//        LibMessage(ctrl->GetValue().bstrVal);
+//#endif // DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
+        if (ctrl)
+        {
+            var_t = ctrl->GetValue();
+            str = active_file_patch();
+#if DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
+            LibMessage(_T("active_file_patch():"));
+            LibMessage(str);
+#endif // DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
+            str += patch_resure_detales;
+            str += std::wstring(var_t.bstrVal).c_str();
+
+            return str;
+        }
+        else
+        {
+#if DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
+            LibMessage(_T("DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL: Отсутствует ID_CHOSE_DETAIL контрол"));
+#endif // DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
+
+        }
+
+        break;
+    }
+    default:
+        break;
+    }
+    return str;
+}
+
+CString Shpeel::get_value_from_list(long id_control)
+{
+#if DEBUG_GET_VALUE_FROM_LIST
+    LibMessage(_T("DEBUG_GET_VALUE_FROM_LIST:"));
+#endif // DEBUG_GET_VALUE_FROM_LIST
+
+    CString str;
+    IPropertyControlPtr ctrl;
+    _variant_t var_t;
+    switch (id_control)
+    {
+
+    case ID_CHOSE_DETAIL:
+    {
+        var_t = get_order_control(ID_CHOSE_DETAIL);
+        curentCollection->get_Item(var_t, &ctrl);
         
 //#if DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL
 //        LibMessage(_T("DEBUG_GET_VALUE_FROM_LIST_ID_CHOSE_DETAIL:")); 
