@@ -1280,6 +1280,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
       } 
       break;
     }
+
   }
 } 
 
@@ -1542,6 +1543,191 @@ void Shpeel::OnButtonClick( long buttonID )
 
         break;
     }
+        case(ID_VERT_ROTATE_DETAIL):
+        {
+            try
+            {
+                CString str;
+                auto pl = m_part->GetPlacement();
+                pl->SetAxes(0, 0, 1, 0, 1, 0);
+                rotated = !rotated;
+
+                m_part->UpdatePlacement();
+                SetChanged();
+                RedrawPhantom();
+                m_part->UpdatePlacement();
+                SetChanged();
+                RedrawPhantom();
+
+            }
+            catch (_com_error& e)
+            {
+                DumpError(e); // Вывод сообщений о ошибке
+            }
+            catch (LPCTSTR mes)
+            {
+                LibMessage(mes, MB_ICONERROR | MB_OK); // Вывод сообщений о ошибке
+            }
+           
+            m_part->RebuildModel();
+            m_part->Update();
+
+            break;
+        }
+        case(ID_HORIZ_ROTATE_DETAIL):
+        {
+            try
+            {
+                CString str;
+                /*  Ptr rt();*/ 
+                auto pl = m_part->GetPlacement();
+                pl->SetAxes(1, 0, 0, 0, 1, 0);
+                rotated = !rotated;
+
+                m_part->UpdatePlacement();
+                SetChanged();
+                RedrawPhantom();
+                m_part->UpdatePlacement();
+                SetChanged();
+                RedrawPhantom();
+
+            }
+            catch (_com_error& e)
+            {
+                DumpError(e); // Вывод сообщений о ошибке
+            }
+            catch (LPCTSTR mes)
+            {
+                LibMessage(mes, MB_ICONERROR | MB_OK); // Вывод сообщений о ошибке
+            }
+   
+            m_part->RebuildModel();
+            m_part->Update();
+
+            break;
+        }
+        case(ID_FRONT_ROTATE_DETAIL):
+        {
+            try
+            {
+                CString str;
+                /*  Ptr rt();*/ 
+                auto pl = m_part->GetPlacement();
+                pl->SetAxes(1, 0, 0, 0, 0, 1);
+                rotated = !rotated;
+                //for (size_t i = 0; i < 2; i++)
+                //{
+                //   
+                //}
+                //if (rotated)
+                //{
+                //}
+                //else
+                //{
+                //    pl->SetAxes(1, 0, 0, 0, 1, 1);
+                //    rotated = !rotated;
+                //}
+                m_part->UpdatePlacement();
+                SetChanged();
+                RedrawPhantom();
+                m_part->UpdatePlacement();
+                SetChanged();
+                RedrawPhantom();
+
+            }
+            catch (_com_error& e)
+            {
+                DumpError(e); // Вывод сообщений о ошибке
+            }
+            catch (LPCTSTR mes)
+            {
+                LibMessage(mes, MB_ICONERROR | MB_OK); // Вывод сообщений о ошибке
+            }
+            //          if (m_part != NULL)
+            //          {
+            //              LibMessage(L"Mpart", 0);
+            //              IEntityPtr entitySketch(m_part->GetDefaultEntity(o3d_sketch), false/*AddRef*/);
+            //              if (entitySketch)
+            //              {
+            //                  // Получить указатель на интерфейс параметров объектов и элементов
+            //                  // Интерфейс свойств эскиза
+            //                  ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
+            //                  if (sketchDefinition)
+            //                  {
+            //                      // Получим интерфейс базовой плоскости XOY
+            //                      IEntityPtr basePlane(m_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
+            //                      // Установка параметров эскиза
+            //                      sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
+            //                      // Создадим эскиз
+            //                      entitySketch->Create();
+            //                      // Войти в режим редактирования эскиза
+            //                      if (sketchDefinition->BeginEdit())
+            //                      {
+            //                          // Введем новый эскиз
+            //                          ArcByAngle(15, 0, 10, -90, 90, 1, 1);
+            //                          LineSeg(15, -10, 15, 10, 3);
+            //                          // Выйти из режима редактирования эскиза
+            //                          sketchDefinition->EndEdit();
+            //                      }
+            //                      // Операции вращения
+            //                      IEntityPtr entityRotate(m_part->NewEntity(o3d_bossRotated), false/*AddRef*/);
+            //                      if (entityRotate)
+            //                      {
+            //                          LibMessage(L"Mpart", 0);
+            //                          // Получить указатель на интерфейс параметров объектов и элементов
+            //                          // Интерфейс базовой операции вращения
+            //                          IBossRotatedDefinitionPtr baseRotatedDefinition(IUnknownPtr(entityRotate->GetDefinition(), false/*AddRef*/));
+            //                          if (baseRotatedDefinition)
+            //                          {
+            //                              baseRotatedDefinition->SetToroidShapeType(false);      // Признак тороида ( TRUE - тороид, FALSE - сфероид )
+            //                              baseRotatedDefinition->SetDirectionType(dtBoth);       // Направление вращения ( dtNormal - прямое направление, для тонкой стенки - наружу
+            //                                                                                       // dtReverse - обратное направление, для тонкой стенки - внутрь, dtBoth - в обе стороны,
+            //                                                                                       // dtMiddlePlane - от средней плоскости )
+            //                              // Изменить параметры тонкой стенки
+            //                              baseRotatedDefinition->SetThinParam(true,               // Признак тонкостенной операции
+            //                                  dtBoth,             // Направление построения тонкой стенки
+            //                                  1,                  // Толщина стенки в прямом направлении
+            //                                  1);                // Толщина стенки в обратном направлении
+            //// Изменить параметры выдавливания в одном направлении
+            //                              baseRotatedDefinition->SetSideParam(obj.rotated,               // Направление вращения ( TRUE - прямое, FALSE - обратное )
+            //                                  obj.angle);
+            //                              obj.rotated = !obj.rotated; // Угол вращения
+            ////// Изменить параметры выдавливания в одном направлении
+            ////                              baseRotatedDefinition->SetSideParam(false,              // Направление вращения ( TRUE - прямое, FALSE - обратное )
+            ////                                  180);              // Угол вращения
+            //                              baseRotatedDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания                                                                 
+            //                              // Создать операцию              
+            //                              entityRotate->Create();
+            //                          }
+            //                      }
+            //                  }
+            //              }
+            //          }
+            
+            //reference  gr;
+            //double x = 0, y = 0/* , * ang; *ang = 30*/;
+            //gr = NewGroup(0);
+            //EndGroup();
+            //
+            //if (AddObjGroup(gr, (reference) m_part))
+            //{
+            //    LibMessage(L"ADD", 0);
+            //}
+            //else
+            //{
+            //    LibMessage(L"not ADD", 0);
+            //}
+            //// задание параметров поворота
+            //RequestInfo info;
+            //memset(&info, 0, sizeof(info));
+            //info.prompt = " Центр поворота ";
+            ////if ( (ReadDouble("Угол поворота", 0, 0, 360, ang)))
+            //RotateObj(gr, x, y,90); // поворот группы gr                
+            m_part->RebuildModel();
+            m_part->Update();
+
+            break;
+        }
   }
 }
 
@@ -1775,14 +1961,21 @@ void Shpeel::FillMaterial(ksAPI7::IPropertyListPtr & materialList )
 // ---
 void Shpeel::ShowControls() 
 {
+    //IDocument3DPtr corDoc(ksGetActive3dDocument());
+    //auto partColl = corDoc->PartCollection(0);
+    //auto basePart = partColl->GetByIndex(0);
+    //basePart->BodyCollection();
+
   if ( curentCollection )
   {
       ksAPI7::IPropertyListPtr chose_ditail = curentCollection->Add(ksControlListStr);
       chose_ditail->Name = _T("Текущая деталь");
+      chose_ditail->Value = new_detile_df;
       chose_ditail->Id = ID_CHOSE_DETAIL;
       info_list inf_l; 
       inf_l.id = ID_CHOSE_DETAIL;
       inf_l.order_id = 0; v_info_list.push_back(inf_l);
+
       
       _upload_list(chose_ditail, patch_resure_detales);
 
@@ -1831,30 +2024,85 @@ void Shpeel::ShowControls()
           }
       }
 
-      //Комбобокс сбора размера панели 
-      ksAPI7::IPropertyEditPtr edit_h = curentCollection->Add(ksControlEditReal);
-      edit_h->Name = _T("Высота");
-      edit_h->Id = ID_H_3D_PLATE;
-      edit_h->Value = 20;
-      ksAPI7::IPropertyEditPtr edit_w = curentCollection->Add(ksControlEditReal);
-      edit_w->Name = _T("Ширина");
-      edit_w->Id = ID_W_3D_PLATE;
-      edit_w->Value = 20;
+      ksAPI7::IPropertyPoint3DPtr sizePart(curentCollection->Add(ksControlPoint3D));
+      try
+      {
+          if (sizePart)
+          {
+              //_bstr_t tmpBstr(LoadStr(ctrlID));
+              //control->Name = tmpBstr;
+              //control->Id = ctrlID;
+              //tmpBstr = hint ? LoadStr(hint) : _T("");
+              //control->Hint = tmpBstr;
+              //tmpBstr = tips ? LoadStr(tips) : _T("");
+              //control->Tips = tmpBstr;
+              //control->Enable = enable;
+              //control->Visible = visible;
+              //control->NameVisibility = nameVisibility;
 
-      ksAPI7::IPropertyEditPtr edit_z = curentCollection->Add(ksControlEditReal);
-      edit_z->Name = _T("Толщина");
-      edit_z->Id = ID_Z_3D_PLATE;
-      edit_z->Value = 10;
+              sizePart->Name = _T("Размеры детали");
+              sizePart->Id = ID_COMBO_BOX_SIZE_DETAIL;
+              sizePart->Enable = TRUE;
+              sizePart->Visible = TRUE;
+              //Комбобокс сбора размера панели 
+
+              ksAPI7::IPropertyEditPtr edit_h = sizePart->Coordinate[0];
+              //sizePart->CoordinateValue[0] = 20;
+              sizePart->put_CoordinateValue(0, 20);
+              sizePart->PutCoordinateState(0, ksCheckVariable);
+              //edit_h->Name = _T("Размер H");
+              edit_h->Id = ID_H_3D_PLATE;
+              edit_h->Value = 20;
+              
+              ksAPI7::IPropertyEditPtr edit_w = sizePart->Coordinate[1];
+              //edit_w->Name = _T("Размер W");
+              edit_w->Id = ID_W_3D_PLATE;
+              edit_w->Value = 20;
+              //sizePart->CoordinateValue[1] = 20;
+              sizePart->put_CoordinateValue(1, 20);
+              sizePart->PutCoordinateState(1, ksCheckVariable);
+
+              ksAPI7::IPropertyEditPtr edit_z = sizePart->Coordinate[2];
+              /*          edit_z->Name = _T("Размер Z")*/;
+              edit_z->Id = ID_Z_3D_PLATE;
+              edit_z->Value = 10;
+              //sizePart->CoordinateValue[2] = 10;
+              sizePart->put_CoordinateValue(2, 20);
+              sizePart->PutCoordinateState(2, ksCheckVariable);
+
+          }
 
 
-      ksAPI7::IPropertyControlPtr rotate= curentCollection->Add(ksControlTextButton);
-      rotate->Name = _T("Повернуть");
-      rotate->Id = ID_ROTATE_DETAIL;
+      }
+      catch (_com_error& e)
+      {
+          DumpError(e); // Вывод сообщений о ошибке
+      }
+      catch (LPCTSTR mes)
+      {
+          LibMessage(mes, MB_ICONERROR | MB_OK); // Вывод сообщений о ошибке
+      }
 
 
       ksAPI7::IPropertyControlPtr rebuild= curentCollection->Add(ksControlTextButton);
       rebuild->Name = _T("Перестроить");
       rebuild->Id = ID_REBUILD_DETAIL;
+
+      ksAPI7::IPropertyControlPtr vert_rotate = curentCollection->Add(ksControlTextButton);
+      vert_rotate->Name = _T("Вертикально");
+      vert_rotate->Id = ID_VERT_ROTATE_DETAIL;
+      
+
+      ksAPI7::IPropertyControlPtr horiz_rotate = curentCollection->Add(ksControlTextButton);
+      horiz_rotate->Name = _T("Горизонтально");
+      horiz_rotate->Id = ID_HORIZ_ROTATE_DETAIL;
+      
+
+      ksAPI7::IPropertyControlPtr front_rotate = curentCollection->Add(ksControlTextButton);
+      front_rotate->Name = _T("Фронтально");
+      front_rotate->Id = ID_FRONT_ROTATE_DETAIL;
+
+
       
 
       //ksAPI7::IPropertyControlPtr rebuild = curentCollection->Add(ksControlEditLength
@@ -2012,6 +2260,7 @@ void Shpeel::Draw3D()
       bstr = GetFileName();
       m_part->SetFileName(bstr);*/
     }
+
 
     load_default_panel();
     IDocument3DPtr corrent_doc(ksGetActive3dDocument());
