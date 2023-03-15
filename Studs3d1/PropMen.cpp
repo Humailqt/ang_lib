@@ -511,17 +511,22 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
           else
           {
               auto& part = obj.GetPart();
+              IDocument3DPtr corrent_doc(ksGetActive3dDocument());
+              obj.dPart = IDocument3DPtr(ksGet3dDocument(), false/*AddRef*/);
+
               if (!part)
               {
                   //LibMessage(_T("part empty"), 0);
               }
               part->ClearAllObj();
               part->SetFileName((LPWSTR)(LPCTSTR)patch);
+              obj.dPart->Open((LPWSTR)(LPCTSTR)patch, true);
               part->Update();
               obj.RedrawPhantom();
               auto info = obj.get_part_info();
               info->part = part;
               info->patch = patch;
+              corrent_doc->SetActive();
           }
 
       }

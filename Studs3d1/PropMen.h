@@ -60,8 +60,8 @@ protected:
 
   
 public:
-
   ///////////////////////////////////////////////////////////////////////////////
+    IDocument3DPtr                               dPart; // ”казатель на интерфейс текущего 3D-документа
     bool rotated = false;
     double angle = 90;
     //double x, y, z=20;

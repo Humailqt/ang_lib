@@ -1196,7 +1196,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
         IDocument3DPtr corDoc = ksGetActive3dDocument();
         //show_info(FilePatchName);
         //IDocument3DPtr mDoc(ksGet3dDocument());
-        //IPartPtr part = m_part->GetPart(pTop_Part);
+        //IPartPtr part = m_part->GetPart(pTop_Part); 
 
         double h_contr = 1, w_contr = 1, z_contr = 1;
 
@@ -1228,7 +1228,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
             }
 
         }
-        dPart->SetActive();
+        //dPart->SetActive();
         IPartPtr part = dPart->GetPart(pTop_Part);
         // Создадим новый эскиз
         auto col = part->EntityCollection(o3d_sketch);
