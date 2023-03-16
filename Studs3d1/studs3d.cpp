@@ -1194,6 +1194,8 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
     {
 
         IDocument3DPtr corDoc = ksGetActive3dDocument();
+        auto pColl = corDoc->PartCollection(true);
+        show_info(std::to_string(pColl->GetCount()).c_str());
         //show_info(FilePatchName);
         //IDocument3DPtr mDoc(ksGet3dDocument());
         //IPartPtr part = m_part->GetPart(pTop_Part); 
@@ -1229,7 +1231,19 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
 
         }
         //dPart->SetActive();
+        if (!dPart)
+        {
+            show_info("dPart is empty");
+            break;
+        }
         IPartPtr part = dPart->GetPart(pTop_Part);
+        if (!part)
+        {
+            show_info("part is empty");
+            break;
+
+        }
+        show_info(std::to_string(partStatus).c_str())
         switch (partStatus)
         {
             case PartStatus::newCreatePart:
@@ -1246,14 +1260,14 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
                 {
                     std::filesystem::path p((NewPatchName.GetString()));
     
-                    //show_info(p.filename().c_str());
+                    show_info(p.filename().c_str());
                     for (size_t i = 1; i < 100; i++)
                     {
                         std::filesystem::path p_tmp((NewPatchName.GetString()));
                         CString newFileName(p_tmp.filename().replace_extension().c_str());
-                        CString tmp_v = ("V"); tmp_v += (std::to_string(i).c_str()); tmp_v += ".m3d";
+                        CString tmp_v = ("_V"); tmp_v += (std::to_string(i).c_str()); tmp_v += ".m3d";
                         newFileName += tmp_v;
-                        //show_info(newFileName);
+                        show_info(newFileName);
                         p_tmp.replace_extension().replace_filename(newFileName.GetString());
                         if (!std::filesystem::exists(p_tmp))
                         {
@@ -1263,11 +1277,13 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
                     }
 
                     CString pns(p.c_str());
-                    //show_info(pns);
+                    show_info(pns);
                     if (!pns.IsEmpty())
                     {
                         dPart->SaveAs(LPWSTR(pns.GetString()));
+                        partStatus = PartStatus::loadedPartNewVers;
                     }
+                    
                 }
 
                 break;
@@ -3712,6 +3728,9 @@ CString get_value_from_list(Shpeel* shpeel, long id_control)
     return str;
 }
 
+void Shpeel::upload_plate_controls() {
+
+}
 CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
 {
     auto cor_dir = std::filesystem::path(doc->GetFileName()).remove_filename().wstring();

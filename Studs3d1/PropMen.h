@@ -87,6 +87,10 @@ public:
   // Событие prChangeControlValue - Изменение значения контрола
   virtual void OnChangeControlValue( long ctrlID, const VARIANT& newVal ){}
   virtual InsertPartPtr get_part_info() { return NULL; }
+  virtual void upload_plate_controls()
+  {
+      return;
+  }
   /////////////////////////////////////////////////////////////
 
   virtual int load_default_panel() { return 1; };

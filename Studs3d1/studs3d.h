@@ -255,14 +255,15 @@ public :
 
   ////////////////////////////////////////////////////////////////////////////
   int load_default_panel();
-  void show_info();
+  void show_info();()
   CString  get_tmp_filename_tmp(IDocument3DPtr doc);
   InsertPartPtr get_part_info() { return partInfo; }
   bool save_part_info(IPartPtr part, IDocument3DPtr doc, CString patch_file);
+  void override upload_plate_controls();
 
   ///////////////////////////////////////////////////////////////////////////
 
-  // Инициализация
+  // Инициализацияif 
   void               Init();                                          
   // Возвращает изменился ли массив 
   bool &            GetCollectChanged() { return collectChanged; }   
