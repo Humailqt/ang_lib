@@ -1230,6 +1230,52 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
         }
         //dPart->SetActive();
         IPartPtr part = dPart->GetPart(pTop_Part);
+        switch (partStatus)
+        {
+            case PartStatus::newCreatePart:
+            {
+                CString NewPatchName = part->GetFileName();
+                dPart->SaveAs(LPWSTR(NewPatchName.GetString()));
+                break;
+            }
+            case PartStatus::loadedPartOrig:
+            {
+                CString NewPatchName = part->GetFileName();
+                show_info(NewPatchName);
+                if (NewPatchName)
+                {
+                    std::filesystem::path p((NewPatchName.GetString()));
+    
+                    //show_info(p.filename().c_str());
+                    for (size_t i = 1; i < 100; i++)
+                    {
+                        std::filesystem::path p_tmp((NewPatchName.GetString()));
+                        CString newFileName(p_tmp.filename().replace_extension().c_str());
+                        CString tmp_v = ("V"); tmp_v += (std::to_string(i).c_str()); tmp_v += ".m3d";
+                        newFileName += tmp_v;
+                        //show_info(newFileName);
+                        p_tmp.replace_extension().replace_filename(newFileName.GetString());
+                        if (!std::filesystem::exists(p_tmp))
+                        {
+                            p.replace_extension().replace_filename(newFileName.GetString());
+                            break;
+                        }
+                    }
+
+                    CString pns(p.c_str());
+                    //show_info(pns);
+                    if (!pns.IsEmpty())
+                    {
+                        dPart->SaveAs(LPWSTR(pns.GetString()));
+                    }
+                }
+
+                break;
+            }
+
+        default:
+            break;
+        }
         // Создадим новый эскиз
         auto col = part->EntityCollection(o3d_sketch);
         IEntityPtr entitySketch(col->GetByIndex(0), false /*AddRef*/);

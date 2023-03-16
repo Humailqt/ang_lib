@@ -19,6 +19,15 @@
 #endif
 #include <math.h>
 #include <charconv>
+
+enum PartStatus
+{
+    newCreatePart,
+    loadedPartOrig,
+    loadedPartNewVers
+
+};
+
 //-------------------------------------------------------------------------------
 // Функции для выдачи сообщений библиотеки
 // ---
@@ -62,6 +71,7 @@ protected:
 public:
   ///////////////////////////////////////////////////////////////////////////////
     IDocument3DPtr                               dPart; // Указатель на интерфейс текущего 3D-документа
+    long partStatus = PartStatus::newCreatePart;
     bool rotated = false;
     double angle = 90;
     //double x, y, z=20;

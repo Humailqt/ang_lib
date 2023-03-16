@@ -507,6 +507,7 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
               obj.RedrawPhantom();
               info->part = part;
               info->patch = patch;
+              obj.partStatus = PartStatus::newCreatePart;
           }
           else
           {
@@ -527,6 +528,7 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
               info->part = part;
               info->patch = patch;
               corrent_doc->SetActive();
+              obj.partStatus = PartStatus::loadedPartOrig;
           }
 
       }
