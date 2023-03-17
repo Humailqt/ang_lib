@@ -248,18 +248,18 @@ public :
   virtual ~Shpeel();
 
   /* IUnknown */
-  virtual unsigned long _IFUNC AddRef();
+  virtual unsigned long _IFUNC AddRef();    
   virtual unsigned long _IFUNC Release();
   virtual HRESULT    _IFUNC QueryInterface(const GUID far& iid, void far*far* iface);
   virtual HRESULT       _IFUNC LtQueryInterface( int idType, void far*far* iface );
 
   ////////////////////////////////////////////////////////////////////////////
   int load_default_panel();
-  void show_info();()
+  void show_info();
   CString  get_tmp_filename_tmp(IDocument3DPtr doc);
   InsertPartPtr get_part_info() { return partInfo; }
   bool save_part_info(IPartPtr part, IDocument3DPtr doc, CString patch_file);
-  void override upload_plate_controls();
+  void  upload_plate_controls();
 
   ///////////////////////////////////////////////////////////////////////////
 

@@ -87,12 +87,12 @@ public:
   // Событие prChangeControlValue - Изменение значения контрола
   virtual void OnChangeControlValue( long ctrlID, const VARIANT& newVal ){}
   virtual InsertPartPtr get_part_info() { return NULL; }
+  /////////////////////////////////////////////////////////////
+
   virtual void upload_plate_controls()
   {
       return;
   }
-  /////////////////////////////////////////////////////////////
-
   virtual int load_default_panel() { return 1; };
   std::string get_tmp_filename_tmp(IDocument3DPtr doc) { return std::string(""); };
 

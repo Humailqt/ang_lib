@@ -1411,6 +1411,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
         RedrawPhantom();
         corDoc->SetActive();
         m_process->Update();
+        upload_plate_controls();
         break;  
     }
 	
@@ -3479,7 +3480,42 @@ unsigned int Shpeel::get_order_control(variant_t ID)
     return -1;
 }
 
+#define DEBUG_UPLOAD_PLATE_CONTROLS 1 ;
 
+void Shpeel::upload_plate_controls()
+{
+#if DEBUG_UPLOAD_PLATE_CONTROLS
+    show_info("DEBUG_UPLOAD_PLATE_CONTROLS")
+#endif // DEBUG_UPLOAD_PLATE_CONTROLS
+
+    double *x1=0, * x2=0, * y1=0, * y2=0, * z1 = 0, * z2 = 0;
+    if (m_part)
+    {
+#if DEBUG_UPLOAD_PLATE_CONTROLS
+        show_info("DEBUG_UPLOAD_PLATE_CONTROLS")
+#endif // DEBUG_UPLOAD_PLATE_CONTROLS
+
+        //auto mBody = m_part->GetMainBody();
+        
+        if (m_part->GetGabarit(false,false,x1, y1, z1, x2, y2, z2))
+        {
+#if DEBUG_UPLOAD_PLATE_CONTROLS
+            show_info("DEBUG_UPLOAD_PLATE_CONTROLS")
+#endif // DEBUG_UPLOAD_PLATE_CONTROLS
+
+            CString number( (std::to_string(*x1) +"||" + std::to_string(*x2)
+                + std::to_string(*y1)+"||" + std::to_string(*y1)
+                + std::to_string(*z1) + std::to_string(*z2)).c_str());
+            show_info(number);
+        }
+    }
+
+#if DEBUG_UPLOAD_PLATE_CONTROLS
+    show_info("DEBUG_UPLOAD_PLATE_CONTROLS")
+#endif // DEBUG_UPLOAD_PLATE_CONTROLS
+
+    return;
+}
 
 int Shpeel::load_default_panel()
 {
@@ -3728,9 +3764,7 @@ CString get_value_from_list(Shpeel* shpeel, long id_control)
     return str;
 }
 
-void Shpeel::upload_plate_controls() {
 
-}
 CString Shpeel::get_tmp_filename_tmp(IDocument3DPtr doc)
 {
     auto cor_dir = std::filesystem::path(doc->GetFileName()).remove_filename().wstring();
