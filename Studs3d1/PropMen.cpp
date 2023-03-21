@@ -488,6 +488,11 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
   {
       CString patch; 
       patch = get_value_from_list(obj, ID_CHOSE_DETAIL);
+      if (patch.IsEmpty())
+      {
+          LibMessage(L"Error open file", 0);
+          return 0 ;
+      }
       if (!patch.IsEmpty())
       {
          /* LibMessage(patch, 0);*/
@@ -521,7 +526,16 @@ afx_msg BOOL PropertyManagerEvent::ChangeControlValue(LPDISPATCH  iCtrl)
               }
               part->ClearAllObj();
               part->SetFileName((LPWSTR)(LPCTSTR)patch);
-              obj.dPart->Open((LPWSTR)(LPCTSTR)patch, true);
+              obj.patch = patch;
+              if (!obj.dPart->Open((LPWSTR)(LPCTSTR)patch, true))
+              {
+
+                  obj.dPart->Close();
+                  if (obj.dPart->Open((LPWSTR)(LPCTSTR)patch, true))
+                  {
+
+                  }
+              }
               part->Update();
               obj.RedrawPhantom();
               auto info = obj.get_part_info();

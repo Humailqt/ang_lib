@@ -1195,13 +1195,13 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
 
         IDocument3DPtr corDoc = ksGetActive3dDocument();
         auto pColl = corDoc->PartCollection(true);
-        show_info(std::to_string(pColl->GetCount()).c_str());
+        /*show_info(std::to_string(pColl->GetCount()).c_str());*/
         //show_info(FilePatchName);
         //IDocument3DPtr mDoc(ksGet3dDocument());
         //IPartPtr part = m_part->GetPart(pTop_Part); 
 
         double h_contr = 1, w_contr = 1, z_contr = 1;
-
+        
         for (int i = 0; i < curentCollection->GetCount(); i++)
         {
             _variant_t v_iter; v_iter = i;
@@ -1234,56 +1234,97 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
         if (!dPart)
         {
             show_info("dPart is empty");
+
             break;
         }
         IPartPtr part = dPart->GetPart(pTop_Part);
         if (!part)
         {
-            show_info("part is empty");
-            break;
-
+            //show_info(dPart->GetFileName());
+            //if (!dPart->Open((LPWSTR)(LPCTSTR)patch, true))
+            //{
+            //    show_info(dPart->GetFileName());
+            //    dPart->Close();
+            //    if (!dPart->Open((LPWSTR)(LPCTSTR)patch, true))
+            //    {
+            //        show_info(dPart->GetFileName());
+            //    }
+            //}
+            //part = dPart->GetPart(pTop_Part);
+            //if (!part)
+            //{
+            //    show_info("part is empty");
+            //    show_info(dPart->GetFileName());
+            //    break;
+            //}
+            //part->ClearAllObj();
+            //part->SetFileName((LPWSTR)(LPCTSTR)patch);
+            //part->Update();
         }
-        show_info(std::to_string(partStatus).c_str())
+        //show_info(std::to_string(partStatus).c_str())
         switch (partStatus)
         {
             case PartStatus::newCreatePart:
             {
-                CString NewPatchName = part->GetFileName();
-                dPart->SaveAs(LPWSTR(NewPatchName.GetString()));
+                //part->SetFileName(LPWSTR(patch.GetString()));
+                //dPart->SaveAs(LPWSTR(patch.GetString()));
+                //show_info(dPart->GetFileName());
                 break;
             }
             case PartStatus::loadedPartOrig:
             {
-                CString NewPatchName = part->GetFileName();
-                show_info(NewPatchName);
+                CString NewPatchName;
+                if (part)
+                {
+                    NewPatchName = part->GetFileName();
+                }
+                else
+                {
+                    NewPatchName = patch;
+                    part->SetFileName(LPWSTR (NewPatchName.GetString()));
+                }
+                //show_info(NewPatchName);
                 if (NewPatchName)
                 {
                     std::filesystem::path p((NewPatchName.GetString()));
     
-                    show_info(p.filename().c_str());
+                    //show_info(p.filename().c_str());
                     for (size_t i = 1; i < 100; i++)
                     {
                         std::filesystem::path p_tmp((NewPatchName.GetString()));
                         CString newFileName(p_tmp.filename().replace_extension().c_str());
                         CString tmp_v = ("_V"); tmp_v += (std::to_string(i).c_str()); tmp_v += ".m3d";
                         newFileName += tmp_v;
-                        show_info(newFileName);
+                        //show_info(newFileName);
                         p_tmp.replace_extension().replace_filename(newFileName.GetString());
                         if (!std::filesystem::exists(p_tmp))
                         {
                             p.replace_extension().replace_filename(newFileName.GetString());
                             break;
                         }
-                    }
 
+                    }
+                    for (size_t i = 0; i < this->curentCollection->GetCount(); i++)
+                    {
+                        auto ctr = curentCollection->GetItem(i);
+                        if (ctr->Id == ID_CHOSE_DETAIL)
+                        {
+                            variant_t v_nameFIlE(p.c_str());
+                            //show_info(v_nameFIlE.bstrVal);
+                            //show_info(ctr->GetValue());
+                            ctr->PutValue(v_nameFIlE);
+                            //show_info(ctr->GetValue());
+                            break;
+                        }
+                    }
                     CString pns(p.c_str());
-                    show_info(pns);
+                    //show_info(pns);
                     if (!pns.IsEmpty())
                     {
                         dPart->SaveAs(LPWSTR(pns.GetString()));
                         partStatus = PartStatus::loadedPartNewVers;
                     }
-                    
+
                 }
 
                 break;
@@ -1292,6 +1333,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
         default:
             break;
         }
+        //show_info("start edit");
         // Создадим новый эскиз
         auto col = part->EntityCollection(o3d_sketch);
         IEntityPtr entitySketch(col->GetByIndex(0), false /*AddRef*/);
@@ -1400,7 +1442,10 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
                 }
             }
         }
-
+        else
+        {
+            show_info("Ошибка редактироваия панели");
+        }
         part->Update();
         dPart->Save();
         dPart->RebuildDocument();
@@ -1411,7 +1456,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
         RedrawPhantom();
         corDoc->SetActive();
         m_process->Update();
-        upload_plate_controls();
+        //upload_plate_controls();
         break;  
     }
 	
@@ -3480,7 +3525,7 @@ unsigned int Shpeel::get_order_control(variant_t ID)
     return -1;
 }
 
-#define DEBUG_UPLOAD_PLATE_CONTROLS 1 ;
+#define DEBUG_UPLOAD_PLATE_CONTROLS 0 ;
 
 void Shpeel::upload_plate_controls()
 {
@@ -3643,7 +3688,9 @@ int Shpeel::load_default_panel()
 
     m_part->SetFileName((LPWSTR)(LPCWSTR)pPatch);
 
-    
+    patch = pPatch;
+    //show_info("load_default_panel");
+    //show_info(pPatch);
     save_part_info(part, dPart, pPatch); //// Сохранение инф о детали 
     //show_info(pPatch);
     FilePatchName = pPatch;

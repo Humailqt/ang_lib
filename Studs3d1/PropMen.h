@@ -74,6 +74,7 @@ public:
     long partStatus = PartStatus::newCreatePart;
     bool rotated = false;
     double angle = 90;
+    CString patch; 
     //double x, y, z=20;
     //double h = 20, w=20;
   ///////////////////////////////////////////////////////////////////////////////
