@@ -2658,13 +2658,13 @@ BOOL Shpeel::EndProcess()
     m_part->SetStandardComponent(true);
 
 
-    reference spcObj;
+    //reference spcObj;
 
-    if (DrawSpcObj(spcObj)) // Вывод объекта СП
-    {
-      // Редактируем параметры
-      ksEditWindowSpcObject(spcObj);
-    }
+    //if (DrawSpcObj(spcObj)) // Вывод объекта СП
+    //{
+    //  // Редактируем параметры
+    //  ksEditWindowSpcObject(spcObj);
+    //}
 
   }
 
