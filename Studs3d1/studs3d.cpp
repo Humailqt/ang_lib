@@ -2224,12 +2224,12 @@ void Shpeel::ShowControls()
               sizePart->put_CoordinateValue(0, 20);
               sizePart->PutCoordinateState(0, ksCheckVariable);
               //edit_h->Name = _T("Размер H");
-              edit_h->Id = ID_H_3D_PLATE;
+              edit_h->Id = ID_W_3D_PLATE;
               edit_h->Value = 20;
               
               ksAPI7::IPropertyEditPtr edit_w = sizePart->Coordinate[1];
               //edit_w->Name = _T("Размер W");
-              edit_w->Id = ID_W_3D_PLATE;
+              edit_w->Id = ID_H_3D_PLATE;
               edit_w->Value = 20;
               //sizePart->CoordinateValue[1] = 20;
               sizePart->put_CoordinateValue(1, 20);
