@@ -214,25 +214,18 @@ void WINAPI LIBRARYENTRY( unsigned int )
 {
   GetNewKompasAPI();
 
-
+  pNewKompasAPI->Application->HideMessage = ksHideMessageYes;
   IDocument3DPtr pDocument3d( ksGetActive3dDocument(), false/*AddRef*/ ); // Получить указатель на активный документ трехмерной модели
   if ( (bool)pDocument3d && !pDocument3d->IsDetail() )
   {
-      try
+      Shpeel* shpeel = new Shpeel();
+      shpeel->patch_lib = std::filesystem::path(pDocument3d->GetFileName()).c_str();
+      if (shpeel)
       {
-        Shpeel* shpeel = new Shpeel();
-        shpeel->patch_lib = std::filesystem::path(pDocument3d->GetFileName()).c_str();
-	    if ( shpeel ) 
-        {
-          
-	      shpeel->Draw3D();
-	    }
 
+          shpeel->Draw3D();
       }
-      catch (const std::exception&e)
-      {
-          LibMessage((CString(e.what())),0);
-      }
+
      pDocument3d->RebuildDocument();
   }
   else
@@ -1199,7 +1192,7 @@ void Shpeel::OnChangeControlValue( long ctrlID, const VARIANT& newVal )
         //show_info(FilePatchName);
         //IDocument3DPtr mDoc(ksGet3dDocument());
         //IPartPtr part = m_part->GetPart(pTop_Part); 
-
+        
         double h_contr = 1, w_contr = 1, z_contr = 1;
         
         for (int i = 0; i < curentCollection->GetCount(); i++)
@@ -1902,86 +1895,7 @@ void Shpeel::OnButtonClick( long buttonID )
             {
                 LibMessage(mes, MB_ICONERROR | MB_OK); // Вывод сообщений о ошибке
             }
-            //          if (m_part != NULL)
-            //          {
-            //              LibMessage(L"Mpart", 0);
-            //              IEntityPtr entitySketch(m_part->GetDefaultEntity(o3d_sketch), false/*AddRef*/);
-            //              if (entitySketch)
-            //              {
-            //                  // Получить указатель на интерфейс параметров объектов и элементов
-            //                  // Интерфейс свойств эскиза
-            //                  ISketchDefinitionPtr sketchDefinition(IUnknownPtr(entitySketch->GetDefinition(), false /*AddRef*/));
-            //                  if (sketchDefinition)
-            //                  {
-            //                      // Получим интерфейс базовой плоскости XOY
-            //                      IEntityPtr basePlane(m_part->GetDefaultEntity(o3d_planeXOY), false /*AddRef*/);
-            //                      // Установка параметров эскиза
-            //                      sketchDefinition->SetPlane(basePlane); // Установим плоскость XOY базовой для эскиза
-            //                      // Создадим эскиз
-            //                      entitySketch->Create();
-            //                      // Войти в режим редактирования эскиза
-            //                      if (sketchDefinition->BeginEdit())
-            //                      {
-            //                          // Введем новый эскиз
-            //                          ArcByAngle(15, 0, 10, -90, 90, 1, 1);
-            //                          LineSeg(15, -10, 15, 10, 3);
-            //                          // Выйти из режима редактирования эскиза
-            //                          sketchDefinition->EndEdit();
-            //                      }
-            //                      // Операции вращения
-            //                      IEntityPtr entityRotate(m_part->NewEntity(o3d_bossRotated), false/*AddRef*/);
-            //                      if (entityRotate)
-            //                      {
-            //                          LibMessage(L"Mpart", 0);
-            //                          // Получить указатель на интерфейс параметров объектов и элементов
-            //                          // Интерфейс базовой операции вращения
-            //                          IBossRotatedDefinitionPtr baseRotatedDefinition(IUnknownPtr(entityRotate->GetDefinition(), false/*AddRef*/));
-            //                          if (baseRotatedDefinition)
-            //                          {
-            //                              baseRotatedDefinition->SetToroidShapeType(false);      // Признак тороида ( TRUE - тороид, FALSE - сфероид )
-            //                              baseRotatedDefinition->SetDirectionType(dtBoth);       // Направление вращения ( dtNormal - прямое направление, для тонкой стенки - наружу
-            //                                                                                       // dtReverse - обратное направление, для тонкой стенки - внутрь, dtBoth - в обе стороны,
-            //                                                                                       // dtMiddlePlane - от средней плоскости )
-            //                              // Изменить параметры тонкой стенки
-            //                              baseRotatedDefinition->SetThinParam(true,               // Признак тонкостенной операции
-            //                                  dtBoth,             // Направление построения тонкой стенки
-            //                                  1,                  // Толщина стенки в прямом направлении
-            //                                  1);                // Толщина стенки в обратном направлении
-            //// Изменить параметры выдавливания в одном направлении
-            //                              baseRotatedDefinition->SetSideParam(obj.rotated,               // Направление вращения ( TRUE - прямое, FALSE - обратное )
-            //                                  obj.angle);
-            //                              obj.rotated = !obj.rotated; // Угол вращения
-            ////// Изменить параметры выдавливания в одном направлении
-            ////                              baseRotatedDefinition->SetSideParam(false,              // Направление вращения ( TRUE - прямое, FALSE - обратное )
-            ////                                  180);              // Угол вращения
-            //                              baseRotatedDefinition->SetSketch(entitySketch);        // Эскиз операции выдавливания                                                                 
-            //                              // Создать операцию              
-            //                              entityRotate->Create();
-            //                          }
-            //                      }
-            //                  }
-            //              }
-            //          }
             
-            //reference  gr;
-            //double x = 0, y = 0/* , * ang; *ang = 30*/;
-            //gr = NewGroup(0);
-            //EndGroup();
-            //
-            //if (AddObjGroup(gr, (reference) m_part))
-            //{
-            //    LibMessage(L"ADD", 0);
-            //}
-            //else
-            //{
-            //    LibMessage(L"not ADD", 0);
-            //}
-            //// задание параметров поворота
-            //RequestInfo info;
-            //memset(&info, 0, sizeof(info));
-            //info.prompt = " Центр поворота ";
-            ////if ( (ReadDouble("Угол поворота", 0, 0, 360, ang)))
-            //RotateObj(gr, x, y,90); // поворот группы gr                
             m_part->RebuildModel();
             m_part->Update();
 
@@ -2656,15 +2570,6 @@ BOOL Shpeel::EndProcess()
     }
     // Устанавливаем признак, стандартное изделие
     m_part->SetStandardComponent(true);
-
-
-    //reference spcObj;
-
-    //if (DrawSpcObj(spcObj)) // Вывод объекта СП
-    //{
-    //  // Редактируем параметры
-    //  ksEditWindowSpcObject(spcObj);
-    //}
 
   }
 
